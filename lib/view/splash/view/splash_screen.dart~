@@ -1,0 +1,37 @@
+// ignore_for_file: use_full_hex_values_for_flutter_colors, prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'package:flutter/material.dart';
+import 'package:tatify_app/res/app_images/App_images.dart';
+
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body: Container(
+        width: width * double.infinity,
+        height: height * double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xffFFFAFB),
+              const Color(0xFFFFD7C599),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Image.asset(
+            AppImages.splashLogo,
+            height: height / 2,
+            width: width / 2,
+          ),
+        ),
+      ),
+    );
+  }
+}
