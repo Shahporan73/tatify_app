@@ -25,6 +25,7 @@ class AddItemScreen extends StatelessWidget {
     "Saturday",
     "Sunday",
     "Monday",
+    "7 days"
   ];
 
   @override
@@ -90,9 +91,11 @@ class AddItemScreen extends StatelessWidget {
                       Divider(color: Colors.grey, height: 5,),
                       heightBox10,
                       RoundTextField(
-                        hint: '',
+                        hint: '0.0',
                         borderRadius: 25,
                         filled: true,
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
                         fillColor: Color(0xffD9D9D9),
                         focusBorderRadius: 25,
                       ),
@@ -114,9 +117,11 @@ class AddItemScreen extends StatelessWidget {
                       Divider(color: Colors.grey, height: 5,),
                       heightBox10,
                       RoundTextField(
-                        hint: '',
+                        hint: '0.0',
                         borderRadius: 25,
+                        textAlign: TextAlign.center,
                         filled: true,
+                        keyboardType: TextInputType.number,
                         fillColor: Color(0xffD9D9D9),
                         focusBorderRadius: 25,
                       ),
@@ -141,7 +146,7 @@ class AddItemScreen extends StatelessWidget {
                 spacing: 10,
                 runSpacing: 10,
                 children: days.map((day) {
-                  bool isSelected = controller.selectedDay.value == day;
+                  bool isSelected = controller.selectedDays.contains(day);
                   return GestureDetector(
                     onTap: () => controller.selectDay(day),
                     child: Container(
@@ -150,8 +155,8 @@ class AddItemScreen extends StatelessWidget {
                         color: isSelected ? Colors.green.withOpacity(0.2) : Colors.grey[200],
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Text(
-                        day,
+                      child: CustomText(
+                        title: day,
                         style: TextStyle(
                           color: isSelected ? Colors.green : Colors.grey[600],
                           fontWeight: FontWeight.w500,
@@ -162,6 +167,19 @@ class AddItemScreen extends StatelessWidget {
                 }).toList(),
               ),
             ),
+
+            // heightBox10,
+            // Center(child: CustomText(title: 'For a certain period of time', color: Colors.grey,),),
+            // Divider(color: Colors.grey, height: 10,),
+            // heightBox5,
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            //   decoration: BoxDecoration(
+            //     color: Color(0xffE3F2E7),
+            //     borderRadius: BorderRadius.circular(18),
+            //   ),
+            //   child: CustomText(title: '7 days', fontWeight: FontWeight.w500, color: AppColors.secondaryColor,),
+            // ),
 
 
             heightBox20,
@@ -174,6 +192,7 @@ class AddItemScreen extends StatelessWidget {
             ),
 
 
+            heightBox50,
           ],
         ),
       ),

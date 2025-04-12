@@ -21,7 +21,6 @@ class UserPersonalInformationScreen extends StatelessWidget {
       backgroundColor: AppColors.bgColor,
       body: Stack(
         children: [
-          // Header image
           Positioned(
             top: 0,
             right: 0,
@@ -38,7 +37,7 @@ class UserPersonalInformationScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  CustomAppBar(appBarName: 'Profile', titleColor: Colors.white, widget: SizedBox(),),
+                  CustomAppBar(appBarName: 'Personal Information', titleColor: Colors.white, leadingColor: Colors.white,),
                   heightBox20,
                   CircleAvatar(
                     radius: 60,

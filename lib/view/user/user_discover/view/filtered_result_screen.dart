@@ -9,14 +9,13 @@ import 'package:tatify_app/view/user/user_home/widget/home_list_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/home_menu_widget.dart';
 
 class FilteredResultScreen extends StatelessWidget {
-  final String title;
-  FilteredResultScreen({super.key, required this.title});
+  FilteredResultScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: title),
+      appBar: MainAppBar(title: "Results"),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ListView.builder(

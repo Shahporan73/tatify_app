@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
-import 'package:tatify_app/res/common_widget/custom_alert_dialog.dart';
-import 'package:tatify_app/res/common_widget/custom_button.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
-import 'package:tatify_app/view/vendor/vendor_add_item/views/edit_item_screen.dart';
 
 class HomeMenuWidget extends StatelessWidget {
   final bool? isEdit;
@@ -36,7 +33,7 @@ class HomeMenuWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText(title: 'Pommes',
+          CustomText(title: 'Restaurant A',
             fontWeight: FontWeight.w700, color: AppColors.blackColor, fontSize: 18,
           ),
           heightBox5,
@@ -52,26 +49,26 @@ class HomeMenuWidget extends StatelessWidget {
 
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(AppImages.parchentageIcon, scale: 4,),
                       widthBox5,
                       Text.rich(TextSpan(
                           children: [
                             TextSpan(
-                              text: '12.50€ ',
+                              text: '12.50€',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 10.68, color: AppColors.whiteColor,
+                                fontSize: 11, color: AppColors.whiteColor,
                                 decoration: TextDecoration.lineThrough,
                                 decorationColor: Colors.white,
                               ),
                             ),
                             TextSpan(
-                              text: '8.49€',
+                              text: ' 8.49€',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 10.68, color: AppColors.secondaryColor,
+                                fontSize: 11, color: Color(0xff00FF00),
                               ),
                             ),
                           ]
@@ -90,11 +87,11 @@ class HomeMenuWidget extends StatelessWidget {
 
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(AppImages.refreshIcon, scale: 4,),
                       widthBox5,
-                      CustomText(title: '6 days', fontSize: 10.68, color: Colors.white,)
+                      CustomText(title: '6 days', fontWeight: FontWeight.w600, fontSize: 11, color: Colors.white,)
                     ],
                   ),
                 ),),
@@ -109,11 +106,11 @@ class HomeMenuWidget extends StatelessWidget {
 
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(Icons.location_on_outlined, color: Colors.white, size: 18,),
                       widthBox5,
-                      CustomText(title: 'On-site', fontSize: 10.68, color: Colors.white,)
+                      CustomText(title: 'On-site', fontWeight: FontWeight.w600, fontSize: 11, color: Colors.white,)
                     ],
                   ),
                 ),)

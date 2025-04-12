@@ -22,7 +22,7 @@ class VendorShowReviewsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      appBar: MainAppBar(title: 'Rating & Review'),
+      appBar: MainAppBar(title: 'Rating & Review', backgroundColor: AppColors.whiteColor,),
       body: SingleChildScrollView(
         padding: bodyPadding,
         child: Column(
@@ -40,7 +40,7 @@ class VendorShowReviewsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          '4.8 ★',
+                          '4.8',
                           style: GoogleFonts.urbanist(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
@@ -49,10 +49,10 @@ class VendorShowReviewsScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '1,64,002 Ratings\n&\n 5,922 Reviews',
+                          '25\n ratings',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.urbanist(
-                            fontSize: 10,
+                            fontSize: 12,
                             color: Colors.black54,
                           ),
                         ),
@@ -63,11 +63,11 @@ class VendorShowReviewsScreen extends StatelessWidget {
                     Expanded(
                       child: Column(
                         children: [
-                          RatingBarWidget(starCount: 5, fillPercent: 0.8),
-                          RatingBarWidget(starCount: 4, fillPercent: 0.6),
-                          RatingBarWidget(starCount: 3, fillPercent: 0.4),
-                          RatingBarWidget(starCount: 2, fillPercent: 0.2),
-                          RatingBarWidget(starCount: 1, fillPercent: 0.1),
+                          RatingBarWidget(starCount: 5, fillPercent: 0.8, rating: 12,),
+                          RatingBarWidget(starCount: 4, fillPercent: 0.6, rating: 5,),
+                          RatingBarWidget(starCount: 3, fillPercent: 0.4, rating: 4,),
+                          RatingBarWidget(starCount: 2, fillPercent: 0.2, rating: 2,),
+                          RatingBarWidget(starCount: 1, fillPercent: 0.1, rating: 0,),
                         ],
                       ),
                     ),

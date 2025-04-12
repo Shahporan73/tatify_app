@@ -43,7 +43,7 @@ class ItemWidget extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                flex: 12,
+                flex: 13,
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
@@ -52,30 +52,32 @@ class ItemWidget extends StatelessWidget {
 
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(AppImages.parchentageIcon, scale: 4,),
                       widthBox5,
                       Text.rich(TextSpan(
                           children: [
                             TextSpan(
-                              text: '12.50€ ',
+                              text: '12.50€',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 10.68, color: AppColors.whiteColor,
+                                fontSize: 11,
+                                color: AppColors.whiteColor,
                                 decoration: TextDecoration.lineThrough,
                                 decorationColor: Colors.white,
+                                decorationThickness: 2,
                               ),
                             ),
                             TextSpan(
-                              text: '8.49€',
+                              text: ' 8.49€',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 10.68, color: AppColors.secondaryColor,
+                                fontSize: 11, color: Color(0xff00FF00),
                               ),
                             ),
                           ]
-                      ))
+                      ),),
                     ],
                   ),
                 ),),
@@ -90,11 +92,11 @@ class ItemWidget extends StatelessWidget {
 
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(AppImages.refreshIcon, scale: 4,),
                       widthBox5,
-                      CustomText(title: '6 days', fontSize: 10.68, color: Colors.white,)
+                      CustomText(title: '6 days', fontWeight: FontWeight.w600, fontSize: 11, color: AppColors.whiteColor,)
                     ],
                   ),
                 ),),
@@ -109,11 +111,11 @@ class ItemWidget extends StatelessWidget {
 
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(Icons.location_on_outlined, color: Colors.white, size: 18,),
                       widthBox5,
-                      CustomText(title: 'On-site', fontSize: 10.68, color: Colors.white,)
+                      CustomText(title: 'On-site', fontWeight: FontWeight.w600, fontSize: 11, color: AppColors.whiteColor,)
                     ],
                   ),
                 ),)
@@ -128,6 +130,7 @@ class ItemWidget extends StatelessWidget {
               title: 'Use as Template',
               borderRadius: 25,
               padding_vertical: 8,
+              buttonColor: AppColors.secondaryColor,
               widget: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(

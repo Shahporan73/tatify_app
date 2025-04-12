@@ -102,17 +102,6 @@ class _AddedAllItemScreenState extends State<AddedAllItemScreen> {
                         color: Colors.white,
                       ),
                     ),
-                    Spacer(),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: AppColors.whiteColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Color(0xffEBEBEB), width: 1),
-                      ),
-                      child: Icon(Icons.favorite_outline, color: AppColors.secondaryColor,),
-                    ),
-
                   ],
                 ),
               ),
@@ -179,19 +168,21 @@ class _AddedAllItemScreenState extends State<AddedAllItemScreen> {
                       Expanded(child: controller.selectedTab.value=='onGoing'?
                       ListView.builder(
                         itemCount: 5,
+                        padding: EdgeInsets.only(top: 10),
                         shrinkWrap: true,
                         physics: ScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return ItemWidget(isEdit: false,);
+                          return ItemWidget(isEdit: true,);
                         },
                       ):
                       // Closed List
                       ListView.builder(
                         itemCount: 3,
+                        padding: EdgeInsets.only(top: 10),
                         physics: ScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return ItemWidget(isEdit: true,);
+                          return ItemWidget(isEdit: false,);
                         },
                       ),),
                     ],
@@ -257,6 +248,7 @@ class _AddedAllItemScreenState extends State<AddedAllItemScreen> {
                         heightBox5,
                         CustomButton(
                           title: 'Add a Menu',
+                          buttonColor: AppColors.secondaryColor,
                           padding_vertical: 8,
                           onTap: () {
                             Get.to(()=> AddItemScreen());

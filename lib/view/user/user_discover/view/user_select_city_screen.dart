@@ -31,7 +31,7 @@ class UserSelectCityScreen extends StatelessWidget {
             ),
           ),
           CustomText(
-            title: 'First, select a city.',
+            title: 'First select a city',
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),

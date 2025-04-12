@@ -350,10 +350,11 @@ class SignUpScreen extends StatelessWidget {
                       ),
                       widthBox10,
                       CustomText(
-                          title: 'Sign Up with',
+                          title: 'Continue with google',
                           color: AppColors.blackColor,
                           fontSize: 15,
-                          fontWeight: FontWeight.w500),
+                          fontWeight: FontWeight.w500
+                      ),
                     ],
                   ),
                   onTap: () {},

@@ -29,7 +29,7 @@ class ChangePasswordScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: height / 6,
+              height: height / 15,
             ),
             CustomPasswordField(
                 hintText: 'Enter old password',

@@ -2,18 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:tatify_app/res/app_images/App_images.dart';
-import 'package:tatify_app/res/common_widget/RoundTextField.dart';
-import 'package:tatify_app/res/common_widget/custom_dotted_widget.dart';
 import 'package:tatify_app/res/common_widget/custom_drop_down_widget.dart';
-import 'package:tatify_app/res/common_widget/custom_network_image_widget.dart';
 import 'package:tatify_app/res/common_widget/custom_row_widget.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
-import 'package:tatify_app/res/common_widget/main_app_bar.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
-import 'package:tatify_app/view/user/user_home/view/user_restaurant_details_screen.dart';
-import 'package:tatify_app/view/user/user_home/widget/home_list_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_home/views/search_on_going_item_screen.dart';
 import 'package:tatify_app/view/vendor/vendor_home/views/vendor_restaurant_details_screen.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/first_grap_widget.dart';
@@ -22,7 +14,6 @@ import 'package:tatify_app/view/vendor/vendor_home/widget/second_grap_widget.dar
 import 'package:tatify_app/view/vendor/vendor_home/widget/v_home_header_widget.dart';
 
 import '../../../../res/app_colors/App_Colors.dart';
-import 'vendor_notification_screen.dart';
 
 class VendorHomeScreen extends StatelessWidget {
   const VendorHomeScreen({super.key});
@@ -120,7 +111,7 @@ class VendorHomeScreen extends StatelessWidget {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
-                  itemCount:3,
+                  itemCount: 3,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
                     return Padding(

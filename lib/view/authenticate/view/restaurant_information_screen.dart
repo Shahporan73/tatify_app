@@ -11,6 +11,7 @@ import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/common_widget/main_app_bar.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/res/custom_style/custom_style.dart';
+import 'package:tatify_app/view/authenticate/view/sign_in_screen.dart';
 import 'package:tatify_app/view/authenticate/widget/build_time_button_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_home/views/vendor_home_dashboard.dart';
 
@@ -227,7 +228,7 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
             CustomButton(
                 title: 'Continue',
                 onTap: (){
-                  Get.to(()=> VendorHomeDashboard());
+                  Get.to(()=> SignInScreen());
                 }
             ),
 
