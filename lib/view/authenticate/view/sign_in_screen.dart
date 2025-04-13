@@ -165,7 +165,7 @@ class SignInScreen extends StatelessWidget {
                         ),
                         widthBox10,
                         CustomText(
-                            title: 'Sign in with',
+                            title: 'Continue with google',
                             color: AppColors.blackColor,
                             fontSize: 15,
                             fontWeight: FontWeight.w500),

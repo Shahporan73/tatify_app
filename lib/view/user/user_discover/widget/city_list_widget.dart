@@ -50,8 +50,8 @@ class CityListWidget extends StatelessWidget {
                 ),
                 onTap: () {
                   controller.selectedCity.value = city;
-                  Get.back(); // Close the BottomSheet on selection
-                  Get.to(()=>FilteredResultScreen(title: city,));
+                  Navigator.pop(context);
+                  Get.to(()=>FilteredResultScreen());
                 },
               ));
             },

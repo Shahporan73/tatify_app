@@ -119,7 +119,7 @@ class _UserFavDetailsScreenState extends State<UserFavDetailsScreen> {
                     shape: BoxShape.circle,
                     border: Border.all(color: Color(0xffEBEBEB), width: 1),
                   ),
-                  child: Icon(Icons.favorite_outline, color: AppColors.secondaryColor,),
+                  child: Icon(Icons.favorite, color: AppColors.primaryColor,),
                 ),
 
               ],

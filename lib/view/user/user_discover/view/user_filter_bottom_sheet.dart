@@ -8,7 +8,7 @@ import 'package:tatify_app/res/common_widget/custom_button.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/view/user/user_discover/controller/filter_controller.dart';
-import 'package:tatify_app/view/user/user_discover/view/user_select_city_screen.dart';
+import 'package:tatify_app/view/user/user_discover/view/filtered_result_screen.dart';
 
 class UserFilterBottomSheet extends StatefulWidget {
   const UserFilterBottomSheet({super.key});
@@ -216,7 +216,8 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                             titleColor: AppColors.whiteColor,
                             onTap: (){
                               Navigator.pop(context);
-                              Get.to(()=> UserSelectCityScreen());
+                              Get.to(()=> FilteredResultScreen(),
+                              );
                             }
                         ),
                       ),

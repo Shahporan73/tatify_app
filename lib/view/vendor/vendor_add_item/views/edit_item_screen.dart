@@ -31,6 +31,7 @@ class EditItemScreen extends StatelessWidget {
     "Saturday",
     "Sunday",
     "Monday",
+    "7 days",
   ];
 
 
@@ -158,7 +159,7 @@ class EditItemScreen extends StatelessWidget {
                 spacing: 10,
                 runSpacing: 10,
                 children: days.map((day) {
-                  bool isSelected = controller.selectedDay.value == day;
+                  bool isSelected = controller.selectedDays.contains(day);
                   return GestureDetector(
                     onTap: () => controller.selectDay(day),
                     child: Container(
@@ -167,8 +168,8 @@ class EditItemScreen extends StatelessWidget {
                         color: isSelected ? Colors.green.withOpacity(0.2) : Colors.grey[200],
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Text(
-                        day,
+                      child: CustomText(
+                        title: day,
                         style: TextStyle(
                           color: isSelected ? Colors.green : Colors.grey[600],
                           fontWeight: FontWeight.w500,
@@ -179,7 +180,6 @@ class EditItemScreen extends StatelessWidget {
                 }).toList(),
               ),
             ),
-
 
             heightBox20,
             CustomButton(

@@ -282,29 +282,6 @@ class _VendorRestaurantDetailsScreenState extends State<VendorRestaurantDetailsS
                         ),
                       ],
                     ),
-                    /*heightBox5,
-                    Row(
-                      children: [
-                        *//*Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(16),
-
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.menu, size: 18, color: Colors.white,),
-                              widthBox5,
-                              CustomText(title: 'Menu', fontWeight: FontWeight.w600, color: Colors.white,fontSize: 14,)
-                            ],
-                          ),
-                        ),*//*
-                        Spacer(),
-
-                      ],
-                    ),*/
-
                   ],
                 ),
               ),

@@ -1,10 +1,13 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
+import 'package:tatify_app/res/common_widget/custom_button.dart';
 import 'package:tatify_app/view/user/user_discover/view/user_filter_bottom_sheet.dart';
+import 'package:tatify_app/view/user/user_discover/view/user_select_city_screen.dart';
 
 class UserDiscoverScreen extends StatefulWidget {
   @override
@@ -82,7 +85,8 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
                     height: 60,
                   ),
                 ),
-                title: Text("SPICETRAILS Altstadt", style: TextStyle(fontWeight: FontWeight.bold)),
+                title: Text("SPICETRAILS Altstadt",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Row(
                   children: [
                     Icon(Icons.star, color: Colors.orange, size: 18),
@@ -100,54 +104,31 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
                 child: Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(8)),
-                      child: Text("\$10 Discount", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Text("\$10 Discount",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
                     ),
                     SizedBox(width: 8),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(color: Colors.orange, borderRadius: BorderRadius.circular(8)),
-                      child: Text("Free soft drink", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Text("Free soft drink",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
               ),
-              Divider(),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton.icon(
-                      icon: Icon(Icons.filter_list),
-                      label: Text("Filter"),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black),
-                      onPressed: () {
-
-                        Navigator.pop(context);
-
-                        showModalBottomSheet(
-                            context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                          ),
-                            builder: (context) {
-                              return UserFilterBottomSheet();
-                            },
-                        );
-                      },
-                    ),
-                    ElevatedButton.icon(
-                      icon: Icon(Icons.list),
-                      label: Text("List"),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
         );
@@ -158,14 +139,85 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          GoogleMap(
-            initialCameraPosition: CameraPosition(target: _initialPosition, zoom: 15),
-            markers: _markers,
-            onMapCreated: (controller) => mapController = controller,
-          ),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            GoogleMap(
+              initialCameraPosition:
+                  CameraPosition(target: _initialPosition, zoom: 15),
+              markers: _markers,
+              onMapCreated: (controller) => mapController = controller,
+            ),
+
+            Positioned(
+              bottom: 16,
+                left: Get.width / 6,
+                right: Get.width / 6,
+                child:Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: CustomButton(
+                          title: "Filter",
+                        buttonColor: Colors.white,
+                        borderRadius: 25,
+                        widget: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.filter_list),
+                            Text("Filter"),
+                          ],
+                        ),
+                        onTap: () {
+                          // Navigator.pop(context);
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20)),
+                            ),
+                            builder: (context) {
+                              return UserFilterBottomSheet();
+                            },
+                          );
+                        },
+                      ),),
+                      Container(
+                        width: 1,
+                        height: Get.height / 15,
+                        color: Colors.grey,
+                      ),
+                      Expanded(
+                        child: CustomButton(
+                          title: '',
+                          buttonColor: Colors.white,
+                          borderRadius: 25,
+                        widget: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.list),
+                            Text("List"),
+                          ],
+                        ),
+                        onTap: () {
+                          Get.to(()=> UserSelectCityScreen());
+                        },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ),
+          ],
+        ),
       ),
     );
   }

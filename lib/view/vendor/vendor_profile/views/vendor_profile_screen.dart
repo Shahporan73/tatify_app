@@ -111,13 +111,13 @@ class VendorProfileScreen extends StatelessWidget {
                           Get.to(() => VendorShowReviewsScreen());
                         }
                     ),
-                    ProfileItemWidget(
+                    /*ProfileItemWidget(
                         icon: Icons.menu_open_sharp,
                         title: 'Discount Items',
                         onTap: (){
                           // Get.to(() => UserSettingScreen());
                         }
-                    ),
+                    ),*/
                     ProfileItemWidget(
                         icon: Icons.watch_later,
                         title: 'History',

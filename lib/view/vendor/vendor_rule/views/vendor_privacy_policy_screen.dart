@@ -24,11 +24,6 @@ class VendorPrivacyPolicyScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomAppBar(
-              appBarName: "",
-            ),
-
-            heightBox30,
             CustomText(
               title:
               '1-Lorem ipsum dolor sit amet consectetur. '

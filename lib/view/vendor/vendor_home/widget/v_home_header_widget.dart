@@ -12,8 +12,8 @@ class VHomeHeaderWidget extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return Container(
       width: width * double.infinity,
-      height: height / 3,
-      padding: EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 8),
+      height: height / 3.2,
+      padding: EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 8),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),

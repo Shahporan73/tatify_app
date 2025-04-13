@@ -30,7 +30,7 @@ class CustomAppBar extends StatelessWidget {
           left: 0,
           child: widget ??
               GestureDetector(
-                onTap: onTap,
+                onTap: Navigator.of(context).pop,
                 child: Padding(
                   padding: EdgeInsets.zero,
                   child: Icon(Icons.arrow_back, color: leadingColor, size: 24),

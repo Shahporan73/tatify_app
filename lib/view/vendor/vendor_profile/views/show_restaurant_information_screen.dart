@@ -12,7 +12,6 @@ import 'package:tatify_app/res/common_widget/main_app_bar.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/res/custom_style/custom_style.dart';
 import 'package:tatify_app/view/authenticate/widget/build_time_button_widget.dart';
-import 'package:tatify_app/view/vendor/vendor_home/views/vendor_home_dashboard.dart';
 
 class ShowRestaurantInformationScreen extends StatefulWidget {
   const ShowRestaurantInformationScreen({super.key});
@@ -22,7 +21,6 @@ class ShowRestaurantInformationScreen extends StatefulWidget {
 }
 
 class _ShowRestaurantInformationScreenState extends State<ShowRestaurantInformationScreen> {
-
   final Map<String, TimeOfDay> _openingTimes = {
     "Monday": TimeOfDay(hour: 10, minute: 0),
     "Tuesday": TimeOfDay(hour: 10, minute: 0),
@@ -43,7 +41,11 @@ class _ShowRestaurantInformationScreenState extends State<ShowRestaurantInformat
     "Sunday": TimeOfDay(hour: 23, minute: 0),
   };
 
+  final Set<String> _closedDays = {}; // Store closed days
+
   Future<void> _pickTime(BuildContext context, String day, bool isOpeningTime) async {
+    if (_closedDays.contains(day)) return;
+
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: isOpeningTime ? _openingTimes[day]! : _closingTimes[day]!,
@@ -60,9 +62,18 @@ class _ShowRestaurantInformationScreenState extends State<ShowRestaurantInformat
     }
   }
 
+  void _toggleClosedDay(String day) {
+    setState(() {
+      if (_closedDays.contains(day)) {
+        _closedDays.remove(day);
+      } else {
+        _closedDays.add(day);
+      }
+    });
+  }
 
   final TextEditingController _controller = TextEditingController();
-  final List<String> _tags = ['Burger', 'meat'];
+  final List<String> _tags = ['Burger', 'Meat'];
 
   void _addTag(String tag) {
     if (tag.isNotEmpty && !_tags.contains(tag)) {
@@ -79,11 +90,10 @@ class _ShowRestaurantInformationScreenState extends State<ShowRestaurantInformat
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(title: 'Restaurant Information'),
@@ -92,26 +102,28 @@ class _ShowRestaurantInformationScreenState extends State<ShowRestaurantInformat
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             CustomDottedWidget(
               containerHeight: height / 7,
               centerWidget: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.cloud_upload_outlined, color: AppColors.primaryColor,),
+                  Icon(Icons.cloud_upload_outlined, color: AppColors.primaryColor),
                   widthBox5,
-                  CustomText(title: 'Upload restaurant photo', fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.secondaryColor,)
+                  CustomText(
+                    title: 'Upload restaurant photo',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.secondaryColor,
+                  ),
                 ],
               ),
             ),
-
             heightBox10,
-            Text('Kitchen Style', style: customLabelStyle,),
+            Text('Kitchen Style', style: customLabelStyle),
             heightBox10,
             Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
@@ -129,9 +141,7 @@ class _ShowRestaurantInformationScreenState extends State<ShowRestaurantInformat
                         backgroundColor: Colors.green[50],
                         deleteIcon: Icon(Icons.close, size: 16, color: Colors.red),
                         onDeleted: () => _removeTag(tag),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                       );
                     }).toList(),
                   ),
@@ -141,9 +151,9 @@ class _ShowRestaurantInformationScreenState extends State<ShowRestaurantInformat
                       hintText: 'Enter style and press Enter',
                       border: InputBorder.none,
                       hintStyle: GoogleFonts.urbanist(
-                          color: Color(0xff595959),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14
+                        color: Color(0xff595959),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
                       ),
                     ),
                     onSubmitted: _addTag,
@@ -151,92 +161,105 @@ class _ShowRestaurantInformationScreenState extends State<ShowRestaurantInformat
                 ],
               ),
             ),
-
             heightBox10,
-            Text('Restaurant Name', style: customLabelStyle,),
-            heightBox10,
-            RoundTextField(
-              hint: 'Enter your restaurant name',
-            ),
-
-            heightBox10,
-            Text('Restaurant Address', style: customLabelStyle,),
-            heightBox10,
-            RoundTextField(
-              hint: 'Enter your restaurant address',
-              prefixIcon: Icon(Icons.location_on_outlined),
-            ),
-
-            heightBox10,
-            Text('City', style: customLabelStyle,),
-            heightBox10,
-            RoundTextField(
-              hint: 'Enter your city name',
-              prefixIcon: Icon(Icons.location_on_outlined),
-            ),
-
-
-
-
-            heightBox20,
-            // opening time and close time
-            Row(
-              children: [
-                Text("Opening Hours", style: customLabelStyle,),
-                SizedBox(width: 8),
-                Icon(Icons.access_time, size: 18),
-              ],
-            ),
+            Text('Opening Hours', style: customLabelStyle),
             SizedBox(height: 10),
             ListView(
               shrinkWrap: true,
               physics: ScrollPhysics(),
               children: _openingTimes.keys.map((day) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                return Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                      ),
+                    ]
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(day, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          BuildTimeButtonWidget(
-                            day: day,
-                            isOpeningTime: true,
-                            time: _openingTimes[day]!,
-                            onTap: () => _pickTime(context, day, true),
-                          ),
-
-                          SizedBox(width: 10),
-
-                          BuildTimeButtonWidget(
-                            day: day,
-                            isOpeningTime: false,
-                            time: _closingTimes[day]!,
-                            onTap: () => _pickTime(context, day, false),
+                          CustomText(title: day, fontSize: 14, color: Colors.black, fontWeight: FontWeight.w600),
+                          Switch(
+                            value: _closedDays.contains(day),
+                            onChanged: (value) => _toggleClosedDay(day),
+                            activeColor: AppColors.primaryColor,
                           ),
                         ],
                       ),
+                      if (!_closedDays.contains(day))
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                CustomText(
+                                    title: 'Opening',
+                                    fontSize: 12,
+                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.w600
+                                ),
+                                widthBox5,
+                                BuildTimeButtonWidget(
+                                  day: day,
+                                  isOpeningTime: true,
+                                  time: _openingTimes[day]!,
+                                  onTap: () => _pickTime(context, day, true),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                CustomText(
+                                    title: 'Closed',
+                                    fontSize: 12,
+                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.w600
+                                ),
+                                widthBox5,
+                                BuildTimeButtonWidget(
+                                  day: day,
+                                  isOpeningTime: false,
+                                  time: _closingTimes[day]!,
+                                  onTap: () => _pickTime(context, day, false),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      if (_closedDays.contains(day))
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: CustomText(
+                            title: "Closed",
+                              color: Colors.red, fontSize: 14, fontWeight: FontWeight.bold
+                          ),
+                        ),
                     ],
                   ),
                 );
               }).toList(),
             ),
-
             heightBox20,
             CustomButton(
-                title: 'Continue',
-                onTap: (){
-                  Get.to(()=> VendorHomeDashboard());
-                }
+              title: 'Update',
+              onTap: () {
+                Navigator.of(context).pop();
+              },
             ),
-
             heightBox20,
-
           ],
         ),
       ),
     );
   }
 }
-

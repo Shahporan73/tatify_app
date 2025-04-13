@@ -69,7 +69,7 @@ class UserDetailsItemWidget extends StatelessWidget {
                               text: '8.49€',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 10.68, color: AppColors.secondaryColor,
+                                fontSize: 10.68, color: Color(0xff00FF00),
                               ),
                             ),
                           ]

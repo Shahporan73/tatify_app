@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
@@ -67,7 +67,7 @@ class VRDetailsCardWidget extends StatelessWidget {
                               text: '8.49€',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 10.68, color: AppColors.secondaryColor,
+                                fontSize: 10.68, color: Color(0xff00FF00),
                               ),
                             ),
                           ]

@@ -87,9 +87,9 @@ class _RedeemDealScreenState extends State<RedeemDealScreen> {
               onSubmit: () {
                 setState(() {
                   isConfirmed = true;
-                  if(isConfirmed==true){
-                    Get.to(()=>RedeemSuccessScreen());
-                  }
+                });
+                Future.delayed(Duration(seconds: 1), () {
+                  Get.offAll(() => RedeemSuccessScreen());
                 });
               },
             ),

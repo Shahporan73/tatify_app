@@ -112,7 +112,8 @@ class UserHomeScreen extends StatelessWidget {
                             fillColor: Colors.white,
                             hintColor: Colors.grey,
                             filled: true,
-                            isBorder: false,
+                            isBorder: true,
+                            borderWidth: 0,
                             borderColor: Colors.transparent,
                             prefixIcon: Icon(
                               Icons.search,

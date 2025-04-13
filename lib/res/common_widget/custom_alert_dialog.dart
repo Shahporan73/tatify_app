@@ -6,6 +6,7 @@ import '../custom_style/custom_size.dart';
 import 'custom_button.dart';
 
 class CustomAlertDialog {
+
   Future<void> customAlert({
     required BuildContext context,
     required String title,
