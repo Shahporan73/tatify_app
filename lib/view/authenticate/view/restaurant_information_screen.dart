@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tatify_app/data/service/location_service.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/RoundTextField.dart';
 import 'package:tatify_app/res/common_widget/custom_button.dart';
@@ -11,108 +12,139 @@ import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/common_widget/main_app_bar.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/res/custom_style/custom_style.dart';
-import 'package:tatify_app/view/authenticate/view/sign_in_screen.dart';
-import 'package:tatify_app/view/authenticate/widget/build_time_button_widget.dart';
-import 'package:tatify_app/view/vendor/vendor_home/views/vendor_home_dashboard.dart';
+import 'package:tatify_app/view/authenticate/controller/restaurant_controller.dart';
+import '../../../data/service/get_current_postion.dart';
+import '../../vendor/vendor_profile/widget/opening_hour_widget.dart';
 
 class RestaurantInformationScreen extends StatefulWidget {
   const RestaurantInformationScreen({super.key});
 
   @override
-  State<RestaurantInformationScreen> createState() => _RestaurantInformationScreenState();
+  State<RestaurantInformationScreen> createState() =>
+      _RestaurantInformationScreenState();
 }
 
-class _RestaurantInformationScreenState extends State<RestaurantInformationScreen> {
+class _RestaurantInformationScreenState
+    extends State<RestaurantInformationScreen> {
+  final RestaurantController controller = Get.put(RestaurantController());
 
-  final Map<String, TimeOfDay> _openingTimes = {
-    "Monday": TimeOfDay(hour: 10, minute: 0),
-    "Tuesday": TimeOfDay(hour: 10, minute: 0),
-    "Wednesday": TimeOfDay(hour: 10, minute: 0),
-    "Thursday": TimeOfDay(hour: 10, minute: 0),
-    "Friday": TimeOfDay(hour: 10, minute: 0),
-    "Saturday": TimeOfDay(hour: 10, minute: 0),
-    "Sunday": TimeOfDay(hour: 10, minute: 0),
-  };
-
-  final Map<String, TimeOfDay> _closingTimes = {
-    "Monday": TimeOfDay(hour: 23, minute: 0),
-    "Tuesday": TimeOfDay(hour: 23, minute: 0),
-    "Wednesday": TimeOfDay(hour: 23, minute: 0),
-    "Thursday": TimeOfDay(hour: 23, minute: 0),
-    "Friday": TimeOfDay(hour: 23, minute: 0),
-    "Saturday": TimeOfDay(hour: 23, minute: 0),
-    "Sunday": TimeOfDay(hour: 23, minute: 0),
-  };
+  // Helper function to convert TimeOfDay to 24-hour format
+  String formatTo24Hour(TimeOfDay time) {
+    final hour = time.hour;
+    final minute = time.minute;
+    return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+  }
 
   Future<void> _pickTime(BuildContext context, String day, bool isOpeningTime) async {
+    if (controller.closedDays.contains(day)) return;
+
+    TimeOfDay initial = isOpeningTime
+        ? (controller.openingTimes[day] ?? TimeOfDay(hour: 0, minute: 0))
+        : (controller.closingTimes[day] ?? TimeOfDay(hour: 0, minute: 0));
+
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: isOpeningTime ? _openingTimes[day]! : _closingTimes[day]!,
+      initialTime: initial,
     );
 
     if (pickedTime != null) {
       setState(() {
         if (isOpeningTime) {
-          _openingTimes[day] = pickedTime;
+          controller.openingTimes[day] = pickedTime;
         } else {
-          _closingTimes[day] = pickedTime;
+          controller.closingTimes[day] = pickedTime;
         }
       });
     }
   }
 
-
-  final TextEditingController _controller = TextEditingController();
-  final List<String> _tags = ['Burger', 'meat'];
-
-  void _addTag(String tag) {
-    if (tag.isNotEmpty && !_tags.contains(tag)) {
-      setState(() {
-        _tags.add(tag);
-      });
-    }
-    _controller.clear();
-  }
-
-  void _removeTag(String tag) {
+  void _toggleClosedDay(String day) {
     setState(() {
-      _tags.remove(tag);
+      if (controller.closedDays.contains(day)) {
+        controller.closedDays.remove(day);
+      } else {
+        controller.closedDays.add(day);
+      }
     });
   }
 
+  // Function to validate inputs before continuing
+  bool _validateInputs() {
+    if (controller.restaurantNameController.text.trim().isEmpty) {
+      Get.rawSnackbar(message: 'Restaurant name is required');
+      return false;
+    }
+    if (controller.addressController.text.trim().isEmpty) {
+      Get.rawSnackbar(message: 'Restaurant address is required');
+      return false;
+    }
+    if (controller.cityController.text.trim().isEmpty) {
+      Get.rawSnackbar(message: 'City is required');
+      return false;
+    }
+    // Validate opening and closing times
+    for (var day in controller.openingTimes.keys) {
+      if (!controller.closedDays.contains(day)) {
+        var openingTime = controller.openingTimes[day];
+        var closingTime = controller.closingTimes[day];
+        if (openingTime == null || closingTime == null) {
+          Get.rawSnackbar(message: 'Opening and Closing times must be set for $day');
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'Restaurant Information'),
+      appBar: const MainAppBar(title: 'Restaurant Information'),
       body: SingleChildScrollView(
         padding: bodyPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            CustomDottedWidget(
-              containerHeight: height / 7,
+            Obx(() => controller.pickedImage.value != null
+                ? GestureDetector(
+              onTap: controller.pickImage,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.file(
+                  controller.pickedImage.value!,
+                  height: height / 4,
+                  width: Get.width,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            )
+                : CustomDottedWidget(
+              containerHeight: height / 4,
               centerWidget: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.cloud_upload_outlined, color: AppColors.primaryColor,),
+                  Icon(Icons.cloud_upload_outlined, color: AppColors.primaryColor),
                   widthBox5,
-                  CustomText(title: 'Upload restaurant photo', fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.secondaryColor,)
+                  CustomText(
+                    title: 'Upload restaurant photo',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.secondaryColor,
+                  ),
                 ],
               ),
-            ),
-
+              onTap: controller.pickImage,
+            )),
             heightBox10,
-            Text('Kitchen Style', style: customLabelStyle,),
+            Text('Kitchen Style', style: customLabelStyle),
             heightBox10,
-            Container(
+            Obx(() => Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
@@ -124,12 +156,12 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: _tags.map((tag) {
+                    children: controller.tags.map((tag) {
                       return Chip(
                         label: Text(tag, style: TextStyle(color: Colors.grey[700])),
                         backgroundColor: Colors.green[50],
                         deleteIcon: Icon(Icons.close, size: 16, color: Colors.red),
-                        onDeleted: () => _removeTag(tag),
+                        onDeleted: () => controller.removeTag(tag),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -137,53 +169,62 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
                     }).toList(),
                   ),
                   TextField(
-                    controller: _controller,
+                    controller: controller.kitchenStyleController,
                     decoration: InputDecoration(
                       hintText: 'Enter style and press Enter',
                       border: InputBorder.none,
                       hintStyle: GoogleFonts.urbanist(
-                          color: Color(0xff595959),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14
+                        color: Color(0xff595959),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
                       ),
                     ),
-                    onSubmitted: _addTag,
+                    onSubmitted: controller.addTag,
                   ),
                 ],
               ),
-            ),
-
+            )),
             heightBox10,
-            Text('Restaurant Name', style: customLabelStyle,),
-            heightBox10,
-            RoundTextField(
-                hint: 'Enter your restaurant name',
-            ),
-
-            heightBox10,
-            Text('Restaurant Address', style: customLabelStyle,),
+            Text('Restaurant Name', style: customLabelStyle),
             heightBox10,
             RoundTextField(
-                hint: 'Enter your restaurant address',
+              hint: 'Enter your restaurant name',
+              controller: controller.restaurantNameController,
+            ),
+            heightBox10,
+            Text('Restaurant Address', style: customLabelStyle),
+            heightBox10,
+            RoundTextField(
+              hint: 'Enter your restaurant address',
+              controller: controller.addressController,
               prefixIcon: Icon(Icons.location_on_outlined),
+              readOnly: false,
+              onTap: () async {
+                try {
+                  var location = await LocationServiceWithAddress.getCurrentLocationWithAddress();
+                  print('Latitude: ${location['latitude']}');
+                  print('Longitude: ${location['longitude']}');
+                  print('Address: ${location['address']}');
+                  controller.latitude.value = location['latitude'];
+                  controller.longitude.value = location['longitude'];
+                  controller.addressController.text = location['address'];
+                } catch (e) {
+                  print('Error: $e');
+                }
+              },
             ),
-
             heightBox10,
-            Text('City', style: customLabelStyle,),
+            Text('City', style: customLabelStyle),
             heightBox10,
             RoundTextField(
               hint: 'Enter your city name',
+              controller: controller.cityController,
               prefixIcon: Icon(Icons.location_on_outlined),
             ),
-
-
-
-
             heightBox20,
-            // opening time and close time
             Row(
               children: [
-                Text("Opening Hours", style: customLabelStyle,),
+                Text("Opening Hours", style: customLabelStyle),
                 SizedBox(width: 8),
                 Icon(Icons.access_time, size: 18),
               ],
@@ -191,53 +232,35 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
             SizedBox(height: 10),
             ListView(
               shrinkWrap: true,
-              physics: ScrollPhysics(),
-              children: _openingTimes.keys.map((day) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(day, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
-                      Row(
-                        children: [
-                          BuildTimeButtonWidget(
-                            day: day,
-                            isOpeningTime: true,
-                            time: _openingTimes[day]!,
-                            onTap: () => _pickTime(context, day, true),
-                          ),
-
-                          SizedBox(width: 10),
-
-                          BuildTimeButtonWidget(
-                            day: day,
-                            isOpeningTime: false,
-                            time: _closingTimes[day]!,
-                            onTap: () => _pickTime(context, day, false),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+              physics: const ScrollPhysics(),
+              children: controller.openingTimes.keys.map((day) {
+                return OpeningTimeTile(
+                  day: day,
+                  isClosed: controller.closedDays.contains(day),
+                  openingTime: controller.openingTimes[day] ?? TimeOfDay(hour: 0, minute: 0),
+                  closingTime: controller.closingTimes[day] ?? TimeOfDay(hour: 0, minute: 0),
+                  onClosedToggle: (_) => _toggleClosedDay(day),
+                  onPickOpeningTime: () => _pickTime(context, day, true),
+                  onPickClosingTime: () => _pickTime(context, day, false),
                 );
               }).toList(),
             ),
-
             heightBox20,
-            CustomButton(
+            Obx(
+                  () => CustomButton(
                 title: 'Continue',
-                onTap: (){
-                  Get.to(()=> SignInScreen());
-                }
+                isLoading: controller.isLoading.value,
+                onTap: () {
+                  if (_validateInputs()) {
+                    controller.createRestaurant();
+                  }
+                },
+              ),
             ),
-
             heightBox20,
-
           ],
         ),
       ),
     );
   }
 }
-

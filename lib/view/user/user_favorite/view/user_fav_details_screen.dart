@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tatify_app/data/utils/custom_loader.dart';
 import 'package:tatify_app/res/common_widget/custom_button.dart';
 import 'package:tatify_app/res/common_widget/custom_row_widget.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
@@ -18,9 +19,11 @@ import '../../../../res/app_colors/App_Colors.dart';
 import '../../../../res/app_images/App_images.dart';
 import '../../../../res/common_widget/custom_network_image_widget.dart';
 import '../../../../res/common_widget/custom_text.dart';
+import '../controller/favorite_controller.dart';
 
 class UserFavDetailsScreen extends StatefulWidget {
-  const UserFavDetailsScreen({super.key});
+  final String? restaurantId;
+  const UserFavDetailsScreen({super.key, this.restaurantId});
 
   @override
   State<UserFavDetailsScreen> createState() => _UserFavDetailsScreenState();
@@ -41,6 +44,7 @@ class _UserFavDetailsScreenState extends State<UserFavDetailsScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    final FavoriteController controller = Get.put(FavoriteController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       body: Stack(
@@ -112,14 +116,19 @@ class _UserFavDetailsScreenState extends State<UserFavDetailsScreen> {
                   ),
                 ),
                 Spacer(),
-                Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Color(0xffEBEBEB), width: 1),
-                  ),
-                  child: Icon(Icons.favorite, color: AppColors.primaryColor,),
+                InkWell(
+                  onTap: () {
+                    controller.removeFavorite(restaurantId: widget.restaurantId.toString(), context: context);
+                  },
+                  child: Obx(() => controller.isLoading.value ? CustomLoader(size: 26,) : Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: AppColors.whiteColor,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Color(0xffEBEBEB), width: 1),
+                    ),
+                    child: Icon(Icons.favorite, color: AppColors.primaryColor,),
+                  ),),
                 ),
 
               ],

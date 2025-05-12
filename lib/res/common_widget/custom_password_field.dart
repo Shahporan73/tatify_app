@@ -16,6 +16,8 @@ class CustomPasswordField extends StatefulWidget {
   final Color? inputTextColor;
   final VoidCallback? onTap;
   final Widget? prefixWidget;
+  final Function(String)? onChanged;
+  final String? errorText;
   const CustomPasswordField({
     Key? key,
     required this.hintText,
@@ -30,6 +32,9 @@ class CustomPasswordField extends StatefulWidget {
     this.inputTextColor,
     this.onTap,
     this.prefixWidget,
+    this.onChanged,
+    this.errorText,
+
   }) : super(key: key);
 
   @override
@@ -51,6 +56,7 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
         decoration: InputDecoration(
           filled: true,
           fillColor: widget.fillColor ?? Colors.white,
+          errorText: widget.errorText,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(
@@ -85,6 +91,7 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
           hintStyle: GoogleFonts.urbanist(
               fontSize: 14, color: widget.hintTextColor ?? Colors.grey),
         ),
+        onChanged: widget.onChanged,
         style: GoogleFonts.urbanist(
           fontSize: 14,
           color:  Colors.black,

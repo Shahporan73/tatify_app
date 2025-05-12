@@ -56,7 +56,13 @@ class VendorSettingScreen extends StatelessWidget {
                 ),
                 leading: Icon(Icons.delete_outline, color: Colors.red,),
                 onTap: () {
-                  CustomAlertDialog().showDeleteAccountDialog(context);
+                  CustomAlertDialog().showDeleteAccountDialog(
+                    context,
+                        () {
+                    Navigator.pop(context);
+                  },
+                    false
+                  );
                 },
               ),
             ],

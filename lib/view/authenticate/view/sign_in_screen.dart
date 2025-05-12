@@ -3,6 +3,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/RoundTextField.dart';
@@ -106,13 +107,18 @@ class SignInScreen extends StatelessWidget {
                   heightBox10,
                   Row(
                     children: [
-                      Checkbox(
-                        activeColor: AppColors.primaryColor,
-                        value: controller.isSelected.value,
-                        onChanged: (bool? value) {
-                          controller.isSelected.value = !controller.isSelected.value;
-                        },
+                      SizedBox(
+                        width: Get.width / 16,
+                        child: Checkbox(
+                          activeColor: AppColors.primaryColor,
+                          value: controller.isSelected.value,
+                          onChanged: (bool? value) {
+                            controller.isSelected.value = !controller.isSelected.value;
+                            controller.isRemembered();
+                          },
+                        ),
                       ),
+                      widthBox8,
                       Text(
                         'Remember me',
                         style: TextStyle(color: Colors.black),
@@ -123,6 +129,7 @@ class SignInScreen extends StatelessWidget {
                           showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
+                            isDismissible: false,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                             ),
@@ -142,11 +149,23 @@ class SignInScreen extends StatelessWidget {
 
                   // sign up
                   heightBox10,
-                  CustomButton(
-                    title: 'Log In',
-                    onTap: () {
-                      controller.checkUser();
-                    },
+                  Obx(
+                    ()=> CustomButton(
+                      title: 'Log In',
+                      isLoading: controller.isLoading.value,
+                      onTap: () {
+                        // controller.checkUser();
+
+                        String? validationError = controller.validateLogin();
+
+                        if(validationError != null){
+                          Get.snackbar("Error", validationError, snackPosition: SnackPosition.TOP, backgroundColor: Colors.red, colorText: Colors.white);
+                        }else{
+                          controller.loginMethod();
+                          controller.checkUser();
+                        }
+                      },
+                    ),
                   ),
 
                   // sign in with google
@@ -168,7 +187,8 @@ class SignInScreen extends StatelessWidget {
                             title: 'Continue with google',
                             color: AppColors.blackColor,
                             fontSize: 15,
-                            fontWeight: FontWeight.w500),
+                            fontWeight: FontWeight.w500
+                        ),
                       ],
                     ),
                     onTap: () {},

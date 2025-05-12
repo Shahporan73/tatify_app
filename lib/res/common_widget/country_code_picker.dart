@@ -9,6 +9,7 @@ class CountryCodePicker extends StatefulWidget {
   final String titleText;
   final String hintText;
   final TextEditingController? controller;
+
   CountryCodePicker({
     Key? key,
     required this.titleText,
@@ -22,19 +23,32 @@ class CountryCodePicker extends StatefulWidget {
 
 class _CountryCodePickerState extends State<CountryCodePicker> {
   final FocusNode _focusNode = FocusNode();
+  PhoneNumber? _phoneNumber;
 
   @override
   void initState() {
     super.initState();
     _focusNode.addListener(() {
-      setState(() {}); // Rebuilds to update border color when focused
+      setState(() {});
     });
   }
 
   @override
   void dispose() {
-    _focusNode.dispose(); // Clean up the focus node
+    _focusNode.dispose();
     super.dispose();
+  }
+
+  // Method to update phone number
+  void _onInputChanged(PhoneNumber number) {
+    setState(() {
+      _phoneNumber = number;
+    });
+
+    // If a controller is provided, set the phone number text
+    if (widget.controller != null) {
+      widget.controller!.text = number.phoneNumber ?? '';
+    }
   }
 
   @override
@@ -45,7 +59,7 @@ class _CountryCodePickerState extends State<CountryCodePicker> {
         // Title Text
         Text(
           widget.titleText,
-          style: customLabelStyle
+          style: customLabelStyle,
         ),
         SizedBox(height: 5),
         GestureDetector(
@@ -67,11 +81,9 @@ class _CountryCodePickerState extends State<CountryCodePicker> {
             child: Material(
               color: Colors.transparent,
               child: InternationalPhoneNumberInput(
-                focusNode: _focusNode, // FocusNode assigned
-                inputBorder: InputBorder.none, // Remove default borders
-                onInputChanged: (PhoneNumber number) {
-                  print(number.phoneNumber);
-                },
+                focusNode: _focusNode,
+                inputBorder: InputBorder.none,
+                onInputChanged: _onInputChanged,
                 selectorConfig: SelectorConfig(
                   selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                   useEmoji: true,
@@ -91,8 +103,8 @@ class _CountryCodePickerState extends State<CountryCodePicker> {
                       fontSize: 14
                   ),
                   border: InputBorder.none,
-                  isDense: true, // Reduce the vertical space
-                  contentPadding: EdgeInsets.symmetric(vertical: 5), // Adjust padding
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(vertical: 5),
                 ),
               ),
             ),

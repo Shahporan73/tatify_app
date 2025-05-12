@@ -2,11 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tatify_app/data/local_database/local_data_base.dart';
+import 'package:tatify_app/data/utils/const_value.dart';
+import 'package:tatify_app/res/app_const/app_const.dart';
 import 'package:tatify_app/res/common_widget/custom_alert_dialog.dart';
 import 'package:tatify_app/res/common_widget/custom_app_bar.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/view/authenticate/view/sign_in_screen.dart';
+import 'package:tatify_app/view/user/user_profile/controller/my_profile_controller.dart';
 import 'package:tatify_app/view/user/user_profile/view/user_personal_information_screen.dart';
 import 'package:tatify_app/view/user/user_profile/widget/profile_item_widget.dart';
 import 'package:tatify_app/view/user/user_rule_view/user_privacy_policy_screen.dart';
@@ -17,6 +21,8 @@ import '../../../../res/app_colors/App_Colors.dart';
 
 class UserProfileScreen extends StatelessWidget {
   UserProfileScreen({super.key});
+
+  final MyProfileController myProfileController = Get.put(MyProfileController());
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -42,23 +48,32 @@ class UserProfileScreen extends StatelessWidget {
                   bottomRight: Radius.circular(25)
                 )
               ),
-              child: Column(
-                children: [
-                  CustomAppBar(appBarName: 'Profile', titleColor: Colors.white, widget: SizedBox(),),
-                  heightBox20,
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundColor: AppColors.primaryColor,
-                    backgroundImage: NetworkImage('https://static.vecteezy.com/system/resources/thumbnails/003/337/584/small/default-avatar-photo-placeholder-profile-icon-vector.jpg'),
-                  ),
-                  heightBox10,
-                  CustomText(title: 'Istiak Ahmed', fontWeight: FontWeight.w600, color: Colors.white,fontSize: 18,)
-
-
-                ],
+              child: Obx(
+                ()=> Column(
+                  children: [
+                    CustomAppBar(appBarName: 'Profile', titleColor: Colors.white, widget: SizedBox(),),
+                    heightBox20,
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundColor: AppColors.primaryColor,
+                      backgroundImage: NetworkImage(
+                        myProfileController.profileImage.value.isNotEmpty ? myProfileController.profileImage.value :
+                        placeholderImage,
+                      ),
+                    ),
+                    heightBox10,
+                    CustomText(
+                      title: myProfileController.fullName.value.isNotEmpty ?
+                      myProfileController.fullName.value : 'User Name',
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,fontSize: 18,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
+
           // details
           Positioned(
             top: height / 2.8,
@@ -113,7 +128,7 @@ class UserProfileScreen extends StatelessWidget {
                     ),
                     ProfileItemWidget(
                         icon: Icons.info_outline,
-                        title: 'Support',
+                        title: 'About Us',
                         onTap: (){
                           Get.to(() => UserSupportScreen());
                         }
@@ -130,7 +145,10 @@ class UserProfileScreen extends StatelessWidget {
                               message: 'Are your sure you want to logout?',
                               NegativebuttonText: "Cancel",
                               PositivvebuttonText: "Logout",
-                              onPositiveButtonPressed: () => Get.to(()=>SignInScreen()),
+                              onPositiveButtonPressed: () {
+                                LocalStorage.removeData(key: accessToken);
+                                Get.offAll(() => SignInScreen());
+                              },
                               onNegativeButtonPressed: () {
                                 Navigator.of(context).pop();
                               },

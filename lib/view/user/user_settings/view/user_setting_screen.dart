@@ -7,6 +7,7 @@ import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/custom_alert_dialog.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/common_widget/main_app_bar.dart';
+import 'package:tatify_app/view/user/user_settings/controller/setting_controller.dart';
 import 'package:tatify_app/view/user/user_settings/view/user_change_password_screen.dart';
 import '../../user_rule_view/user_privacy_policy_screen.dart';
 
@@ -17,6 +18,7 @@ class UserSettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    final SettingController controller = Get.put(SettingController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(
@@ -43,8 +45,7 @@ class UserSettingScreen extends StatelessWidget {
                   Get.to(
                         () => ChangePasswordScreen(),
                     fullscreenDialog: true,
-                    transition: Transition.rightToLeft,
-                    duration: Duration(milliseconds: 300),
+                    transition: Transition.downToUp,
                   );
                 },
               ),
@@ -58,7 +59,13 @@ class UserSettingScreen extends StatelessWidget {
                 ),
                 leading: Icon(Icons.delete_outline, color: Colors.red,),
                 onTap: () {
-                  CustomAlertDialog().showDeleteAccountDialog(context);
+                  CustomAlertDialog().showDeleteAccountDialog(
+                      context,
+                    () {
+                      controller.deleteAccount(context);
+                    },
+                      controller.isLoading.value
+                  );
                 },
               ),
             ],

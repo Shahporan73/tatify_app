@@ -1,0 +1,2 @@
+C:/Users/riadk/StudioProjects/tatify_app/android/app/.cxx/Debug/q664b1y6/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/riadk/StudioProjects/tatify_app/android/app/.cxx/Debug/q664b1y6/x86_64/CMakeFiles/rebuild_cache.dir
