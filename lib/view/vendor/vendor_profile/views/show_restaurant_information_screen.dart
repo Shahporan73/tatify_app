@@ -13,6 +13,8 @@ import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/res/custom_style/custom_style.dart';
 import 'package:tatify_app/view/authenticate/widget/build_time_button_widget.dart';
 
+import '../widget/opening_hour_widget.dart';
+
 class ShowRestaurantInformationScreen extends StatefulWidget {
   const ShowRestaurantInformationScreen({super.key});
 
@@ -166,89 +168,21 @@ class _ShowRestaurantInformationScreenState extends State<ShowRestaurantInformat
             SizedBox(height: 10),
             ListView(
               shrinkWrap: true,
-              physics: ScrollPhysics(),
+              physics: const ScrollPhysics(),
               children: _openingTimes.keys.map((day) {
-                return Container(
-                  padding: const EdgeInsets.all(8),
-                  margin: EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 1,
-                      ),
-                    ]
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomText(title: day, fontSize: 14, color: Colors.black, fontWeight: FontWeight.w600),
-                          Switch(
-                            value: _closedDays.contains(day),
-                            onChanged: (value) => _toggleClosedDay(day),
-                            activeColor: AppColors.primaryColor,
-                          ),
-                        ],
-                      ),
-                      if (!_closedDays.contains(day))
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                CustomText(
-                                    title: 'Opening',
-                                    fontSize: 12,
-                                    color: Colors.grey.shade600,
-                                    fontWeight: FontWeight.w600
-                                ),
-                                widthBox5,
-                                BuildTimeButtonWidget(
-                                  day: day,
-                                  isOpeningTime: true,
-                                  time: _openingTimes[day]!,
-                                  onTap: () => _pickTime(context, day, true),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                CustomText(
-                                    title: 'Closed',
-                                    fontSize: 12,
-                                    color: Colors.grey.shade600,
-                                    fontWeight: FontWeight.w600
-                                ),
-                                widthBox5,
-                                BuildTimeButtonWidget(
-                                  day: day,
-                                  isOpeningTime: false,
-                                  time: _closingTimes[day]!,
-                                  onTap: () => _pickTime(context, day, false),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      if (_closedDays.contains(day))
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: CustomText(
-                            title: "Closed",
-                              color: Colors.red, fontSize: 14, fontWeight: FontWeight.bold
-                          ),
-                        ),
-                    ],
-                  ),
+                return OpeningTimeTile(
+                  day: day,
+                  isClosed: _closedDays.contains(day),
+                  openingTime: _openingTimes[day]!,
+                  closingTime: _closingTimes[day]!,
+                  onClosedToggle: (value) => _toggleClosedDay(day),
+                  onPickOpeningTime: () => _pickTime(context, day, true),
+                  onPickClosingTime: () => _pickTime(context, day, false),
                 );
               }).toList(),
             ),
+
+
             heightBox20,
             CustomButton(
               title: 'Update',

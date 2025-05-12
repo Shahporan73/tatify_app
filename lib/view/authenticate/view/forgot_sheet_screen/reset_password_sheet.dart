@@ -25,6 +25,7 @@ class ResetPasswordSheet extends StatelessWidget {
       builder: (context) {
         return Obx(() => Container(
           width: double.infinity,
+          height: Get.height / 1.3,
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -81,15 +82,14 @@ class ResetPasswordSheet extends StatelessWidget {
                     ),
                   ),
                   heightBox20,
-                  CustomButton(
-                    title: 'Verify OTP',
-                    onTap: (){
-                      Navigator.pop(context);
-                      Get.rawSnackbar(
-                        message: 'Password Reset Successfully',
-                        backgroundColor: AppColors.primaryColor,
-                      );
-                    },
+                  Obx(
+                    ()=> CustomButton(
+                      title: 'Verify OTP',
+                      isLoading: controller.isLoading.value,
+                      onTap: (){
+                        controller.resetPassword(context: context);
+                      },
+                    ),
                   ),
                 ]
             ),

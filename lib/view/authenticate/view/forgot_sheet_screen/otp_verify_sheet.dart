@@ -6,14 +6,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tatify_app/res/common_widget/RoundTextField.dart';
 import 'package:tatify_app/res/common_widget/custom_otp_widget.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
+import 'package:tatify_app/view/authenticate/controller/otp_controller.dart';
 import 'package:tatify_app/view/authenticate/view/forgot_sheet_screen/reset_password_sheet.dart';
 
 import '../../../../res/app_colors/App_Colors.dart';
 import '../../../../res/common_widget/custom_button.dart';
 import '../../../../res/custom_style/custom_size.dart';
+import '../../controller/forgot_sheet_controller.dart';
 
 class OtpVerifySheet extends StatelessWidget {
-  const OtpVerifySheet({super.key});
+  OtpVerifySheet({super.key});
+
+  final OtpController otpController = Get.put(OtpController());
+  final ForgotSheetController forgotSheetController =
+      Get.put(ForgotSheetController());
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +30,7 @@ class OtpVerifySheet extends StatelessWidget {
       builder: (context) {
         return Container(
           width: double.infinity,
+          height: Get.height / 1.3,
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -48,7 +55,8 @@ class OtpVerifySheet extends StatelessWidget {
                   ),
                   heightBox20,
                   CustomText(
-                    title: 'Enter the 4 digits code that you received on your email.',
+                    title:
+                        'Enter the 4 digits code that you received on your email.',
                     style: GoogleFonts.rubik(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -56,35 +64,52 @@ class OtpVerifySheet extends StatelessWidget {
                     ),
                   ),
                   heightBox20,
-                  CustomOtpWidget(pinColor: Colors.black,),
-                  heightBox20,
-                  CustomButton(
-                    title: 'Verify OTP',
-                    onTap: (){
-                      Navigator.pop(context);
-
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                        ),
-                        builder: (_) => ResetPasswordSheet(),
-                      );
-
-                      Get.rawSnackbar(
-                        message: 'OTP verified successfully',
-                        backgroundColor: Colors.green,
-                        snackPosition: SnackPosition.TOP,
-                      );
-                    },
+                  CustomOtpWidget(
+                    borderColor: Colors.grey,
+                    numberOfFields: 4,
+                    controllers: otpController.verifyOtpControllers,
                   ),
-                ]
-            ),
+                  heightBox20,
+                  Obx(
+                    () => otpController.secondsRemaining.value == 0
+                        ? Center(
+                            child: InkWell(
+                              onTap: () => otpController.ResendOtpForForgot(
+                                  forgotSheetController.emailController.text,
+                                context,
+                              ),
+                              child: CustomText(
+                                title: 'Resend code',
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.secondaryColor,
+                                fontSize: 14,
+                                decoration: TextDecoration.underline,
+                                decorationColor: AppColors.secondaryColor,
+                              ),
+                            ),
+                          )
+                        : Center(
+                            child: CustomText(
+                                title: 'Resend otp in ${otpController.secondsRemaining.value} seconds',
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primaryColor,
+                                fontSize: 14),
+                          ),
+                  ),
+                  heightBox20,
+                  Obx(
+                    () => CustomButton(
+                      title: 'Verify OTP',
+                      isLoading: otpController.isLoading.value,
+                      onTap: () {
+                        otpController.verifyOtpForgotMail(context: context);
+                      },
+                    ),
+                  ),
+                ]),
           ),
         );
       },
     );
   }
 }
-

@@ -40,6 +40,7 @@ class AppImages {
 
   /// ==================================Lottie animations=============================================
   static String successAnim = "assets/lottie/success_anim.json";
+  static String emptyAnim = "assets/lottie/empty_anim.json";
 
 
   // ==================================SVG=============================================

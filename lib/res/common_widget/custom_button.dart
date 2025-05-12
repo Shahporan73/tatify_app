@@ -39,7 +39,14 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return  isLoading
+        ? Center(
+      child: SpinKitCircle(
+        size: 32,
+        color: AppColors.primaryColor,
+      ),
+    )
+        :  InkWell(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
@@ -51,14 +58,7 @@ class CustomButton extends StatelessWidget {
         ),
         width: width,
         padding: EdgeInsets.symmetric(vertical: padding_vertical),
-        child: isLoading
-            ? Center(
-          child: SpinKitDualRing(
-            size: 20,
-            color: Colors.white,
-          ),
-        )
-            : widget ??
+        child: widget ??
             Text(
               title,
               style: GoogleFonts.dmSans(

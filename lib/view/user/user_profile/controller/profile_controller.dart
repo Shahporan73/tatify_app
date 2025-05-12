@@ -5,7 +5,11 @@ import 'package:intl/intl.dart';
 
 class UserProfileController extends GetxController{
   var selectedDate = ''.obs;
+  var selectedGender = ''.obs;
   final TextEditingController dobController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
   // Rx variable to hold the image
   var imagePath = Rxn<String>();
@@ -21,7 +25,7 @@ class UserProfileController extends GetxController{
     );
 
     if (pickedDate != null) {
-      String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       selectedDate.value = formattedDate;
       dobController.text = formattedDate;
     }

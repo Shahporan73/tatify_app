@@ -16,10 +16,11 @@ class HomeListWidget extends StatelessWidget {
   final String discountPrice;
   final String price;
   final String distance;
+  final String kitchenStyle;
   final String reviewsAndRating;
   final VoidCallback on2for1Click;
   final VoidCallback onFreeSoftClick;
-  HomeListWidget({super.key, required this.imagePath, required this.title, required this.discountPrice, required this.price, required this.distance, required this.reviewsAndRating, required this.on2for1Click, required this.onFreeSoftClick});
+  HomeListWidget({super.key, required this.imagePath, required this.title, required this.discountPrice, required this.price, required this.distance, required this.reviewsAndRating, required this.on2for1Click, required this.onFreeSoftClick, required this.kitchenStyle});
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -61,7 +62,9 @@ class HomeListWidget extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Expanded(
+                      flex: 10,
+                      child: Row(
                     children: [
                       Container(
                         margin: EdgeInsets.only(left: 5),
@@ -79,9 +82,9 @@ class HomeListWidget extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ],
-                  ),
-                  widthBox8,
-                  Row(
+                  )),
+                  Expanded(flex: 9,
+                      child: Row(
                     children: [
                       Container(
                         margin: EdgeInsets.only(left: 5),
@@ -93,15 +96,15 @@ class HomeListWidget extends StatelessWidget {
                       ),
                       SizedBox(width: 3,),
                       CustomText(
-                        title: 'Kebab',
+                        title: kitchenStyle,
                         color: AppColors.black100,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
                     ],
-                  ),
-                  widthBox8,
-                  Row(
+                  )),
+                  Expanded(flex: 9,
+                      child: Row(
                     children: [
                       Icon(Icons.star, color: Colors.amber, size: 16,),
                       CustomText(
@@ -111,7 +114,7 @@ class HomeListWidget extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ],
-                  )
+                  )),
                 ],
               ),
 

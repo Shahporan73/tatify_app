@@ -25,7 +25,7 @@ class FilteredResultScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Get.to(()=>UserRestaurantDetailsScreen());
+                  Get.to(()=>UserRestaurantDetailsScreen(restaurantId: '',));
                 },
                 child: HomeListWidget(
                   imagePath: 'https://t4.ftcdn.net/jpg/02/74/99/01/360_F_274990113_ffVRBygLkLCZAATF9lWymzE6bItMVuH1.jpg',
@@ -33,6 +33,7 @@ class FilteredResultScreen extends StatelessWidget {
                   discountPrice: '6.99€',
                   price: '9.99€',
                   distance: '2 km',
+                  kitchenStyle: 'kabab',
                   reviewsAndRating: '4.3(17)',
                   on2for1Click: () {},
                   onFreeSoftClick: () {},

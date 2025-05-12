@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tatify_app/data/utils/custom_loader.dart';
 import '../app_colors/App_Colors.dart';
 import '../custom_style/custom_size.dart';
 import 'custom_button.dart';
@@ -72,7 +73,11 @@ class CustomAlertDialog {
     );
   }
 
-  void showDeleteAccountDialog(BuildContext context) {
+  void showDeleteAccountDialog(
+      BuildContext context,
+      VoidCallback onPositiveButtonPressed,
+      bool isLoading
+      ) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -121,7 +126,7 @@ class CustomAlertDialog {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 20),
-                Row(
+                isLoading ? CustomLoader() : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
@@ -144,10 +149,7 @@ class CustomAlertDialog {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        // Perform delete account action here
-                        Navigator.of(context).pop(); // Close dialog
-                      },
+                      onPressed: onPositiveButtonPressed,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         shape: RoundedRectangleBorder(
