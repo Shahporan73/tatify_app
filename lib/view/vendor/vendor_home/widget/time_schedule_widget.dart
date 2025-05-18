@@ -7,35 +7,31 @@ import '../../../../res/common_widget/custom_text.dart';
 import '../../../../res/custom_style/custom_size.dart';
 
 class TimeScheduleWidget extends StatelessWidget {
-  const TimeScheduleWidget({super.key});
+  final String day;
+  final String openTime;
+  final String closeTime;
+  final bool isClosed;
+  const TimeScheduleWidget(
+      {super.key,
+      required this.day,
+      required this.openTime,
+      required this.closeTime,
+      required this.isClosed});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Icon(Icons.watch_later_outlined, color: AppColors.secondaryColor,size: 19,),
-            widthBox10,
-            CustomText(title: 'Opening hours', fontSize: 14, fontWeight: FontWeight.w500,)
-          ],
+    return CustomRowWidget(
+        title: Text(
+          day,
+          style: titleStyle,
         ),
-        heightBox10,
-        CustomRowWidget(title: Text('Monday', style: titleStyle,), value: Text('09:00-19:00', style: titleStyle,)),
-        CustomRowWidget(title: Text('Tuesday', style: titleStyle,), value: Text('09:00-19:00', style: titleStyle,)),
-        CustomRowWidget(title: Text('Wednesday', style: titleStyle,), value: Text('09:00-19:00', style: titleStyle,)),
-        CustomRowWidget(title: Text('Thursday', style: titleStyle,), value: Text('09:00-19:00', style: titleStyle,)),
-        CustomRowWidget(title: Text('Friday', style: titleStyle,), value: Text('09:00-19:00', style: titleStyle,)),
-        CustomRowWidget(title: Text('Saturday', style: titleStyle,), value: Text('09:00-19:00', style: titleStyle,)),
-        CustomRowWidget(title: Text('Sunday', style: titleStyle,), value: CustomText(title: 'Closed',
-          color: AppColors.primaryColor,)),
-      ],
+        value: CustomText(
+          title: isClosed ? 'Closed' : '$openTime - $closeTime',
+          color: AppColors.primaryColor,
+        )
     );
   }
 }
 
 TextStyle titleStyle = GoogleFonts.poppins(
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    color: Color(0xff5C5C5C)
-);
+    fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xff5C5C5C));

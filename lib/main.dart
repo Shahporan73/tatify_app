@@ -9,6 +9,7 @@ import 'package:tatify_app/data/local_database/local_data_base.dart';
 import 'package:tatify_app/data/utils/const_value.dart';
 import 'package:tatify_app/view/splash/view/splash_screen.dart';
 import 'package:tatify_app/view/user/user_home/view/home_dashboard.dart';
+import 'package:tatify_app/view/vendor/vendor_home/views/vendor_home_dashboard.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,6 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LocalStorage.getData(key: accessToken) != null? HomeDashboard() : SplashScreen(),
+      home: LocalStorage.getData(key: accessToken) != null? (
+      LocalStorage.getData(key: userType) == 'vendor' ? VendorHomeDashboard() : HomeDashboard()
+      ) : SplashScreen(),
+
+      // home: VendorHomeDashboard(),
     );
   }
 }

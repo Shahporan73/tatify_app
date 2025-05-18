@@ -4,7 +4,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tatify_app/view/user/user_home/controller/home_controller.dart';
 import 'package:tatify_app/view/user/user_home/view/search_restaurant_view.dart';
+import 'package:tatify_app/view/user/user_profile/controller/my_profile_controller.dart';
 
 import '../../../../res/app_colors/App_Colors.dart';
 import '../../../../res/app_images/App_images.dart';
@@ -19,7 +21,8 @@ class CustomSliverAppbar extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController distanceController = TextEditingController();
   final TextEditingController limitController = TextEditingController();
-
+  final HomeController homeController = Get.put(HomeController());
+  final MyProfileController profileController = Get.put(MyProfileController());
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -55,7 +58,8 @@ class CustomSliverAppbar extends StatelessWidget {
                       ),
                       widthBox5,
                       CustomText(
-                        title: 'JL. Kampung Melon No. 32',
+                        title: profileController.address.value.isEmpty ? 'Address not found' :
+                        profileController.address.value,
                         color: AppColors.primaryColor,
                         fontSize: 10,
                         fontWeight: FontWeight.w400,

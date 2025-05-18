@@ -212,13 +212,21 @@ class _VendorRestaurantDetailsScreenState extends State<VendorRestaurantDetailsS
                     Container(
                       width: double.infinity,
                       height: height / 4,
-                      child: MapWidget(),
+                      child: MapWidget(
+                        latitude: 0.0,
+                        longitude: 0.0,
+                      ),
                     ),
 
 
  ///===================== Time schedule
                     heightBox20,
-                    TimeScheduleWidget(),
+                    TimeScheduleWidget(
+                      day: 'sunday',
+                      openTime: '10:00',
+                      closeTime: '19:00',
+                      isClosed: false,
+                    ),
 
                     heightBox50,
                   ],

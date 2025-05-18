@@ -8,7 +8,19 @@ import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 
 class BookingCardWidget extends StatelessWidget {
-  const BookingCardWidget({super.key});
+  final String title;
+  final String price;
+  final String description;
+  final String location;
+  final String? imagePath;
+  final bool isRedeem;
+  const BookingCardWidget(
+      {super.key,
+      required this.title,
+      required this.price,
+      required this.description,
+      required this.location,
+      this.imagePath, required this.isRedeem});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +33,13 @@ class BookingCardWidget extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(AppImages.historyBackground, height: double.infinity, width: double.infinity, fit: BoxFit.cover,),
+            child: Image.asset(
+              AppImages.historyBackground,
+              height: double.infinity,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
           ),
-
           Positioned.fill(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 0),
@@ -37,7 +53,7 @@ class BookingCardWidget extends StatelessWidget {
                     ),
                     child: CustomNetworkImage(
                       imageUrl:
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvC1pGhW7_BRwnGuBguLE99tfA0faYflekCA&s',
+                      imagePath ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvC1pGhW7_BRwnGuBguLE99tfA0faYflekCA&s',
                       height: height / 5,
                       width: double.infinity,
                     ),
@@ -49,14 +65,16 @@ class BookingCardWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
-                          title: 'Chicken Berlicious',
+                          title: title,
                           fontWeight: FontWeight.w600,
-                          fontSize: 20, color: AppColors.secondaryColor,
+                          fontSize: 20,
+                          color: AppColors.secondaryColor,
                         ),
                         CustomText(
-                          title: '🌟€1 Bowl 🌟',
+                          title: '🌟€$price 🌟',
                           fontWeight: FontWeight.w600,
-                          fontSize: 20, color: AppColors.blackColor,
+                          fontSize: 20,
+                          color: AppColors.blackColor,
                         ),
                         heightBox5,
                         Container(
@@ -70,22 +88,22 @@ class BookingCardWidget extends StatelessWidget {
                                     color: Colors.black.withOpacity(0.1),
                                     spreadRadius: 1,
                                     blurRadius: 1,
-                                    offset: Offset(0, 1)
-                                )
-                              ]
-                          ),
+                                    offset: Offset(0, 1))
+                              ]),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomText(
                                 title: '2for1 Turkish Mocca',
-                                fontSize: 18, fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
                                 color: AppColors.secondaryColor,
                               ),
                               CustomText(
                                 textAlign: TextAlign.start,
-                                title: 'You order 2 Turkish Moccas, the cheaper/\nequally priced one will not be charged.',
-                                fontSize: 13, fontWeight: FontWeight.w400,
+                                title: description,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
                                 color: AppColors.blackColor,
                               ),
                             ],
@@ -94,20 +112,22 @@ class BookingCardWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-
-
-
                   Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.location_on_outlined, color: AppColors.primaryColor,),
-                        CustomText(title: 'Location')
+                        Icon(
+                          Icons.location_on_outlined,
+                          color: AppColors.primaryColor,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: CustomText(title: location, textAlign: TextAlign.center,),
+                        )
                       ],
                     ),
                   ),
-
                   Spacer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,14 +136,21 @@ class BookingCardWidget extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.all(3),
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: isRedeem ? Colors.green : Colors.white,
                             shape: BoxShape.circle,
-                            border: Border.all(width: 1, color: Colors.green)
+                            border: Border.all(width: 1, color: Colors.green)),
+                        child: Icon(
+                          Icons.done,
+                          color: isRedeem ? Colors.white : Colors.green,
                         ),
-                        child: Icon(Icons.done, color: Colors.green,),
                       ),
                       widthBox10,
-                      CustomText(title: 'REDEEM', fontWeight: FontWeight.w600, color: AppColors.black100, fontSize: 18,)
+                      CustomText(
+                        title: isRedeem ? 'COMPLETED' : 'REDEEM',
+                        fontWeight: FontWeight.w600,
+                        color: isRedeem ? Colors.green : AppColors.black100,
+                        fontSize: 18,
+                      )
                     ],
                   ),
                   SizedBox(
@@ -133,8 +160,6 @@ class BookingCardWidget extends StatelessWidget {
               ),
             ),
           ),
-
-
         ],
       ),
     );

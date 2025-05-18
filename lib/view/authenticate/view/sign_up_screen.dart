@@ -9,14 +9,12 @@ import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/RoundTextField.dart';
 import 'package:tatify_app/res/common_widget/country_code_picker.dart';
 import 'package:tatify_app/res/common_widget/custom_button.dart';
-import 'package:tatify_app/res/common_widget/custom_password_field.dart';
 import 'package:tatify_app/res/common_widget/custom_radio_button.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/res/custom_style/custom_style.dart';
 import 'package:tatify_app/view/authenticate/controller/sign_up_controller.dart';
 import 'package:tatify_app/view/authenticate/controller/validation_controller.dart';
-import 'package:tatify_app/view/authenticate/view/email_verification_screen.dart';
 import 'package:tatify_app/view/authenticate/view/sign_in_screen.dart';
 
 import '../../../data/service/location_service.dart';

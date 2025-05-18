@@ -18,14 +18,14 @@ class AddItemScreen extends StatelessWidget {
   final ItemController controller = Get.put(ItemController());
 
   final List<String> days = [
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-    "Monday",
-    "7 days"
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+    "monday",
+    "7days"
   ];
 
   @override
@@ -40,13 +40,9 @@ class AddItemScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Menu Name or Items Name',
-              style: customLabelStyle,
-            ),
-            heightBox10,
             RoundTextField(
                 hint: 'Enter menu name',
+              controller: controller.menuNameController,
             ),
 
             heightBox20,
@@ -55,6 +51,7 @@ class AddItemScreen extends StatelessWidget {
               height: height / 8,
               vertical_padding: 5,
               hint: 'Enter menu  description',
+              controller: controller.descriptionController,
             ),
 
             heightBox20,
@@ -92,6 +89,7 @@ class AddItemScreen extends StatelessWidget {
                       heightBox10,
                       RoundTextField(
                         hint: '0.0',
+                        controller: controller.standardPriceController,
                         borderRadius: 25,
                         filled: true,
                         textAlign: TextAlign.center,
@@ -118,6 +116,7 @@ class AddItemScreen extends StatelessWidget {
                       heightBox10,
                       RoundTextField(
                         hint: '0.0',
+                        controller: controller.discountController,
                         borderRadius: 25,
                         textAlign: TextAlign.center,
                         filled: true,
@@ -168,27 +167,16 @@ class AddItemScreen extends StatelessWidget {
               ),
             ),
 
-            // heightBox10,
-            // Center(child: CustomText(title: 'For a certain period of time', color: Colors.grey,),),
-            // Divider(color: Colors.grey, height: 10,),
-            // heightBox5,
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-            //   decoration: BoxDecoration(
-            //     color: Color(0xffE3F2E7),
-            //     borderRadius: BorderRadius.circular(18),
-            //   ),
-            //   child: CustomText(title: '7 days', fontWeight: FontWeight.w500, color: AppColors.secondaryColor,),
-            // ),
-
 
             heightBox20,
-            CustomButton(
-                title: 'Submit',
-                onTap: (){
-                  Get.rawSnackbar(message: 'Item added successfully');
-                  Navigator.of(context).pop();
-                }
+            Obx(
+              ()=> CustomButton(
+                  title: 'Submit',
+                  isLoading: controller.isLoading.value,
+                  onTap: (){
+                   controller.addItem(context: context);
+                  }
+              ),
             ),
 
 

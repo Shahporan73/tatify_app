@@ -114,14 +114,21 @@ class SignInController extends GetxController{
 
       if (responseBody != null) {
         if (responseBody['success'] == true) {
-
           String token = responseBody['data']['accessToken'];
           print('accessToken $token');
 
           LocalStorage.saveData(key: accessToken, data: token);
           print('accessToken main ${LocalStorage.getData(key: accessToken)}');
 
-          Get.to(() => HomeDashboard());
+          String role = responseBody['data']['user']['role'];
+
+          LocalStorage.saveData(key: userType, data: role);
+
+          if(responseBody['data']['user']['role'] == 'vendor'){
+            Get.to(() => VendorHomeDashboard());
+          }if(responseBody['data']['user']['role'] == 'user'){
+            Get.to(() => HomeDashboard());
+          }
 
           Get.rawSnackbar(message: responseBody['message'],
               backgroundColor: Colors.green,

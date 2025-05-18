@@ -46,7 +46,7 @@ class SignUpController extends GetxController {
       Map<String, dynamic> body = {
         'name': fullName,
         'phoneNumber': phoneNumber,
-        'address': phoneNumber,
+        // 'address': address,
         'email': email,
         'location': {
           'coordinates': [longitude, latitude],
@@ -81,7 +81,7 @@ class SignUpController extends GetxController {
   }
 
 
-  /// sign up
+  /// sign up for vendor account
   Future<void> createVendorAccount(
       {required String fullName,
         required String phoneNumber,
@@ -114,10 +114,15 @@ class SignUpController extends GetxController {
 
       if (responseBody != null) {
         if (responseBody['success'] == true) {
-          print('responseBody $responseBody');
           String otp = responseBody['data']['emailVerifyToken'];
+          String venId = responseBody['data']['vendor']['user'];
+
           print('otp $otp');
+          print('Vendor id $venId');
+
           LocalStorage.saveData(key: otpToken, data: otp);
+          LocalStorage.saveData(key: vendorId, data: venId);
+
           Get.to(() => EmailVerificationScreen(isVendor: true, email: email));
           Get.rawSnackbar(message: responseBody['message']);
         }

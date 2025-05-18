@@ -1,5 +1,8 @@
 
 class EndPoint {
+  static const String MAP_KEY = 'AIzaSyAYU95zhhNeRjmDdr2AckdfQxz2zm9HHNQ';
+
+
   static const String BASE_URL = 'http://192.168.10.180:5200/api/v1';
 
   // auth endpoint
@@ -37,16 +40,52 @@ class EndPoint {
     return '$BASE_URL/restaurant/near-by-restaurant${queryString.isNotEmpty ? '?$queryString' : ''}';
   }
 
+  static String singleRestaurantURL({required String id}) => '$BASE_URL/restaurant/single-restaurant/$id';
+
 //   favorites
   static const String addFavoriteURL = '$BASE_URL/favorite/create';
   static String removeFavoriteURL({required String restaurantId}) => '$BASE_URL/favorite/$restaurantId';
   static const String getFavoriteURL = '$BASE_URL/favorite/';
 
 
+  /// review
+  static const String createReviewURL = '$BASE_URL/ratings/create';
+  static String getReviewURL({required String restaurantId}) => '$BASE_URL/ratings/$restaurantId';
 
+  /// redeem
+  static const String createRedeemURL = '$BASE_URL/redeem/create';
+  static const String userRedeemURL = '$BASE_URL/redeem/user-redeem';
+  static const String vendorRedeemURL = '$BASE_URL/redeem/vendor-redeem';
+  static String getRedeemURL({String? userId, String? vendorId, int? limit, int? page}) {
+    final queryParams = <String, String>{};
+    if (userId != null) queryParams['user'] = userId.toString();
+    if (vendorId != null) queryParams['vendor'] = vendorId.toString();
+    if (limit != null) queryParams['limit'] = limit.toString();
+    if (page != null) queryParams['page'] = page.toString();
 
-//   create vendor
+    final queryString = queryParams.entries.map((e) => '${e.key}=${e.value}').join('&');
+    return '$BASE_URL/redeem/my-bookings${queryString.isNotEmpty ? '?$queryString' : ''}';
+  }
+
+///   create vendor
   static const String createVendorURL = '$BASE_URL/user/create-vendor';
   static const String createRestaurantURL = '$BASE_URL/restaurant/create-restaurant';
+  static const String updateRestaurantURL = '$BASE_URL/restaurant/update-my-restaurant';
+  static const String getMyRestaurantsURL = '$BASE_URL/restaurant/my-restaurant';
+
+//   food
+  static const String createFoodURL = '$BASE_URL/foods/create';
+  static String getFoodsURL({String? restaurantId, String? searchTerm,int? limit, int? page}) {
+    final queryParams = <String, String>{};
+    if (restaurantId != null) queryParams['restaurant'] = restaurantId.toString();
+    if (searchTerm != null) queryParams['long'] = searchTerm.toString();
+    if (limit != null) queryParams['limit'] = limit.toString();
+    if (page != null) queryParams['page'] = page.toString();
+
+    final queryString = queryParams.entries.map((e) => '${e.key}=${e.value}').join('&');
+    return '$BASE_URL/foods${queryString.isNotEmpty ? '?$queryString' : ''}';
+  }
+
+  static String updateFoodURL({required String foodId}) => '$BASE_URL/foods/update/$foodId';
 
 }

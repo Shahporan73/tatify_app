@@ -15,9 +15,6 @@ class RestaurantController extends GetxController {
   var isLoading = false.obs;
   var pickedImage = Rx<File?>(null);
 
-  var latitude = 0.0.obs;
-  var longitude = 0.0.obs;
-
   final TextEditingController restaurantNameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
@@ -58,7 +55,7 @@ class RestaurantController extends GetxController {
     tags.remove(tag);
   }
 
-  Future<void> createRestaurant() async {
+  Future<void> createRestaurant({required double latitude, required double longitude}) async {
     isLoading.value = true;
     var imageFile = pickedImage.value;
     try {
@@ -70,6 +67,12 @@ class RestaurantController extends GetxController {
         'POST',
         Uri.parse(EndPoint.createRestaurantURL),
       );
+
+      String vendId = await LocalStorage.getData(key: vendorId);
+      if (vendId.isEmpty) {
+        Get.snackbar('Error', 'Vendor id is empty');
+      }
+
 
       RxList openingHours = [].obs;
 
@@ -88,12 +91,12 @@ class RestaurantController extends GetxController {
 
       Map<String, dynamic> body = {
         'name': restaurantNameController.text.trim(),
-        'vendorId': '6820b962cba8408ef0709feb',
+        'vendorId': vendId,
         'address': addressController.text.trim(),
         'kitchenStyle': tags,
         'city': cityController.text.trim(),
         'location': {
-          'coordinates': [longitude.value, latitude.value],
+          'coordinates': [longitude, latitude],
         },
         'openingHr': openingHours,
       };

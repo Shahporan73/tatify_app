@@ -21,6 +21,7 @@ class MyProfileController extends GetxController {
   var phoneNumber = ''.obs;
   var email = ''.obs;
   var profileImage = ''.obs;
+  var address = ''.obs;
   var id = ''.obs;
 
   // Rx variable to hold the image
@@ -59,6 +60,7 @@ class MyProfileController extends GetxController {
         dateOfBirth.value = responseBody['data']['dob']?.toString() ?? '';
         gender.value = responseBody['data']['gender']?.toString() ?? '';
         phoneNumber.value = responseBody['data']['phoneNumber']?.toString() ?? '';
+        address.value = responseBody['data']['address']?.toString() ?? '';
         email.value = responseBody['data']['email']?.toString() ?? '';
         profileImage.value = responseBody['data']['profileImage']?.toString() ?? '';
         id.value = responseBody['data']['_id']?.toString() ?? '';
@@ -159,6 +161,7 @@ class MyProfileController extends GetxController {
       isLoading.value = false;
     }
   }
+  
 
 
 

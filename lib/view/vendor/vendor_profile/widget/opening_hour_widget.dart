@@ -10,9 +10,9 @@ class OpeningTimeTile extends StatelessWidget {
   final bool isClosed;
   final TimeOfDay openingTime;
   final TimeOfDay closingTime;
-  final Function(bool) onClosedToggle;
-  final VoidCallback onPickOpeningTime;
-  final VoidCallback onPickClosingTime;
+  final Function(bool) onClosedToggle; // Toggle closed day
+  final VoidCallback onPickOpeningTime; // Pick opening time
+  final VoidCallback onPickClosingTime; // Pick closing time
 
   const OpeningTimeTile({
     Key? key,
@@ -44,6 +44,7 @@ class OpeningTimeTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Day and Switch to toggle closed status
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -60,10 +61,12 @@ class OpeningTimeTile extends StatelessWidget {
               ),
             ],
           ),
+          // If not closed, show opening and closing times
           if (!isClosed)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // Opening time
                 Row(
                   children: [
                     CustomText(
@@ -81,10 +84,11 @@ class OpeningTimeTile extends StatelessWidget {
                     )
                   ],
                 ),
+                // Closing time
                 Row(
                   children: [
                     CustomText(
-                      title: 'Closed',
+                      title: 'Closing',
                       fontSize: 12,
                       color: Colors.grey.shade600,
                       fontWeight: FontWeight.w600,
@@ -100,6 +104,7 @@ class OpeningTimeTile extends StatelessWidget {
                 ),
               ],
             ),
+          // If closed, show a "Closed" message
           if (isClosed)
             Padding(
               padding: const EdgeInsets.only(left: 10),

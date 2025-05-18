@@ -141,7 +141,7 @@ class UserProfileScreen extends StatelessWidget {
                         onTap: (){
                           CustomAlertDialog().customAlert(
                               context: context,
-                              title: 'Delete',
+                              title: 'Want to logout?',
                               message: 'Are your sure you want to logout?',
                               NegativebuttonText: "Cancel",
                               PositivvebuttonText: "Logout",

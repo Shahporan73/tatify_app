@@ -10,7 +10,21 @@ import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/view/user/user_home/widget/confirm_booking_sheet_widget.dart';
 
 class UserDetailsItemWidget extends StatelessWidget {
-  const UserDetailsItemWidget({super.key});
+  final String foodName;
+  final String standardPrice;
+  final String discountPrice;
+  final String offerDays;
+  final String description;
+  final String foodId;
+  const UserDetailsItemWidget({
+    super.key,
+    required this.foodName,
+    required this.standardPrice,
+    required this.discountPrice,
+    required this.offerDays,
+    required this.description,
+    required this.foodId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,55 +42,60 @@ class UserDetailsItemWidget extends StatelessWidget {
               blurRadius: 5,
               offset: Offset(0, 3),
             ),
-          ]
-      ),
+          ]),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText(title: 'Downer',
-            fontWeight: FontWeight.w700, color: AppColors.blackColor, fontSize: 18,
+          CustomText(
+            title: foodName,
+            fontWeight: FontWeight.w700,
+            color: AppColors.blackColor,
+            fontSize: 18,
           ),
           heightBox5,
           Row(
             children: [
               Expanded(
-                flex: 12,
+                flex: 13,
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(16),
-
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(AppImages.parchentageIcon, scale: 4,),
+                      Image.asset(
+                        AppImages.parchentageIcon,
+                        scale: 4,
+                      ),
                       widthBox5,
-                      Text.rich(TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '12.50€ ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 10.68, color: AppColors.whiteColor,
-                                decoration: TextDecoration.lineThrough,
-                                decorationColor: Colors.white,
-                              ),
-                            ),
-                            TextSpan(
-                              text: '8.49€',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 10.68, color: Color(0xff00FF00),
-                              ),
-                            ),
-                          ]
-                      ))
+                      Text.rich(TextSpan(children: [
+                        TextSpan(
+                          text: '$standardPrice€',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 10.68,
+                            color: AppColors.whiteColor,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: Colors.white,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' $discountPrice€',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 10.68,
+                            color: Color(0xff00FF00),
+                          ),
+                        ),
+                      ]))
                     ],
                   ),
-                ),),
+                ),
+              ),
               widthBox10,
               Expanded(
                 flex: 10,
@@ -85,17 +104,24 @@ class UserDetailsItemWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(16),
-
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(AppImages.refreshIcon, scale: 4,),
+                      Image.asset(
+                        AppImages.refreshIcon,
+                        scale: 4,
+                      ),
                       widthBox5,
-                      CustomText(title: '6 days', fontSize: 10.68, color: Colors.white,)
+                      CustomText(
+                        title: offerDays,
+                        fontSize: 10.68,
+                        color: Colors.white,
+                      )
                     ],
                   ),
-                ),),
+                ),
+              ),
               widthBox10,
               Expanded(
                 flex: 10,
@@ -104,22 +130,33 @@ class UserDetailsItemWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(16),
-
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.location_on_outlined, color: Colors.white, size: 18,),
+                      Icon(
+                        Icons.location_on_outlined,
+                        color: Colors.white,
+                        size: 18,
+                      ),
                       widthBox5,
-                      CustomText(title: 'On-site', fontSize: 10.68, color: Colors.white,)
+                      CustomText(
+                        title: 'On-site',
+                        fontSize: 10.68,
+                        color: Colors.white,
+                      )
                     ],
                   ),
-                ),)
+                ),
+              )
             ],
           ),
           heightBox5,
-          CustomText(title: 'You order 2 Turkish Moccas, the cheaper/equally priced one will not be charged.',
-            fontWeight: FontWeight.w400, color: Color(0xff677294), fontSize: 12,
+          CustomText(
+            title: description,
+            fontWeight: FontWeight.w400,
+            color: Color(0xff677294),
+            fontSize: 12,
           ),
           heightBox8,
           CustomButton(
@@ -128,7 +165,7 @@ class UserDetailsItemWidget extends StatelessWidget {
               titleColor: Colors.white,
               borderRadius: 25,
               padding_vertical: 8,
-              onTap: (){
+              onTap: () {
                 Get.bottomSheet(
                   Container(
                     height: Get.height / 3,
@@ -140,12 +177,16 @@ class UserDetailsItemWidget extends StatelessWidget {
                         topRight: Radius.circular(20),
                       ),
                     ),
-                    child: ConfirmBookingSheetWidget(),
+                    child: ConfirmBookingSheetWidget(
+                        foodName: foodName,
+                        foodPrice: discountPrice,
+                        foodDesc: description,
+                        foodId: foodId
+                    ),
                   ),
                   isScrollControlled: true, // Allows full height modal
                 );
-              }
-          ),
+              }),
         ],
       ),
     );
