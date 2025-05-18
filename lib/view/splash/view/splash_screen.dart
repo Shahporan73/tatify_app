@@ -1,29 +1,44 @@
-// ignore_for_file: use_full_hex_values_for_flutter_colors, prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
 
 import 'onboarding_screen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) =>  OnboardingScreen()),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingScreen()));
-    });
+
     return Scaffold(
       body: Container(
-        width: width * double.infinity,
-        height: height * double.infinity,
-        decoration: BoxDecoration(
+        width: width,
+        height: height,
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              const Color(0xffFFFAFB),
-              const Color(0xFFFFD7C599),
+              Color(0xffFFFAFB),
+              Color(0xFFFFD7C599),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

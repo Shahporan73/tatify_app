@@ -5,7 +5,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
 
 class MapWidget extends StatefulWidget {
-  const MapWidget({super.key});
+  final double latitude;
+  final double longitude;
+  final String? address;
+  const MapWidget({super.key, required this.latitude, required this.longitude, this.address,});
 
   @override
   State<MapWidget> createState() => _MapWidgetState();
@@ -14,12 +17,18 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> {
   late GoogleMapController mapController;
   BitmapDescriptor? _customIcon;
-
-  final LatLng restaurantLocation = LatLng(23.7678, 90.4125);
+  late LatLng restaurantLocation;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     _loadCustomMarker();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    restaurantLocation = LatLng(widget.latitude ?? 12.9716, widget.longitude ?? 77.5946);
   }
 
   Future<void> _loadCustomMarker() async {
@@ -42,8 +51,8 @@ class _MapWidgetState extends State<MapWidget> {
         Marker(
           markerId: const MarkerId("restaurant"),
           position: restaurantLocation,
-          infoWindow: const InfoWindow(title: "My Restaurant"),
-          icon: _customIcon ?? BitmapDescriptor.defaultMarker, // Apply custom icon
+          infoWindow: InfoWindow(title: widget.address ?? "My Restaurant"),
+          icon: _customIcon ?? BitmapDescriptor.defaultMarker,
         ),
       },
     );

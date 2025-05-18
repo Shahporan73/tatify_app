@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get.dart';
+import 'package:tatify_app/data/utils/custom_loader.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/main_app_bar.dart';
 import 'package:tatify_app/res/custom_style/custom_style.dart';
+import 'package:tatify_app/res/utils/created_at.dart';
+import 'package:tatify_app/view/vendor/vendor_profile/controller/vendor_booking_controller.dart';
 import 'package:tatify_app/view/vendor/vendor_profile/widget/history_widget.dart';
+
+import '../../../../res/common_widget/empty_restaurant_view.dart';
 
 class VendorHistoryScreen extends StatelessWidget {
   VendorHistoryScreen({super.key});
@@ -34,37 +41,59 @@ class VendorHistoryScreen extends StatelessWidget {
       selectedDate = picked;
     }
   }
+
   @override
   Widget build(BuildContext context) {
+    final VendorBookingController controller = Get.put(VendorBookingController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'History', backgroundColor: AppColors.bgColor,),
-      body: Padding(
-        padding: bodyPadding,
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-              onPressed: (){
-                _selectDate(context);
-              },
-              icon: Icon(Icons.calendar_month_outlined, color: AppColors.secondaryColor, size: 28,),
-            ),
-          ),
-          Expanded(
-              child: ListView.builder(
+      appBar: MainAppBar(
+        title: 'History',
+        backgroundColor: AppColors.bgColor,
+      ),
+      body: Obx(
+        ()=> Padding(
+          padding: bodyPadding,
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () {
+                    _selectDate(context);
+                  },
+                  icon: Icon(
+                    Icons.calendar_month_outlined,
+                    color: AppColors.secondaryColor,
+                    size: 28,
+                  ),
+                ),
+              ),
+              Expanded(
+                  child: controller.isLoading.value ? CustomLoader() :
+                  controller.getBookRedeemList.isEmpty ? EmptyRestaurantView(title: 'No History Found',) :
+                  ListView.builder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                itemCount: 5,
+                itemCount: controller.getBookRedeemList.length,
                 physics: ScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return HistoryWidget();
+                  var data = controller.getBookRedeemList[index];
+                  return HistoryWidget(
+                      foodImage: '',
+                      foodName: data.food?.itemName ?? '',
+                      foodPrice: data.cash?.payableAmount?.toStringAsFixed(0) ?? '',
+                      foodDescription: data.food?.description ?? '',
+                      redeemDate: createdAt(data.vendorRedeem?.redeemDate.toString()),
+                      userName: data.user?.name ?? '',
+                      userEmail: data.user?.email ?? '',
+                      userPhone: data.user?.phoneNumber ?? '',
+                  );
                 },
-              )
+              )),
+            ],
           ),
-        ],
-      ),
+        ),
       ),
     );
   }

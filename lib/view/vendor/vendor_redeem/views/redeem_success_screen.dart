@@ -7,16 +7,24 @@ import 'package:tatify_app/res/app_images/App_images.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/common_widget/lottie_loader_widget.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
+import 'package:tatify_app/view/user/user_home/view/home_dashboard.dart';
 import 'package:tatify_app/view/vendor/vendor_home/views/vendor_home_dashboard.dart';
 
 class RedeemSuccessScreen extends StatelessWidget {
-  const RedeemSuccessScreen({super.key});
+  final bool? isUser;
+  const RedeemSuccessScreen({super.key, this.isUser});
 
   @override
   Widget build(BuildContext context) {
     Future.delayed(
         Duration(seconds: 3),() {
-          Get.offAll(VendorHomeDashboard());
+
+          if(isUser == true) {
+            Get.offAll(HomeDashboard());
+          }else {
+            Get.offAll(VendorHomeDashboard());
+          }
+
         },
     );
     return Scaffold(
@@ -38,8 +46,8 @@ class RedeemSuccessScreen extends StatelessWidget {
             fontSize: 14,
             fontWeight: FontWeight.w400,
             textAlign: TextAlign.center,
-          ),),
-
+          ),
+          ),
         ],
       ),
     );

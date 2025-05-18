@@ -1,7 +1,14 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
+import 'package:tatify_app/view/user/user_profile/controller/my_profile_controller.dart';
+import 'package:tatify_app/view/vendor/vendor_profile/controller/my_restaurant_controller.dart';
+
+import '../../vendor_profile/controller/vendor_profile_controller.dart';
 
 class VHomeHeaderWidget extends StatelessWidget {
   const VHomeHeaderWidget({super.key});
@@ -10,48 +17,56 @@ class VHomeHeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    final VendorProfileController myProfileController = Get.put(VendorProfileController());
+    final MyRestaurantController restaurantController = Get.put(MyRestaurantController());
     return Container(
-      width: width * double.infinity,
-      height: height / 3.2,
-      padding: EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 8),
+      width: Get.width,
+      height: height / 4.8,
+      padding: EdgeInsets.only(left: 16, right: 16, top: 26, bottom: 8),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
-          gradient: LinearGradient(
-              colors: [
-                Color(0xffFF4F00B2).withOpacity(0.7),
-                Color(0xffF04B6C),
-              ]
-          )
-      ),
+          gradient: LinearGradient(colors: [
+            Color(0xffFF4F00B2).withOpacity(0.7),
+            Color(0xffF04B6C),
+          ])),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(AppImages.splashLogo, width: 70,),
+          Image.asset(
+            AppImages.splashLogo,
+            width: Get.width / 8,
+            height: Get.height / 12,
+          ),
           CustomText(
-              title: 'Hi, Istiak',
+              title: 'Hi, ${myProfileController.fullName.value.isNotEmpty ? myProfileController.fullName.value : 'User'},',
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 15,
               fontWeight: FontWeight.w500
           ),
           CustomText(
               title: 'Welcome to Taste Point ',
               color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.w500
-          ),
-
-          heightBox10,
+              fontSize: 16,
+              fontWeight: FontWeight.w500),
+          heightBox5,
           Row(
             children: [
-              Icon(Icons.restaurant_menu, color: Colors.white, size: 18,),
+              Icon(
+                Icons.restaurant_menu,
+                color: Colors.white,
+                size: 18,
+              ),
               widthBox5,
-              CustomText(title: 'Restaurant Name', fontSize: 14, color: Colors.white,),
+              CustomText(
+                title: restaurantController.myRestaurantsModel.value.data?.name ?? 'Not found',
+                fontSize: 14,
+                color: Colors.white,
+              ),
             ],
           ),
-
         ],
       ),
     );

@@ -24,26 +24,54 @@ import 'package:tatify_app/view/authenticate/view/email_verification_screen.dart
 import 'package:tatify_app/view/authenticate/view/sign_in_screen.dart';
 import 'package:tatify_app/view/user/user_profile/controller/profile_controller.dart';
 
+import '../../../user/user_profile/controller/my_profile_controller.dart';
+import '../controller/vendor_profile_controller.dart';
+
 class VendorProfileEditScreen extends StatelessWidget {
-  VendorProfileEditScreen({super.key});
+  final String profileImage;
+  final String fullName;
+  final String phoneNumber;
+  final String gander;
+  final String dateOfBirth;
+  final String email;
+  final String id;
+  VendorProfileEditScreen(
+      {super.key,
+      required this.profileImage,
+      required this.fullName,
+      required this.phoneNumber,
+      required this.gander,
+      required this.dateOfBirth,
+      required this.email,
+      required this.id});
+
+
   final UserProfileController userProfileController = Get.put(UserProfileController());
+  final VendorProfileController myProfileController = Get.put(VendorProfileController());
+
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
+    userProfileController.nameController.text = fullName;
+    userProfileController.phoneController.text = phoneNumber;
+    userProfileController.emailController.text = email;
+    userProfileController.dobController.text = dateOfBirth;
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(title: 'Edit profile'),
       body: SingleChildScrollView(
         padding: bodyPadding,
-        child:Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Center(
               child: Obx(() {
                 // Use the reactive `imagePath` from the controller
-                String? image = userProfileController.imagePath.value;
+                String? image = myProfileController.imagePath.value;
 
                 return CircleAvatar(
                   radius: 70,
@@ -56,7 +84,11 @@ class VendorProfileEditScreen extends StatelessWidget {
                             backgroundColor: Colors.grey,
                             backgroundImage: image != null
                                 ? FileImage(File(image)) // Show selected image
-                                : NetworkImage(placeholderImage) as ImageProvider,
+                                : NetworkImage(
+                              profileImage.isNotEmpty
+                                  ? profileImage
+                                  : placeholderImage,
+                            ) as ImageProvider,
                           ),
                         ),
                       ),
@@ -64,7 +96,7 @@ class VendorProfileEditScreen extends StatelessWidget {
                         bottom: 5,
                         right: 5,
                         child: GestureDetector(
-                          onTap: userProfileController.pickImage, // Trigger image picking
+                          onTap: myProfileController.pickImage, // Trigger image picking
                           child: Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
@@ -88,6 +120,7 @@ class VendorProfileEditScreen extends StatelessWidget {
             heightBox5,
             RoundTextField(
               hint: 'Enter your full name',
+              controller: userProfileController.nameController,
               prefixIcon: Icon(
                 Icons.person,
                 color: Colors.grey,
@@ -102,6 +135,7 @@ class VendorProfileEditScreen extends StatelessWidget {
             heightBox5,
             RoundTextField(
               hint: 'Enter your phone number',
+              controller: userProfileController.phoneController,
               prefixIcon: Icon(
                 Icons.phone,
                 color: Colors.grey,
@@ -110,16 +144,20 @@ class VendorProfileEditScreen extends StatelessWidget {
 
             heightBox10,
             Text(
-              'Gander',
+              'Gender',
               style: customLabelStyle,
             ),
             heightBox5,
-            CustomDropDownWidget(
-                selectedValue: 'Male',
-                items: ['Male', "Female", 'Others'],
-                onChanged: (value) {},
-                hintText: "Male"
-            ),
+            Obx(() => CustomDropDownWidget(
+              selectedValue: myProfileController.gender.value.isNotEmpty
+                  ? myProfileController.gender.value
+                  : null,
+              items: ['male', "female", 'other'],
+              onChanged: (value) {
+                myProfileController.gender.value = value ?? '';
+              },
+              hintText: "gander",
+            )),
 
             heightBox10,
             Text(
@@ -129,10 +167,10 @@ class VendorProfileEditScreen extends StatelessWidget {
             heightBox5,
             RoundTextField(
               onTap: () {
-                userProfileController.pickDate(context);
+                userProfileController.pickDate(context); // Trigger date picker
               },
               controller: userProfileController.dobController,
-              hint: '25/22/2002',
+              hint: 'Select your date of birth',
               prefixIcon: Icon(Icons.calendar_month_outlined),
               readOnly: true,
             ),
@@ -145,6 +183,7 @@ class VendorProfileEditScreen extends StatelessWidget {
             heightBox5,
             RoundTextField(
               hint: 'Enter your email',
+              controller: userProfileController.emailController,
               readOnly: true,
               prefixIcon: Icon(
                 Icons.email,
@@ -153,15 +192,24 @@ class VendorProfileEditScreen extends StatelessWidget {
             ),
 
             heightBox20,
-            CustomButton(
+            Obx(
+                  () => CustomButton(
                 title: "Update",
-                onTap: (){
-                  Navigator.of(context).pop();
-                  Get.rawSnackbar(message: 'Profile updated');
-                }
+                isLoading: myProfileController.isLoading.value,
+                onTap: () {
+                  print('id $id');
+                  myProfileController.updateProfile(
+                      fullName: userProfileController.nameController.text,
+                      dateOfBirth: userProfileController.dobController.text,
+                      gender: myProfileController.gender.value,
+                      phoneNumber: userProfileController.phoneController.text,
+                      email: userProfileController.emailController.text,
+                      id: id,
+                      context: context
+                  );
+                },
+              ),
             ),
-
-
             heightBox20,
           ],
         ),

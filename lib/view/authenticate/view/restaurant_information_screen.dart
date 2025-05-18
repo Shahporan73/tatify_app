@@ -24,8 +24,7 @@ class RestaurantInformationScreen extends StatefulWidget {
       _RestaurantInformationScreenState();
 }
 
-class _RestaurantInformationScreenState
-    extends State<RestaurantInformationScreen> {
+class _RestaurantInformationScreenState extends State<RestaurantInformationScreen> {
   final RestaurantController controller = Get.put(RestaurantController());
 
   // Helper function to convert TimeOfDay to 24-hour format
@@ -94,6 +93,34 @@ class _RestaurantInformationScreenState
       }
     }
     return true;
+  }
+
+
+  double? latitude;
+  double? longitude;
+
+  @override
+  void initState() {
+    super.initState();
+    _getLocationData();
+  }
+
+  Future<void> _getLocationData() async {
+    try {
+      var location = await LocationServiceWithAddress.getCurrentLocationWithAddress();
+      print('Latitude: ${location['latitude']}');
+      print('Longitude: ${location['longitude']}');
+      print('Address: ${location['address']}');
+
+      setState(() {
+        latitude = location['latitude'];
+        longitude = location['longitude'];
+      });
+
+      controller.addressController.text = location['address'];
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   @override
@@ -199,19 +226,6 @@ class _RestaurantInformationScreenState
               controller: controller.addressController,
               prefixIcon: Icon(Icons.location_on_outlined),
               readOnly: false,
-              onTap: () async {
-                try {
-                  var location = await LocationServiceWithAddress.getCurrentLocationWithAddress();
-                  print('Latitude: ${location['latitude']}');
-                  print('Longitude: ${location['longitude']}');
-                  print('Address: ${location['address']}');
-                  controller.latitude.value = location['latitude'];
-                  controller.longitude.value = location['longitude'];
-                  controller.addressController.text = location['address'];
-                } catch (e) {
-                  print('Error: $e');
-                }
-              },
             ),
             heightBox10,
             Text('City', style: customLabelStyle),
@@ -252,7 +266,7 @@ class _RestaurantInformationScreenState
                 isLoading: controller.isLoading.value,
                 onTap: () {
                   if (_validateInputs()) {
-                    controller.createRestaurant();
+                    controller.createRestaurant(longitude: longitude ?? 0.0, latitude: latitude ?? 0.0);
                   }
                 },
               ),

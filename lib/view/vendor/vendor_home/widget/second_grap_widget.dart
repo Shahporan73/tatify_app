@@ -1,61 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 
 class SecondGrapWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> graphData = [
-    {"month": "Jan", "value": 50.0, "color": Colors.green},
-    {"month": "Feb", "value": 20.0, "color": Colors.green},
-    {"month": "Mar", "value": 45.0, "color": Colors.green},
-    {"month": "Apr", "value": 80.0, "color": Colors.green},
-    {"month": "May", "value": 65.0, "color": Colors.green},
-    {"month": "Jun", "value": 100.0, "color": Colors.green},
-    {"month": "Jul", "value": 50.0, "color": Colors.green},
-    {"month": "Aug", "value": 50.0, "color": Colors.green},
-    {"month": "Sep", "value": 50.0, "color": Colors.green},
-    {"month": "Oct", "value": 50.0, "color": Colors.green},
-    {"month": "Nov", "value": 50.0, "color": Colors.green},
-    {"month": "Dec", "value": 100.0, "color": Colors.orange}, // Highlighted month
+  final List<_MonthlyData> graphData = [
+    _MonthlyData('Jan', 50.0, Colors.green),
+    _MonthlyData('Feb', 20.0, Colors.green),
+    _MonthlyData('Mar', 45.0, Colors.green),
+    _MonthlyData('Apr', 80.0, Colors.green),
+    _MonthlyData('May', 65.0, Colors.green),
+    _MonthlyData('Jun', 100.0, Colors.green),
+    _MonthlyData('Jul', 50.0, Colors.green),
+    _MonthlyData('Aug', 50.0, Colors.green),
+    _MonthlyData('Sep', 50.0, Colors.green),
+    _MonthlyData('Oct', 50.0, Colors.green),
+    _MonthlyData('Nov', 50.0, Colors.green),
+    _MonthlyData('Dec', 100.0, Colors.orange),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgColor, // Light background like the image
+      backgroundColor: AppColors.bgColor,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: graphData.map((data) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Graph Bar
-                  Container(
-                    width: 20,
-                    height: data['value'],
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: data['color'],
-                    ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: Get.height / 4.2,
+                child: SfCartesianChart(
+                  plotAreaBorderWidth: 0,
+                  primaryXAxis: CategoryAxis(
+                    axisLine: const AxisLine(width: 0),
+                    majorTickLines: const MajorTickLines(size: 0),
+                    // Hide default labels
+                    labelStyle: const TextStyle(color: Colors.transparent, fontSize: 0),
                   ),
-                  SizedBox(height: 5),
-                  // Month Label
-                  Text(
-                    data['month'],
+                  primaryYAxis: NumericAxis(
+                    isVisible: false,
+                    minimum: 0,
+                    maximum: 110,
+                  ),
+                  series: <ColumnSeries<_MonthlyData, String>>[
+                    ColumnSeries<_MonthlyData, String>(
+                      dataSource: graphData,
+                      xValueMapper: (_MonthlyData data, _) => data.month,
+                      yValueMapper: (_MonthlyData data, _) => data.value,
+                      pointColorMapper: (_MonthlyData data, _) => data.color,
+                      width: 0.5,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ],
+                ),
+              ),
+              // Show month labels
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: graphData.map((data) {
+                  final bool isDec = data.month == 'Dec';
+                  return Text(
+                    data.month,
                     style: TextStyle(
                       fontSize: 12,
-                      color: data['month'] == "Dec" ? Colors.orange : Colors.grey[700],
-                      fontWeight: data['month'] == "Dec" ? FontWeight.bold : FontWeight.normal,
+                      color: isDec ? Colors.orange : Colors.grey[700],
+                      fontWeight: isDec ? FontWeight.bold : FontWeight.normal,
                     ),
-                  ),
-                ],
-              );
-            }).toList(),
+                  );
+                }).toList(),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+}
+
+class _MonthlyData {
+  final String month;
+  final double value;
+  final Color color;
+
+  _MonthlyData(this.month, this.value, this.color);
 }

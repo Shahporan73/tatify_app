@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:tatify_app/view/user/user_favorite/model/favorite_restaurant_model.dart';
 import 'package:tatify_app/view/user/user_home/controller/home_controller.dart';
+import 'package:tatify_app/view/user/user_home/controller/single_restaurant_controller.dart';
 
 import '../../../../data/api_client/bace_client.dart';
 import '../../../../data/api_client/end_point.dart';
@@ -16,7 +17,6 @@ class FavoriteController extends GetxController{
   var favoriteRestaurantModel = FavoriteRestaurantModel().obs;
   var favoriteList = <Fav_restaurant_list>[].obs;
 
-  final HomeController homeController = Get.put(HomeController());
 
   @override
   void onInit() {
@@ -78,7 +78,6 @@ class FavoriteController extends GetxController{
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
         if (responseBody != null && responseBody['success'] == true) {
-          homeController.getNearbyRestaurants();
           getFavorite();
           Get.rawSnackbar(message: 'Add to favorite successfully');
         } else {
@@ -95,7 +94,7 @@ class FavoriteController extends GetxController{
     }
   }
 
-  Future<void> removeFavorite({required String restaurantId, context}) async {
+  Future<void> removeFavorite({required String restaurantId, required BuildContext context}) async {
     isLoading.value = true;
     try {
       String token = await LocalStorage.getData(key: accessToken);
@@ -110,6 +109,9 @@ class FavoriteController extends GetxController{
         ),
       );
 
+      print('Hit api ${EndPoint.removeFavoriteURL(restaurantId: restaurantId)}');
+
+
       if(responseBody != null && responseBody['success'] == true){
         getFavorite();
         Navigator.pop(context);
@@ -123,5 +125,6 @@ class FavoriteController extends GetxController{
       isLoading.value = false;
     }
   }
+
 
 }

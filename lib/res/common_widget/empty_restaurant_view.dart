@@ -19,10 +19,11 @@ class EmptyRestaurantView extends StatelessWidget {
             lottieAssetPath: AppImages.emptyAnim,
           width: Get.width / 2,
           height: Get.height / 4,
+          repeat: true,
         ),
         SizedBox(height: 20),
         CustomText(
-          title: 'Your favorites list is empty',
+          title: title?? 'Your favorites list is empty',
             fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Colors.grey

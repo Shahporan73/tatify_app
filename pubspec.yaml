@@ -64,6 +64,9 @@ dependencies:
   http_parser: ^4.0.0
   geolocator: ^10.1.0
   geocoding: ^2.1.0
+  dio: ^5.8.0+1
+  syncfusion_flutter_charts: ^29.2.4
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

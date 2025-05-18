@@ -12,6 +12,7 @@ import 'package:tatify_app/view/vendor/vendor_home/widget/first_grap_widget.dart
 import 'package:tatify_app/view/vendor/vendor_home/widget/home_menu_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/second_grap_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/v_home_header_widget.dart';
+import 'package:tatify_app/view/vendor/vendor_profile/controller/my_restaurant_controller.dart';
 
 import '../../../../res/app_colors/App_Colors.dart';
 
@@ -22,16 +23,27 @@ class VendorHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    final MyRestaurantController myRestaurantController = Get.put(MyRestaurantController());
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            //   header
-            VHomeHeaderWidget(),
+      body: CustomScrollView(
+        slivers: [
+          // Header section with sticky restaurant name
+          SliverAppBar(
+            expandedHeight: height / 4.8,
+            floating: false,
+            pinned: true,
+            leading: SizedBox(),
+            backgroundColor: Colors.transparent,
+            flexibleSpace: FlexibleSpaceBar(
+              background: VHomeHeaderWidget(),
+            ),
+          ),
 
-            Column(
-              children: [
+          // Content section below the header
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
                 heightBox10,
                 Center(
                   child: CustomText(
@@ -51,7 +63,7 @@ class VendorHomeScreen extends StatelessWidget {
 
                 heightBox10,
                 SizedBox(
-                  height: height / 3.2,
+                  height: height / 2.8,
                   child: FirstGrapWidget(),
                 ),
 
@@ -63,51 +75,62 @@ class VendorHomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text.rich(
-                          textAlign: TextAlign.center,
-                          TextSpan(children: [
-                            TextSpan(
-                                text: 'Total Commission this month: ',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12)),
-                            TextSpan(
-                                text: '\$1,530',
-                                style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16))
-                          ])),
+                        textAlign: TextAlign.center,
+                        TextSpan(children: [
+                          TextSpan(
+                              text: 'Total Commission this month: ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12)),
+                          TextSpan(
+                              text: '\$1,530',
+                              style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16))
+                        ]),
+                      ),
                       widthBox10,
                       CustomDropDownWidget(
-                          width: width / 4,
-                          selectedValue: 'Year',
-                          items: ['Year', 'Month', 'Weeks', 'Today'],
-                          onChanged: (value) {},
-                          hintText: 'Year'),
+                        width: width / 4,
+                        selectedValue: 'Year',
+                        items: ['Year', 'Month', 'Weeks', 'Today'],
+                        onChanged: (value) {},
+                        hintText: 'Year',
+                      ),
                     ],
                   ),
                 ),
 
                 heightBox20,
                 SizedBox(
-                  height: height / 4.5,
+                  height: height / 3,
                   child: SecondGrapWidget(),
                 ),
 
                 // OnGoing list
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                child: CustomRowWidget(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                    title: CustomText(title: 'Ongoing Menu', fontSize: 16, fontWeight: FontWeight.w600,),
+                  child: CustomRowWidget(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    title: CustomText(
+                      title: 'Ongoing Menu',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                     value: IconButton(
                       onPressed: () {
-                        Get.to(()=>SearchOnGoingItemScreen(), transition: Transition.downToUp);
+                        Get.to(() => SearchOnGoingItemScreen(),
+                            transition: Transition.downToUp);
                       },
-                      icon: Icon(Icons.search_outlined, size: 24,),
-                    )
-                ),),
+                      icon: Icon(
+                        Icons.search_outlined,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
@@ -127,8 +150,8 @@ class VendorHomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

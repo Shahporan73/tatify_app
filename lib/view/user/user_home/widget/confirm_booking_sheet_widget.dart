@@ -6,47 +6,59 @@ import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/custom_button.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
+import 'package:tatify_app/view/user/user_booking/controller/booking_controller.dart';
 import 'package:tatify_app/view/user/user_home/view/book_deal_success_screen.dart';
 
 class ConfirmBookingSheetWidget extends StatelessWidget {
-  const ConfirmBookingSheetWidget({super.key});
+  final String foodName;
+  final String foodPrice;
+  final String foodDesc;
+  final String foodId;
+  const ConfirmBookingSheetWidget(
+      {super.key,
+      required this.foodName,
+      required this.foodPrice,
+      required this.foodDesc,
+      required this.foodId});
 
   @override
   Widget build(BuildContext context) {
+    final BookingController controller = Get.put(BookingController());
     return Padding(
       padding: EdgeInsets.only(left: 16, right: 16, top: 32, bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomText(
-            title: 'Chicken Berlicious',
+            title: foodName,
             fontWeight: FontWeight.w600,
             fontSize: 18,
             color: Colors.black,
           ),
           heightBox5,
           CustomText(
-            title: '🌟€1 Bowl 🌟',
+            title: '🌟€$foodPrice 🌟',
             fontWeight: FontWeight.w600,
             fontSize: 18,
             color: Colors.black,
           ),
           heightBox10,
           CustomText(
-            title:
-                'Build your own bowl of size M with your choice and pay only €1.',
+            title: foodDesc,
             fontWeight: FontWeight.w400,
             fontSize: 12,
             color: Colors.black,
           ),
           Spacer(),
-          CustomButton(
-            title: 'Book Deal',
-            onTap: () {
-              Get.back();
-              Get.offAll(()=>BookDealSuccessScreen());
-            },
-            buttonColor: AppColors.secondaryColor,
+          Obx(
+            ()=> CustomButton(
+              title: 'Book Deal',
+              isLoading: controller.isLoading.value,
+              onTap: () {
+               controller.createBooking(foodId: foodId, context: context);
+              },
+              buttonColor: AppColors.secondaryColor,
+            ),
           ),
         ],
       ),

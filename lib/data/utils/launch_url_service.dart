@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class LaunchUrlService {
+  Future<void> makePhoneCall({required String phoneNumber}) async {
+    final Uri url = Uri.parse("tel:$phoneNumber");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw "Could not launch $url";
+    }
+  }
+
+  Future<void> sendEmail({required String email}) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint("No email app found. Please install an email app.");
+      Get.rawSnackbar(
+        message: "No email app found. Please install an email app.",
+        duration: Duration(seconds: 3),
+      );
+    }
+  }
+
+  Future<void> openWhatsApp({required String phone}) async {
+    final cleanedPhone = phone.replaceAll('+', '');
+    final Uri url = Uri.parse('https://wa.me/$cleanedPhone');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint("Could not launch WhatsApp");
+      Get.rawSnackbar(
+        message: "Could not launch WhatsApp. Please check if WhatsApp is installed.",
+        duration: Duration(seconds: 3),
+      );
+    }
+  }
+
+}

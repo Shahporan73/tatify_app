@@ -9,7 +9,7 @@ class GetNearByRestaurantModel {
   final String? message;
   final Data? data;
 
-  factory GetNearByRestaurantModel.fromJson(Map<String, dynamic> json){
+  factory GetNearByRestaurantModel.fromJson(Map<String, dynamic> json) {
     return GetNearByRestaurantModel(
       success: json["success"],
       message: json["message"],
@@ -27,16 +27,18 @@ class Data {
 
   final int? limit;
   final dynamic distance;
-  final List<RestaurantList> result;
+  final List<RestaurantList>? result;
 
-  factory Data.fromJson(Map<String, dynamic> json){
+  factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
       limit: json["limit"],
       distance: json["distance"],
-      result: json["result"] == null ? [] : List<RestaurantList>.from(json["result"]!.map((x) => RestaurantList.fromJson(x))),
+      result: json["result"] == null
+          ? []
+          : List<RestaurantList>.from(
+          json["result"]!.map((x) => RestaurantList.fromJson(x))),
     );
   }
-
 }
 
 class RestaurantList {
@@ -80,7 +82,7 @@ class RestaurantList {
   final double? distance;
   final VendorDetails? vendorDetails;
 
-  factory RestaurantList.fromJson(Map<String, dynamic> json){
+  factory RestaurantList.fromJson(Map<String, dynamic> json) {
     return RestaurantList(
       id: json["_id"],
       name: json["name"],
@@ -98,11 +100,10 @@ class RestaurantList {
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
       v: json["__v"],
-      distance: json["distance"],
+      distance: (json["distance"] is int) ? (json["distance"] as int).toDouble() : json["distance"]?.toDouble(),
       vendorDetails: json["vendorDetails"] == null ? null : VendorDetails.fromJson(json["vendorDetails"]),
     );
   }
-
 }
 
 class Commission {
@@ -120,7 +121,7 @@ class Commission {
   final dynamic updatedAt;
   final String? id;
 
-  factory Commission.fromJson(Map<String, dynamic> json){
+  factory Commission.fromJson(Map<String, dynamic> json) {
     return Commission(
       verified: json["verified"],
       commissionRate: json["commissionRate"],
@@ -129,7 +130,6 @@ class Commission {
       id: json["_id"],
     );
   }
-
 }
 
 class Location {
@@ -141,13 +141,12 @@ class Location {
   final List<double> coordinates;
   final String? type;
 
-  factory Location.fromJson(Map<String, dynamic> json){
+  factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       coordinates: json["coordinates"] == null ? [] : List<double>.from(json["coordinates"]!.map((x) => x)),
       type: json["type"],
     );
   }
-
 }
 
 class OpeningHr {
@@ -165,7 +164,7 @@ class OpeningHr {
   final bool? isClosed;
   final String? id;
 
-  factory OpeningHr.fromJson(Map<String, dynamic> json){
+  factory OpeningHr.fromJson(Map<String, dynamic> json) {
     return OpeningHr(
       day: json["day"],
       openTime: json["openTime"],
@@ -174,7 +173,6 @@ class OpeningHr {
       id: json["_id"],
     );
   }
-
 }
 
 class VendorDetails {
@@ -186,11 +184,10 @@ class VendorDetails {
   final String? id;
   final Location? location;
 
-  factory VendorDetails.fromJson(Map<String, dynamic> json){
+  factory VendorDetails.fromJson(Map<String, dynamic> json) {
     return VendorDetails(
       id: json["_id"],
       location: json["location"] == null ? null : Location.fromJson(json["location"]),
     );
   }
-
 }

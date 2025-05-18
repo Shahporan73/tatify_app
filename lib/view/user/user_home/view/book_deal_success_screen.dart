@@ -62,7 +62,7 @@ class BookDealSuccessScreen extends StatelessWidget {
               title: 'Done',
               buttonColor: AppColors.secondaryColor,
               onTap: (){
-                Get.offAll(()=> HomeDashboard());
+                Navigator.of(context).pop();
               }
           ),
           heightBox20

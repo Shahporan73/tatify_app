@@ -8,3 +8,6 @@ const userId = 'userId';
 const saveEmail = 'saveEmail';
 const savePassword = 'savePassword';
 const saveRememberMe = 'saveRememberMe';
+
+const vendorId = 'vendorId';
+const userType = 'userType';
