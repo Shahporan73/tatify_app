@@ -4,10 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:tatify_app/data/utils/custom_loader.dart';
+import 'package:tatify_app/res/app_const/app_const.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
 import 'package:tatify_app/res/common_widget/custom_button.dart';
+import 'package:tatify_app/res/common_widget/custom_network_image_widget.dart';
 import 'package:tatify_app/view/user/user_discover/view/user_filter_bottom_sheet.dart';
 import 'package:tatify_app/view/user/user_discover/view/user_select_city_screen.dart';
+import 'package:tatify_app/view/user/user_home/controller/home_controller.dart';
+import 'package:tatify_app/view/user/user_home/controller/single_restaurant_controller.dart';
+import 'package:tatify_app/view/user/user_home/view/user_restaurant_details_screen.dart';
 
 class UserDiscoverScreen extends StatefulWidget {
   @override
@@ -15,145 +22,138 @@ class UserDiscoverScreen extends StatefulWidget {
 }
 
 class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
-  late GoogleMapController mapController;
-  final LatLng _initialPosition = LatLng(12.9716, 77.5946); // Bangalore
+  final HomeController restaurantController = Get.put(HomeController());
+  final SingleRestaurantController singleRestaurantController = Get.put(SingleRestaurantController());
+  GoogleMapController? mapController;
+  LatLng? _initialPosition;
   BitmapDescriptor? _customIcon;
-
-  final List<LatLng> _locations = [
-    LatLng(12.9718, 77.5944),
-    LatLng(12.9720, 77.5950),
-    LatLng(12.9705, 77.5935),
-    LatLng(12.9698, 77.5960),
-    LatLng(12.9688, 77.5942),
-    LatLng(12.9735, 77.5920),
-    LatLng(12.9736, 77.5921),
-    LatLng(12.9734, 77.5925),
-  ];
-
-  final Set<Marker> _markers = {};
 
   @override
   void initState() {
     super.initState();
+    _determinePosition();
     _loadCustomMarker();
+  }
+
+  Future<void> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Get.snackbar('Location Disabled', 'Please enable location services');
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        Get.snackbar('Permission Denied', 'Location permission denied');
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Get.snackbar('Permission Denied', 'Location permissions are permanently denied');
+      return;
+    }
+
+    final position = await Geolocator.getCurrentPosition();
+
+    setState(() {
+      _initialPosition = LatLng(position.latitude, position.longitude);
+    });
+
+    if (mapController != null) {
+      mapController!.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: _initialPosition!, zoom: 15),
+        ),
+      );
+    }
   }
 
   Future<void> _loadCustomMarker() async {
     final ByteData byteData = await rootBundle.load(AppImages.customMarkerIcon);
     final Uint8List bytes = byteData.buffer.asUint8List();
     _customIcon = BitmapDescriptor.fromBytes(bytes);
-    _loadMarkers();
+    setState(() {}); // Update UI after loading icon
   }
 
-  void _loadMarkers() {
-    if (_customIcon == null) return;
+  Set<Marker> getMarkers() {
+    if (_customIcon == null) return {};
 
-    for (var i = 0; i < _locations.length; i++) {
-      _markers.add(
+    final List<Marker> markers = [];
+
+    for (var i = 0; i < restaurantController.nearbyRestaurantList.length; i++) {
+      final restaurant = restaurantController.nearbyRestaurantList[i];
+
+      if (restaurant.location == null ||
+          restaurant.location!.coordinates.length < 2) continue;
+
+      final longitude = restaurant.location!.coordinates[0];
+      final latitude = restaurant.location!.coordinates[1];
+
+      markers.add(
         Marker(
-          markerId: MarkerId('marker_$i'),
-          position: _locations[i],
+          markerId: MarkerId(restaurant.id ?? 'marker_$i'),
+          position: LatLng(latitude, longitude),
           icon: _customIcon!,
-          onTap: _showBottomSheet,
+          onTap: () => showBottomSheet(
+              restaurantImageUrl: restaurant.featureImage ?? '',
+              restaurantName: restaurant.name ?? '',
+              reviews: restaurant.review?.total?.toStringAsFixed(0) ?? '0',
+              rating: restaurant.review?.star?.toStringAsFixed(1) ?? '0.0',
+              distance: restaurant.distance?.toStringAsFixed(0) ?? '',
+            onTap: () {
+              singleRestaurantController.getSingleRestaurant(restaurantId: restaurant.id ?? '').then((value) {
+                Get.to(()=> UserRestaurantDetailsScreen(restaurantId: restaurant.id ?? '',));
+              },);
+            },
+          ),
+          infoWindow: InfoWindow(title: restaurant.name),
         ),
       );
     }
-    setState(() {});
-  }
-
-  void _showBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return Container(
-          margin: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    'https://t4.ftcdn.net/jpg/02/74/99/01/360_F_274990113_ffVRBygLkLCZAATF9lWymzE6bItMVuH1.jpg',
-                    fit: BoxFit.cover,
-                    width: 60,
-                    height: 60,
-                  ),
-                ),
-                title: Text("SPICETRAILS Altstadt",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Row(
-                  children: [
-                    Icon(Icons.star, color: Colors.orange, size: 18),
-                    SizedBox(width: 4),
-                    Text("4.3 (17)"),
-                    SizedBox(width: 8),
-                    Icon(Icons.location_on, color: Colors.red, size: 18),
-                    SizedBox(width: 4),
-                    Text("2 km"),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Text("\$10 Discount",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                    SizedBox(width: 8),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                          color: Colors.orange,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Text("Free soft drink",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    return markers.toSet();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            GoogleMap(
-              initialCameraPosition:
-                  CameraPosition(target: _initialPosition, zoom: 15),
-              markers: _markers,
-              onMapCreated: (controller) => mapController = controller,
-            ),
-
-            Positioned(
-              bottom: 16,
+        child: Obx(() {
+          if (restaurantController.isLoading.value ||
+              _initialPosition == null ||
+              _customIcon == null) {
+            return Center(child: CustomLoader());
+          }
+          return Stack(
+            children: [
+              GoogleMap(
+                initialCameraPosition:
+                    CameraPosition(target: _initialPosition!, zoom: 15),
+                markers: getMarkers(),
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                onMapCreated: (controller) {
+                  mapController = controller;
+                  if (_initialPosition != null) {
+                    mapController!.animateCamera(
+                      CameraUpdate.newCameraPosition(
+                        CameraPosition(target: _initialPosition!, zoom: 15),
+                      ),
+                    );
+                  }
+                },
+              ),
+              Positioned(
+                bottom: 16,
                 left: Get.width / 6,
                 right: Get.width / 6,
-                child:Container(
+                child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(25.0),
@@ -164,31 +164,31 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
                       Expanded(
                         child: CustomButton(
                           title: "Filter",
-                        buttonColor: Colors.white,
-                        borderRadius: 25,
-                        widget: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.filter_list),
-                            Text("Filter"),
-                          ],
+                          buttonColor: Colors.white,
+                          borderRadius: 25,
+                          widget: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.filter_list),
+                              Text("Filter"),
+                            ],
+                          ),
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30),
+                                ),
+                              ),
+                              builder: (context) => const UserFilterBottomSheet(),
+                            );
+                          },
                         ),
-                        onTap: () {
-                          // Navigator.pop(context);
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(20)),
-                            ),
-                            builder: (context) {
-                              return UserFilterBottomSheet();
-                            },
-                          );
-                        },
-                      ),),
+                      ),
                       Container(
                         width: 1,
                         height: Get.height / 15,
@@ -199,26 +199,118 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
                           title: '',
                           buttonColor: Colors.white,
                           borderRadius: 25,
-                        widget: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.list),
-                            Text("List"),
-                          ],
-                        ),
-                        onTap: () {
-                          Get.to(()=> UserSelectCityScreen());
-                        },
+                          widget: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.list),
+                              Text("List"),
+                            ],
+                          ),
+                          onTap: () {
+                            Get.to(() => UserSelectCityScreen());
+                          },
                         ),
                       ),
                     ],
                   ),
                 ),
-            ),
-          ],
-        ),
+              ),
+            ],
+          );
+        }),
       ),
+    );
+  }
+
+  void showBottomSheet({
+    required String restaurantImageUrl,
+    required String restaurantName,
+    required String reviews,
+    required String rating,
+    required String distance,
+    required VoidCallback onTap
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return InkWell(
+          onTap: onTap,
+          child: Container(
+            margin: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CustomNetworkImage(
+                      imageUrl: restaurantImageUrl.isNotEmpty
+                          ? restaurantImageUrl
+                          : placeholderImage,
+                      fit: BoxFit.cover,
+                      width: 60,
+                      height: 60,
+                    ),
+                  ),
+                  title: Text(restaurantName,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Row(
+                    children: [
+                      Icon(Icons.star, color: Colors.orange, size: 18),
+                      SizedBox(width: 4),
+                      Text("$rating ($reviews)"),
+                      SizedBox(width: 8),
+                      Icon(Icons.location_on, color: Colors.red, size: 18),
+                      SizedBox(width: 4),
+                      Text("$distance km"),
+                    ],
+                  ),
+                ),
+                /* Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          "\$10 Discount",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          "Free soft drink",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),*/
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -65,7 +65,7 @@ class CustomSliverAppbar extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ],
-                  )
+                  ),
               ),
               Spacer(),
               GestureDetector(

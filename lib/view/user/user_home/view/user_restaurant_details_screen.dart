@@ -13,6 +13,8 @@ import 'package:tatify_app/res/common_widget/empty_restaurant_view.dart';
 import 'package:tatify_app/res/utils/created_at.dart';
 import 'package:tatify_app/res/utils/review_format.dart';
 import 'package:tatify_app/view/user/user_home/controller/single_restaurant_controller.dart';
+import 'package:tatify_app/view/user/user_home/view/extra_views/see_all_food_screen.dart';
+import 'package:tatify_app/view/user/user_home/view/extra_views/see_all_review_screen.dart';
 import 'package:tatify_app/view/user/user_home/widget/restaurant_details_header_widget.dart';
 import 'package:tatify_app/view/user/user_home/widget/user_details_item_widget.dart';
 import 'package:tatify_app/view/user/user_home/widget/user_reviews_widget.dart';
@@ -28,30 +30,38 @@ class UserRestaurantDetailsScreen extends StatefulWidget {
   final String? restaurantId;
   const UserRestaurantDetailsScreen({super.key, this.restaurantId});
   @override
-  State<UserRestaurantDetailsScreen> createState() => _UserRestaurantDetailsScreenState();
+  State<UserRestaurantDetailsScreen> createState() =>
+      _UserRestaurantDetailsScreenState();
 }
 
 class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScreen> {
+
+  late final SingleRestaurantController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(SingleRestaurantController());
+    if (widget.restaurantId != null) {
+      controller.getSingleRestaurant(restaurantId: widget.restaurantId!);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
-    final SingleRestaurantController controller = Get.put(SingleRestaurantController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       body: Obx(
         () {
           if (controller.isLoading.value) {
-            return Center(
-              child: CustomLoader(
-                size: 28,
-              ),
-            );
-          }
+            return Center(child: CustomLoader());
+          }else
           if (controller.singleRestaurantModel.value.data == null) {
-            return EmptyRestaurantView(
-              title: 'Restaurant Not Available',
-            );
+            return EmptyRestaurantView(title: 'Restaurant Not Available');
           }
+
           var data = controller.singleRestaurantModel.value.data;
           return SafeArea(
             child: CustomScrollView(
@@ -71,12 +81,14 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                        if (controller.isLoadingFood.value && index == controller.foodList.length) {
+                      (context, index) {
+                        if (controller.isLoadingFood.value &&
+                            index == controller.foodList.length) {
                           return Center(child: CustomLoader());
                         }
 
-                        if (controller.foodList.isEmpty && !controller.isLoadingFood.value) {
+                        if (controller.foodList.isEmpty &&
+                            !controller.isLoadingFood.value) {
                           return EmptyRestaurantView(
                             title: 'Food Not Available',
                           );
@@ -86,7 +98,8 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                         return UserDetailsItemWidget(
                           foodName: food.itemName ?? 'Not Available',
                           standardPrice: food.price?.price.toString() ?? '0',
-                          discountPrice: food.price?.discountPrice.toString() ?? '0',
+                          discountPrice:
+                              food.price?.discountPrice.toString() ?? '0',
                           offerDays: food.price?.offerDay ?? '',
                           description: food.description ?? 'Not Available',
                           foodId: food.id ?? '',
@@ -96,6 +109,32 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                     ),
                   ),
                 ),
+
+                SliverToBoxAdapter(
+                  child: const SizedBox(height: 5),
+                ),
+
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: (controller.foodList.length == 0 || controller.foodList.length <= 2)
+                        ? SizedBox()
+                        : CustomButton(
+                      title: 'All Food (${controller.foodList.length})',
+                      buttonColor: AppColors.secondaryColor,
+                      borderRadius: 25,
+                      padding_vertical: 8,
+                      onTap: () {
+                        Get.to(
+                              () => SeeAllFoodScreen(foodList: controller.foodList),
+                          transition: Transition.downToUp,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+
+
 
                 SliverToBoxAdapter(
                   child: const SizedBox(height: 20),
@@ -173,10 +212,12 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        if (controller.isLoadingReview.value && index == controller.reviewList.length) {
+                        if (controller.isLoadingReview.value &&
+                            index == controller.reviewList.length) {
                           return Center(child: CustomLoader());
                         }
-                        if (controller.reviewList.isEmpty && !controller.isLoadingReview.value) {
+                        if (controller.reviewList.isEmpty &&
+                            !controller.isLoadingReview.value) {
                           return EmptyRestaurantView(
                             title: 'Reviews Not Available',
                           );
@@ -190,7 +231,8 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                         return UserReviewsWidget(
                           rating: review.ratings ?? 0.0,
                           review: reviewFormat(review.ratings ?? 0.0),
-                          userImage: review.userInfo?.profileImage ?? placeholderImage,
+                          userImage:
+                              review.userInfo?.profileImage ?? placeholderImage,
                           userName: review.userInfo?.name ?? 'Not Available',
                           createdTime: createdAt(review.createdAt.toString()),
                         );
@@ -207,15 +249,20 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: (data?.review?.total ?? 0) == 0
+                    child: (data?.review?.total ?? 0) <= 5
                         ? SizedBox()
                         : CustomButton(
-                      title: 'All reviews (${data?.review?.total ?? 0})',
-                      buttonColor: AppColors.secondaryColor,
-                      borderRadius: 25,
-                      padding_vertical: 8,
-                      onTap: () {},
-                    ),
+                            title: 'All reviews (${data?.review?.total ?? 0})',
+                            buttonColor: AppColors.secondaryColor,
+                            borderRadius: 25,
+                            padding_vertical: 8,
+                            onTap: () {
+                              Get.to(
+                                () => SeeAllReviewScreen(reviewList: controller.reviewList,),
+                                transition: Transition.downToUp,
+                              );
+                            },
+                          ),
                   ),
                 ),
 
@@ -231,7 +278,8 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                         Icon(Icons.location_on_outlined,
                             color: AppColors.secondaryColor, size: 24),
                         SizedBox(width: 8),
-                        Text('Location',
+                        Text(
+                          'Location',
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -300,6 +348,7 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                               : ListView.builder(
                                   itemCount: data?.openingHr.length ?? 0,
                                   shrinkWrap: true,
+                                  physics: ScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return TimeScheduleWidget(
                                       day: data?.openingHr[index].day ?? '',

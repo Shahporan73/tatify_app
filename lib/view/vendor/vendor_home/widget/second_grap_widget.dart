@@ -2,22 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
+import 'package:tatify_app/res/common_widget/custom_text.dart';
+import '../../../../res/custom_style/custom_size.dart';
+import '../controller/total_commission_controller.dart';
+import 'commisson_shimmer_widget.dart';
 
 class SecondGrapWidget extends StatelessWidget {
-  final List<_MonthlyData> graphData = [
-    _MonthlyData('Jan', 50.0, Colors.green),
-    _MonthlyData('Feb', 20.0, Colors.green),
-    _MonthlyData('Mar', 45.0, Colors.green),
-    _MonthlyData('Apr', 80.0, Colors.green),
-    _MonthlyData('May', 65.0, Colors.green),
-    _MonthlyData('Jun', 100.0, Colors.green),
-    _MonthlyData('Jul', 50.0, Colors.green),
-    _MonthlyData('Aug', 50.0, Colors.green),
-    _MonthlyData('Sep', 50.0, Colors.green),
-    _MonthlyData('Oct', 50.0, Colors.green),
-    _MonthlyData('Nov', 50.0, Colors.green),
-    _MonthlyData('Dec', 100.0, Colors.orange),
-  ];
+  final TotalCommissionController controller = Get.put(TotalCommissionController());
+
+  SecondGrapWidget({Key? key}) : super(key: key) {
+    controller.getTotalCommission();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,56 +21,156 @@ class SecondGrapWidget extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: Get.height / 4.2,
-                child: SfCartesianChart(
-                  plotAreaBorderWidth: 0,
-                  primaryXAxis: CategoryAxis(
-                    axisLine: const AxisLine(width: 0),
-                    majorTickLines: const MajorTickLines(size: 0),
-                    // Hide default labels
-                    labelStyle: const TextStyle(color: Colors.transparent, fontSize: 0),
-                  ),
-                  primaryYAxis: NumericAxis(
-                    isVisible: false,
-                    minimum: 0,
-                    maximum: 110,
-                  ),
-                  series: <ColumnSeries<_MonthlyData, String>>[
-                    ColumnSeries<_MonthlyData, String>(
-                      dataSource: graphData,
-                      xValueMapper: (_MonthlyData data, _) => data.month,
-                      yValueMapper: (_MonthlyData data, _) => data.value,
-                      pointColorMapper: (_MonthlyData data, _) => data.color,
-                      width: 0.5,
-                      borderRadius: BorderRadius.circular(5),
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              // Use your custom shimmer widget here instead of CircularProgressIndicator
+              return CommissionShimmerWidget();
+            }
+
+            if (controller.totalCommissionList.isEmpty) {
+              return const Text('No data available');
+            }
+
+            List<_MonthlyData> graphData = controller.totalCommissionList.map((item) {
+              final color = item.monthName == 'Dec' ? Colors.orange : Colors.green;
+              return _MonthlyData(item.monthName ?? '', (item.totalCommission ?? 0).toDouble(), color);
+            }).toList();
+
+            final selectedIndex = controller.selectedMonthIndex.value;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text.rich(
+                      textAlign: TextAlign.center,
+                      TextSpan(children: [
+                        TextSpan(
+                            text: 'Total Commission this year: ',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                            ),),
+                        TextSpan(
+                            text: '\$${controller.totalCommissionModel.value.data?.totalCommission ?? 0}',
+                            style: TextStyle(
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                            ),
+                        )
+                      ]),
                     ),
+                    Spacer(),
+                    InkWell(
+                      onTap: () => _filterByYear(context),
+                      child: Row(
+                        children: [
+                          CustomText(title: 'Filter', fontSize: 13, color: Colors.black, fontWeight: FontWeight.bold,),
+                          Icon(Icons.filter_alt_outlined, color: AppColors.black100),
+                        ],
+                      ),
+                    ),
+                    widthBox15,
                   ],
                 ),
-              ),
-              // Show month labels
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: graphData.map((data) {
-                  final bool isDec = data.month == 'Dec';
-                  return Text(
-                    data.month,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDec ? Colors.orange : Colors.grey[700],
-                      fontWeight: isDec ? FontWeight.bold : FontWeight.normal,
+                heightBox10,
+                SizedBox(
+                  height: Get.height / 4.2,
+                  child: SfCartesianChart(
+                    plotAreaBorderWidth: 0,
+                    primaryXAxis: CategoryAxis(
+                      axisLine: const AxisLine(width: 0),
+                      majorTickLines: const MajorTickLines(size: 0),
+                      labelStyle: const TextStyle(color: Colors.transparent, fontSize: 0),
                     ),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
+                    primaryYAxis: NumericAxis(
+                      isVisible: false,
+                      minimum: 0,
+                      maximum: 110,
+                    ),
+                    series: <ColumnSeries<_MonthlyData, String>>[
+                      ColumnSeries<_MonthlyData, String>(
+                        dataSource: graphData,
+                        xValueMapper: (_MonthlyData data, _) => data.month,
+                        yValueMapper: (_MonthlyData data, _) => data.value,
+                        pointColorMapper: (_MonthlyData data, index) {
+                          if (index == selectedIndex) return Colors.blueAccent;
+                          return data.color;
+                        },
+                        width: 0.8,
+                        borderRadius: BorderRadius.circular(5),
+                        onPointTap: (ChartPointDetails details) {
+                          controller.selectedMonthIndex.value = details.pointIndex ?? 0;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: graphData.asMap().entries.map((entry) {
+                    final idx = entry.key;
+                    final data = entry.value;
+                    final bool isSelected = idx == selectedIndex;
+                    final bool isDec = data.month == 'Dec';
+                    // Limit label to 3 characters
+                    final label = (data.month.length > 3) ? data.month.substring(0, 3) : data.month;
+                    return GestureDetector(
+                      onTap: () => controller.selectedMonthIndex.value = idx,
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isSelected
+                              ? Colors.blueAccent
+                              : (isDec ? Colors.orange : Colors.grey[700]),
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : (isDec ? FontWeight.bold : FontWeight.normal),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );
+  }
+
+  Future<int?> showSimpleYearPicker(BuildContext context) async {
+    final currentYear = DateTime.now().year;
+    final years = List.generate(20, (index) => currentYear - index);
+
+    return await showDialog<int>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('Select Year'),
+        children: years.map((year) {
+          return SimpleDialogOption(
+            onPressed: () => Navigator.pop(context, year),
+            child: Text(year.toString()),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+
+  Future<void> _filterByYear(BuildContext context) async {
+    final pickedYear = await showSimpleYearPicker(context);
+    if (pickedYear != null) {
+      controller.selectedYear.value = pickedYear;
+      await controller.getTotalCommission(year: pickedYear.toString());
+      controller.selectedMonthIndex.value = 0;
+    }
   }
 }
 

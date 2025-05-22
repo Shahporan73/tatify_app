@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,82 +17,82 @@ class UserFilterBottomSheet extends StatefulWidget {
 
 class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
   final List<String> days = [
-    "Today",
-    "Tomorrow",
+    "7days",
+    "Monday",
+    "Tuesday",
     "Wednesday",
     "Thursday",
     "Friday",
     "Saturday",
-    "Sunday"
+    "Sunday",
   ];
 
   final FilterController controller = Get.put(FilterController());
-
   final TextEditingController decorationController = TextEditingController();
-  final List<String> _tags = ['Burgers', 'meat'];
 
-  final List<String> historyTags = [
-    'Hamburger','Sandwich','Burrito'
-  ];
+  @override
+  void initState() {
+    super.initState();
+    controller.refreshHistoryTagsUI();
+  }
 
   void _addTag(String tag) {
-    if (tag.isNotEmpty && !_tags.contains(tag)) {
-      setState(() {
-        _tags.add(tag);
-      });
-    }
+    if (tag.isEmpty) return;
+    controller.addTag(tag);
+    controller.addHistoryTag(tag);
+    controller.saveHistoryTags();
     decorationController.clear();
   }
 
   void _removeTag(String tag) {
-    setState(() {
-      _tags.remove(tag);
-    });
+    controller.removeTag(tag);
   }
 
   void _removeHistoryTag(String tag) {
-    setState(() {
-      historyTags.remove(tag);
-    });
+    controller.removeHistoryTag(tag);
+    controller.saveHistoryTags();
   }
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return BottomSheet(
-        onClosing: () {},
-        builder: (context) {
-          return Container(
-            height: height / 1.1,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
+      onClosing: () {},
+      builder: (context) {
+        return Container(
+          height: height / 1.1,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: ()=> Navigator.pop(context),
-                      child: Icon(Icons.cancel_outlined, color: Colors.redAccent, size: 30),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(
+                      Icons.cancel_outlined,
+                      color: Colors.redAccent,
+                      size: 30,
                     ),
                   ),
-
-                  heightBox10,
-                  CustomText(
-                    title: "Day",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                  const SizedBox(height: 10),
-                  Obx(() => SingleChildScrollView(
+                ),
+                heightBox10,
+                CustomText(
+                  title: "Day",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+                const SizedBox(height: 10),
+                Obx(
+                      () => SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: days.map((day) {
@@ -104,7 +102,9 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                           child: Container(
                             margin: const EdgeInsets.symmetric(horizontal: 5),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? Colors.green.withOpacity(0.1)
@@ -123,31 +123,42 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                         );
                       }).toList(),
                     ),
-                  ),),
-
-                  // category
-                  heightBox20,
-                  CustomText(title: "Category", fontWeight: FontWeight.w600, fontSize: 16),
-                  heightBox10,
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Wrap(
+                  ),
+                ),
+                heightBox20,
+                CustomText(
+                  title: "Kitchen Style",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+                heightBox10,
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Obx(
+                            () => Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: _tags.map((tag) {
+                          children: controller.tags.map((tag) {
                             return Chip(
-                              label: Text(tag, style: TextStyle(color: Colors.grey[700])),
+                              label: Text(
+                                tag,
+                                style: TextStyle(color: Colors.grey[700]),
+                              ),
                               backgroundColor: Colors.green[50],
-                              deleteIcon: Icon(Icons.close, size: 16, color: Colors.red),
+                              deleteIcon: const Icon(
+                                Icons.close,
+                                size: 16,
+                                color: Colors.red,
+                              ),
                               onDeleted: () => _removeTag(tag),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
@@ -155,80 +166,93 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                             );
                           }).toList(),
                         ),
-                        TextField(
-                          controller: decorationController,
-                          decoration: InputDecoration(
-                            hintText: 'Enter style and press Enter',
-                            border: InputBorder.none,
-                            hintStyle: GoogleFonts.urbanist(
-                                color: Color(0xff595959),
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14
-                            ),
+                      ),
+                      TextField(
+                        controller: decorationController,
+                        decoration: InputDecoration(
+                          hintText: 'Enter style and press Enter',
+                          border: InputBorder.none,
+                          hintStyle: GoogleFonts.urbanist(
+                            color: const Color(0xff595959),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
                           ),
-                          onSubmitted: _addTag,
                         ),
-                      ],
-                    ),
+                        onSubmitted: _addTag,
+                      ),
+                    ],
                   ),
-                  heightBox5,
-
-                  Column(
-                    children: historyTags.map((tag) {
+                ),
+                heightBox5,
+                Obx(
+                      () => Column(
+                    children: controller.historyTags.map((tag) {
                       return SizedBox(
                         height: 40,
                         child: ListTile(
-                          title: CustomText(title: tag, color: Colors.grey,),
-                          leading: Icon(Icons.history, color: Colors.grey,),
+                          title: CustomText(
+                            title: tag,
+                            color: Colors.grey,
+                          ),
+                          leading: const Icon(
+                            Icons.history,
+                            color: Colors.grey,
+                          ),
                           onTap: () {
-                            print("Tapped on $tag");
+                            if (!controller.tags.contains(tag)) {
+                              controller.addTag(tag);
+                            }
                           },
                           trailing: GestureDetector(
-                            onTap: () => _removeHistoryTag(tag),
-                            child: Icon(Icons.clear, color: Colors.grey,),
+                            onTap: () {
+                              _removeHistoryTag(tag);
+                            },
+                            child: const Icon(
+                              Icons.clear,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       );
                     }).toList(),
                   ),
-
-
-
-                  heightBox50,
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomButton(
-                          title: 'Reset all',
-                          buttonColor: Colors.white,
-                          titleColor: AppColors.secondaryColor,
-                          border: Border.all(color: AppColors.secondaryColor),
-                          onTap: (){
-                            Navigator.pop(context);
-                          }
-                        ),
+                ),
+                heightBox50,
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        title: 'Reset all',
+                        buttonColor: Colors.white,
+                        titleColor: AppColors.secondaryColor,
+                        border: Border.all(color: AppColors.secondaryColor),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
                       ),
-                      widthBox20,
-                      Expanded(
-                        child: CustomButton(
-                            title: 'Apply',
-                            buttonColor: AppColors.secondaryColor,
-                            titleColor: AppColors.whiteColor,
-                            onTap: (){
-                              Navigator.pop(context);
-                              Get.to(()=> FilteredResultScreen(),
-                              );
-                            }
-                        ),
+                    ),
+                    widthBox20,
+                    Expanded(
+                      child: CustomButton(
+                        title: 'Apply',
+                        buttonColor: AppColors.secondaryColor,
+                        titleColor: AppColors.whiteColor,
+                        onTap: () {
+                          controller.saveTags();
+                          controller.saveHistoryTags();
+                          Navigator.pop(context);
+                          Get.to(() => FilteredResultScreen());
+
+                        },
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          );
-        },
+          ),
+        );
+      },
     );
   }
 }
-

@@ -11,14 +11,14 @@ import 'package:tatify_app/view/vendor/vendor_profile/controller/my_restaurant_c
 import '../../vendor_profile/controller/vendor_profile_controller.dart';
 
 class VHomeHeaderWidget extends StatelessWidget {
-  const VHomeHeaderWidget({super.key});
+  final String userName;
+  final String restaurantName;
+  const VHomeHeaderWidget({super.key, required this.userName, required this.restaurantName});
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    final VendorProfileController myProfileController = Get.put(VendorProfileController());
-    final MyRestaurantController restaurantController = Get.put(MyRestaurantController());
     return Container(
       width: Get.width,
       height: height / 4.8,
@@ -41,7 +41,7 @@ class VHomeHeaderWidget extends StatelessWidget {
             height: Get.height / 12,
           ),
           CustomText(
-              title: 'Hi, ${myProfileController.fullName.value.isNotEmpty ? myProfileController.fullName.value : 'User'},',
+              title: 'Hi, $userName',
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w500
@@ -61,7 +61,7 @@ class VHomeHeaderWidget extends StatelessWidget {
               ),
               widthBox5,
               CustomText(
-                title: restaurantController.myRestaurantsModel.value.data?.name ?? 'Not found',
+                title: restaurantName,
                 fontSize: 14,
                 color: Colors.white,
               ),

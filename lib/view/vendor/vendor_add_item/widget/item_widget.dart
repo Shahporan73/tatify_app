@@ -59,7 +59,7 @@ class ItemWidget extends StatelessWidget {
               Expanded(
                 flex: 13,
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(16),
@@ -101,9 +101,9 @@ class ItemWidget extends StatelessWidget {
               ),
               widthBox10,
               Expanded(
-                flex: 10,
+                flex: 12,
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(16),
@@ -130,7 +130,7 @@ class ItemWidget extends StatelessWidget {
               Expanded(
                 flex: 10,
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(16),

@@ -46,6 +46,7 @@ class EndPoint {
   static const String addFavoriteURL = '$BASE_URL/favorite/create';
   static String removeFavoriteURL({required String restaurantId}) => '$BASE_URL/favorite/$restaurantId';
   static const String getFavoriteURL = '$BASE_URL/favorite/';
+  static String isFavoriteURL({required String restaurantId}) => '$BASE_URL/favorite/is-my-fav-restaurant/$restaurantId';
 
 
   /// review
@@ -87,5 +88,17 @@ class EndPoint {
   }
 
   static String updateFoodURL({required String foodId}) => '$BASE_URL/foods/update/$foodId';
+
+
+//   notification
+  static const String notificationURL = '$BASE_URL/notification';
+  static const String readAllNotificationURL = '$BASE_URL/notification/read-all-notification';
+
+//   overview
+  static String netIncomeURL({required String month}) => '$BASE_URL/overview/vendor-net-income?month=$month&limit=6';
+  static String getTotalCommissionURL({required String year}) => '$BASE_URL/overview/vendor-commission?year=$year';
+
+//   payment
+  static const String paymentURL = '$BASE_URL/subscription/pay';
 
 }

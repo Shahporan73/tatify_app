@@ -8,6 +8,9 @@ import 'package:tatify_app/res/common_widget/main_app_bar.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/home_menu_widget.dart';
 
+import '../../../../data/utils/custom_loader.dart';
+import '../../../../res/common_widget/custom_text.dart';
+import '../../vendor_add_item/controller/item_controller.dart';
 import 'vendor_restaurant_details_screen.dart';
 
 class SearchOnGoingItemScreen extends StatelessWidget {
@@ -15,6 +18,7 @@ class SearchOnGoingItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ItemController foodItemController = Get.put(ItemController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(title: 'Search', backgroundColor: AppColors.bgColor,),
@@ -32,23 +36,34 @@ class SearchOnGoingItemScreen extends StatelessWidget {
           ),
           heightBox20,
           Expanded(
-            child: ListView.builder(
+            child: foodItemController.isLoading.value?
+            Center(child: CustomLoader(),):
+            foodItemController.onGoingList.isEmpty?
+            Center(child: CustomText(title: 'No item found', fontSize: 16,)):
+            ListView.builder(
               shrinkWrap: true,
               physics: ScrollPhysics(),
-              itemCount: 18,
+              itemCount: foodItemController.onGoingList.length,
               padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
+                var food = foodItemController.onGoingList[index];
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: GestureDetector(
                     onTap: () {
-                      Get.to(() => VendorRestaurantDetailsScreen());
+                      // Get.to(() => VendorRestaurantDetailsScreen());
                     },
-                    child: HomeMenuWidget(),
+                    child: HomeMenuWidget(
+                      foodName: food.itemName ?? '',
+                      foodPrice: food.price?.price?.toStringAsFixed(0) ?? '0',
+                      discountPrice: food.price?.discountPrice?.toStringAsFixed(0) ?? '0',
+                      offerDay: food.price?.offerDay ?? '',
+                      description: food.description ?? '',
+                    ),
                   ),
                 );
               },
-            ),
+            )
           )
         ],
       ),

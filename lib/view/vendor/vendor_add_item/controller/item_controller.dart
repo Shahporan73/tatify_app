@@ -24,7 +24,8 @@ class ItemController extends GetxController {
 
   // for get food item
   var foodItemModel = FoodItemModel().obs;
-  var foodList = <FoodList>[].obs;
+  var onGoingList = <FoodList>[].obs;
+  var onCloseList = <FoodList>[].obs;
   RxInt currentPage = 1.obs;
   RxInt totalPages = 1.obs;
 
@@ -39,14 +40,14 @@ class ItemController extends GetxController {
   Future<void> getFoods({bool isLoadMore = false, required String restaurantId}) async {
     if (isLoading.value) return;
 
-    // If not loading more, reset pagination
     if (!isLoadMore) {
       currentPage.value = 1;
       totalPages.value = 1;
+      onGoingList.clear();
+      onCloseList.clear();
     } else if (currentPage.value > totalPages.value) {
       return;
     }
-
     isLoading.value = true;
 
     try {
@@ -57,8 +58,8 @@ class ItemController extends GetxController {
 
       final url = EndPoint.getFoodsURL(
         restaurantId: restaurantId,
-          page: currentPage.value,
-          limit: 10
+        page: currentPage.value,
+        limit: 10,
       );
       dynamic responseBody = await BaseClient.handleResponse(
         await BaseClient.getRequest(api: url, headers: headers),
@@ -70,10 +71,24 @@ class ItemController extends GetxController {
       if (responseBody != null && responseBody['success'] == true) {
         final newModel = FoodItemModel.fromJson(responseBody);
 
+        // Clear lists if not loading more
         if (!isLoadMore) {
-          foodList.value = newModel.data?.result ?? [];
+          onGoingList.clear();
+          onCloseList.clear();
+        }
+
+        final items = newModel.data?.result ?? [];
+
+        // Separate items based on status
+        final ongoingItems = items.where((item) => item.status == "on-going").toList();
+        final closedItems = items.where((item) => item.status == "closed").toList();
+
+        if (!isLoadMore) {
+          onGoingList.value = ongoingItems;
+          onCloseList.value = closedItems;
         } else {
-          foodList.addAll(newModel.data?.result ?? []);
+          onGoingList.addAll(ongoingItems);
+          onCloseList.addAll(closedItems);
         }
 
         foodItemModel.value = newModel;
@@ -88,6 +103,7 @@ class ItemController extends GetxController {
       isLoading.value = false;
     }
   }
+
 
 
 
