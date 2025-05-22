@@ -126,5 +126,9 @@ class FavoriteController extends GetxController{
     }
   }
 
+  bool isFavorite(String restaurantId) {
+    print('isFavorite id $restaurantId');
+    return favoriteList.any((fav) => fav.restaurant?.id == restaurantId);
+  }
 
 }

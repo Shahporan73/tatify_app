@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1000640327586",
+    "project_id": "taste-point-a6323",
+    "storage_bucket": "taste-point-a6323.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000640327586:android:d031f693092b65d4d58cfb",
+        "android_client_info": {
+          "package_name": "com.example.tatify_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApIUmOY1rZ4bOuNNaN0rOxh83qFXkj9RQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

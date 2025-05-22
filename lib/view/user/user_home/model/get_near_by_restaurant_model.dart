@@ -6,10 +6,10 @@ class GetNearByRestaurantModel {
   });
 
   final bool? success;
-  final String? message;
+  final dynamic message;
   final Data? data;
 
-  factory GetNearByRestaurantModel.fromJson(Map<String, dynamic> json) {
+  factory GetNearByRestaurantModel.fromJson(Map<dynamic, dynamic> json) {
     return GetNearByRestaurantModel(
       success: json["success"],
       message: json["message"],
@@ -25,18 +25,17 @@ class Data {
     required this.result,
   });
 
-  final int? limit;
-  final dynamic distance;
-  final List<RestaurantList>? result;
+  final dynamic? limit;
+  final double? distance;
+  final List<RestaurantList> result;
 
-  factory Data.fromJson(Map<String, dynamic> json) {
+  factory Data.fromJson(Map<dynamic, dynamic> json) {
     return Data(
       limit: json["limit"],
-      distance: json["distance"],
+      distance: json["distance"] == null ? null : (json["distance"] as num).toDouble(),
       result: json["result"] == null
           ? []
-          : List<RestaurantList>.from(
-          json["result"]!.map((x) => RestaurantList.fromJson(x))),
+          : List<RestaurantList>.from(json["result"]!.map((x) => RestaurantList.fromJson(x))),
     );
   }
 }
@@ -53,6 +52,7 @@ class RestaurantList {
     required this.location,
     required this.kitchenStyle,
     required this.openingHr,
+    required this.review,
     required this.status,
     required this.isDeleted,
     required this.commission,
@@ -63,26 +63,27 @@ class RestaurantList {
     required this.vendorDetails,
   });
 
-  final String? id;
-  final String? name;
-  final String? vendorId;
-  final String? featureImage;
+  final dynamic id;
+  final dynamic name;
+  final dynamic vendorId;
+  final dynamic featureImage;
   final List<dynamic> images;
-  final String? address;
-  final String? city;
+  final dynamic address;
+  final dynamic city;
   final Location? location;
-  final List<String> kitchenStyle;
+  final List<dynamic> kitchenStyle;
   final List<OpeningHr> openingHr;
-  final String? status;
+  final Review? review;
+  final dynamic status;
   final bool? isDeleted;
   final Commission? commission;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final int? v;
+  final dynamic? v;
   final double? distance;
   final VendorDetails? vendorDetails;
 
-  factory RestaurantList.fromJson(Map<String, dynamic> json) {
+  factory RestaurantList.fromJson(Map<dynamic, dynamic> json) {
     return RestaurantList(
       id: json["_id"],
       name: json["name"],
@@ -92,15 +93,16 @@ class RestaurantList {
       address: json["address"],
       city: json["city"],
       location: json["location"] == null ? null : Location.fromJson(json["location"]),
-      kitchenStyle: json["kitchenStyle"] == null ? [] : List<String>.from(json["kitchenStyle"]!.map((x) => x)),
+      kitchenStyle: json["kitchenStyle"] == null ? [] : List<dynamic>.from(json["kitchenStyle"]!.map((x) => x)),
       openingHr: json["openingHr"] == null ? [] : List<OpeningHr>.from(json["openingHr"]!.map((x) => OpeningHr.fromJson(x))),
+      review: json["review"] == null ? null : Review.fromJson(json["review"]),
       status: json["status"],
       isDeleted: json["isDeleted"],
       commission: json["commission"] == null ? null : Commission.fromJson(json["commission"]),
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
       v: json["__v"],
-      distance: (json["distance"] is int) ? (json["distance"] as int).toDouble() : json["distance"]?.toDouble(),
+      distance: json["distance"] == null ? null : (json["distance"] as num).toDouble(),
       vendorDetails: json["vendorDetails"] == null ? null : VendorDetails.fromJson(json["vendorDetails"]),
     );
   }
@@ -116,12 +118,12 @@ class Commission {
   });
 
   final bool? verified;
-  final int? commissionRate;
+  final dynamic? commissionRate;
   final dynamic adminId;
   final dynamic updatedAt;
-  final String? id;
+  final dynamic id;
 
-  factory Commission.fromJson(Map<String, dynamic> json) {
+  factory Commission.fromJson(Map<dynamic, dynamic> json) {
     return Commission(
       verified: json["verified"],
       commissionRate: json["commissionRate"],
@@ -134,17 +136,19 @@ class Commission {
 
 class Location {
   Location({
-    required this.coordinates,
     required this.type,
+    required this.coordinates,
   });
 
+  final dynamic type;
   final List<double> coordinates;
-  final String? type;
 
-  factory Location.fromJson(Map<String, dynamic> json) {
+  factory Location.fromJson(Map<dynamic, dynamic> json) {
     return Location(
-      coordinates: json["coordinates"] == null ? [] : List<double>.from(json["coordinates"]!.map((x) => x)),
       type: json["type"],
+      coordinates: json["coordinates"] == null
+          ? []
+          : List<double>.from(json["coordinates"]!.map((x) => (x as num).toDouble())),
     );
   }
 }
@@ -158,13 +162,13 @@ class OpeningHr {
     required this.id,
   });
 
-  final String? day;
-  final String? openTime;
-  final String? closeTime;
+  final dynamic day;
+  final dynamic openTime;
+  final dynamic closeTime;
   final bool? isClosed;
-  final String? id;
+  final dynamic id;
 
-  factory OpeningHr.fromJson(Map<String, dynamic> json) {
+  factory OpeningHr.fromJson(Map<dynamic, dynamic> json) {
     return OpeningHr(
       day: json["day"],
       openTime: json["openTime"],
@@ -175,19 +179,110 @@ class OpeningHr {
   }
 }
 
+class Review {
+  Review({
+    required this.star,
+    required this.total,
+  });
+
+  final double? star;
+  final dynamic? total;
+
+  factory Review.fromJson(Map<dynamic, dynamic> json) {
+    return Review(
+      star: json["star"] == null ? null : (json["star"] as num).toDouble(),
+      total: json["total"],
+    );
+  }
+}
+
 class VendorDetails {
   VendorDetails({
     required this.id,
+    required this.name,
+    required this.profileImage,
+    required this.phoneNumber,
+    required this.email,
+    required this.password,
+    required this.role,
+    required this.gender,
+    required this.dob,
+    required this.fcmToken,
+    required this.address,
     required this.location,
+    required this.isLocationUpdated,
+    required this.status,
+    required this.isDeleted,
+    required this.verification,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.v,
+    required this.passwordChangedAt,
   });
 
-  final String? id;
+  final dynamic id;
+  final dynamic name;
+  final dynamic profileImage;
+  final dynamic phoneNumber;
+  final dynamic email;
+  final dynamic password;
+  final dynamic role;
+  final dynamic gender;
+  final DateTime? dob;
+  final dynamic fcmToken;
+  final dynamic address;
   final Location? location;
+  final bool? isLocationUpdated;
+  final dynamic status;
+  final bool? isDeleted;
+  final Verification? verification;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final dynamic? v;
+  final DateTime? passwordChangedAt;
 
-  factory VendorDetails.fromJson(Map<String, dynamic> json) {
+  factory VendorDetails.fromJson(Map<dynamic, dynamic> json) {
     return VendorDetails(
       id: json["_id"],
+      name: json["name"],
+      profileImage: json["profileImage"],
+      phoneNumber: json["phoneNumber"],
+      email: json["email"],
+      password: json["password"],
+      role: json["role"],
+      gender: json["gender"],
+      dob: DateTime.tryParse(json["dob"] ?? ""),
+      fcmToken: json["fcmToken"],
+      address: json["address"],
       location: json["location"] == null ? null : Location.fromJson(json["location"]),
+      isLocationUpdated: json["isLocationUpdated"],
+      status: json["status"],
+      isDeleted: json["isDeleted"],
+      verification: json["verification"] == null ? null : Verification.fromJson(json["verification"]),
+      createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
+      updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
+      v: json["__v"],
+      passwordChangedAt: DateTime.tryParse(json["passwordChangedAt"] ?? ""),
+    );
+  }
+}
+
+class Verification {
+  Verification({
+    required this.verified,
+    required this.otp,
+    required this.id,
+  });
+
+  final bool? verified;
+  final dynamic otp;
+  final dynamic id;
+
+  factory Verification.fromJson(Map<dynamic, dynamic> json) {
+    return Verification(
+      verified: json["verified"],
+      otp: json["otp"],
+      id: json["_id"],
     );
   }
 }

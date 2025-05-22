@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
 import 'package:tatify_app/res/common_widget/custom_network_image_widget.dart';
@@ -14,13 +15,18 @@ class BookingCardWidget extends StatelessWidget {
   final String location;
   final String? imagePath;
   final bool isRedeem;
+  final String restaurantName;
+  final String restaurantImage;
   const BookingCardWidget(
       {super.key,
       required this.title,
       required this.price,
       required this.description,
       required this.location,
-      this.imagePath, required this.isRedeem});
+      this.imagePath,
+      required this.isRedeem,
+      required this.restaurantName,
+      required this.restaurantImage});
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +58,8 @@ class BookingCardWidget extends StatelessWidget {
                       topLeft: Radius.circular(8),
                     ),
                     child: CustomNetworkImage(
-                      imageUrl:
-                      imagePath ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvC1pGhW7_BRwnGuBguLE99tfA0faYflekCA&s',
+                      imageUrl: imagePath ??
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvC1pGhW7_BRwnGuBguLE99tfA0faYflekCA&s',
                       height: height / 5,
                       width: double.infinity,
                     ),
@@ -79,6 +85,7 @@ class BookingCardWidget extends StatelessWidget {
                         heightBox5,
                         Container(
                           width: double.infinity,
+                          height: Get.height / 10,
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -93,12 +100,12 @@ class BookingCardWidget extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomText(
-                                title: '2for1 Turkish Mocca',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.secondaryColor,
-                              ),
+                              // CustomText(
+                              //   title: '2for1 Turkish Mocca',
+                              //   fontSize: 18,
+                              //   fontWeight: FontWeight.w700,
+                              //   color: AppColors.secondaryColor,
+                              // ),
                               CustomText(
                                 textAlign: TextAlign.start,
                                 title: description,
@@ -112,49 +119,96 @@ class BookingCardWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: AppColors.primaryColor,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: CustomText(title: location, textAlign: TextAlign.center,),
-                        )
-                      ],
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(restaurantImage),
+                    ),
+                    title: CustomText(
+                      title: restaurantName,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: AppColors.blackColor,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: CustomText(
+                      title: location,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                      color: AppColors.blackColor,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
+
+
                   Spacer(),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(3),
+                  isRedeem
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  color: isRedeem ? Colors.green : Colors.white,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      width: 1, color: Colors.green)),
+                              child: Icon(
+                                Icons.done,
+                                color: isRedeem ? Colors.white : Colors.green,
+                              ),
+                            ),
+                            widthBox10,
+                            CustomText(
+                              title: isRedeem ? 'COMPLETED' : 'REDEEM',
+                              fontWeight: FontWeight.w600,
+                              color:
+                                  isRedeem ? Colors.green : AppColors.black100,
+                              fontSize: 18,
+                            )
+                          ],
+                        )
+                      : Container(
+                        padding: EdgeInsets.zero,
+                        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                         decoration: BoxDecoration(
-                            color: isRedeem ? Colors.green : Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 1, color: Colors.green)),
-                        child: Icon(
-                          Icons.done,
-                          color: isRedeem ? Colors.white : Colors.green,
+                          color: AppColors.whiteColor,
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset: Offset(0, 1))
+                          ],
                         ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              widthBox10,
+                              CircleAvatar(
+                                backgroundColor: AppColors.whiteColor,
+                                child: Icon(
+                                  Icons.qr_code,
+                                  color: AppColors.primaryColor,
+                                  size: 22,
+                                ),
+                              ),
+                              CustomText(
+                                title: 'Get QR Code',
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.black100,
+                                fontSize: 16,
+                              )
+                            ],
+                          ),
                       ),
-                      widthBox10,
-                      CustomText(
-                        title: isRedeem ? 'COMPLETED' : 'REDEEM',
-                        fontWeight: FontWeight.w600,
-                        color: isRedeem ? Colors.green : AppColors.black100,
-                        fontSize: 18,
-                      )
-                    ],
-                  ),
                   SizedBox(
-                    height: height / 18,
+                    height: height / 22,
                   ),
                 ],
               ),

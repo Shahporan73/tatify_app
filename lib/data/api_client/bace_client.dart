@@ -18,7 +18,6 @@ class BaseClient {
     http.Response response = await http.get(
         Uri.parse(api).replace(queryParameters: params),
         headers: headers
-
     );
     return response;
   }

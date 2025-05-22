@@ -14,6 +14,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool? automaticallyImplyLeading;
   final List<Widget>? actions;
   final Widget? leading;
+  final Widget? titleWidget;
 
   const MainAppBar({
     Key? key,
@@ -25,6 +26,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.leading,
     this.automaticallyImplyLeading,
+    this.titleWidget,
   })  : preferredSize = const Size.fromHeight(kToolbarHeight),
         super(key: key);
 
@@ -37,7 +39,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       // forceMaterialTransparency: true,
       automaticallyImplyLeading: automaticallyImplyLeading ?? true,
       backgroundColor: backgroundColor,
-      title: Text(
+      title: titleWidget ?? Text(
         title,
         style: GoogleFonts.urbanist(
             fontSize: fontSize ?? 18,

@@ -6,10 +6,10 @@ class FoodItemModel {
   });
 
   final bool? success;
-  final dynamic message;
+  final String? message;
   final Data? data;
 
-  factory FoodItemModel.fromJson(Map<dynamic, dynamic> json){
+  factory FoodItemModel.fromJson(Map<String, dynamic> json){
     return FoodItemModel(
       success: json["success"],
       message: json["message"],
@@ -28,7 +28,7 @@ class Data {
   final Meta? meta;
   final List<FoodList> result;
 
-  factory Data.fromJson(Map<dynamic, dynamic> json){
+  factory Data.fromJson(Map<String, dynamic> json){
     return Data(
       meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
       result: json["result"] == null ? [] : List<FoodList>.from(json["result"]!.map((x) => FoodList.fromJson(x))),
@@ -45,12 +45,12 @@ class Meta {
     required this.totalPage,
   });
 
-  final dynamic page;
-  final dynamic limit;
-  final dynamic total;
-  final dynamic totalPage;
+  final int? page;
+  final int? limit;
+  final int? total;
+  final int? totalPage;
 
-  factory Meta.fromJson(Map<dynamic, dynamic> json){
+  factory Meta.fromJson(Map<String, dynamic> json){
     return Meta(
       page: json["page"],
       limit: json["limit"],
@@ -77,20 +77,20 @@ class FoodList {
     required this.updatedAt,
   });
 
-  final dynamic id;
-  final dynamic itemName;
+  final String? id;
+  final String? itemName;
   final List<dynamic> itemPhoto;
-  final dynamic vendor;
-  final dynamic description;
+  final String? vendor;
+  final String? description;
   final Price? price;
   final Restaurant? restaurant;
   final List<dynamic> ratings;
-  final dynamic status;
+  final String? status;
   final bool? isDeleted;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  factory FoodList.fromJson(Map<dynamic, dynamic> json){
+  factory FoodList.fromJson(Map<String, dynamic> json){
     return FoodList(
       id: json["_id"],
       itemName: json["itemName"],
@@ -118,13 +118,13 @@ class Price {
     required this.id,
   });
 
-  final dynamic price;
-  final dynamic discountPrice;
-  final dynamic offerDay;
-  final dynamic specificOfferDay;
-  final dynamic id;
+  final int? price;
+  final int? discountPrice;
+  final String? offerDay;
+  final String? specificOfferDay;
+  final String? id;
 
-  factory Price.fromJson(Map<dynamic, dynamic> json){
+  factory Price.fromJson(Map<String, dynamic> json){
     return Price(
       price: json["price"],
       discountPrice: json["discountPrice"],
@@ -138,154 +138,39 @@ class Price {
 
 class Restaurant {
   Restaurant({
-    required this.location,
-    required this.review,
     required this.id,
     required this.name,
-    required this.vendorId,
-    required this.featureImage,
-    required this.images,
-    required this.address,
-    required this.city,
-    required this.kitchenStyle,
     required this.openingHr,
-    required this.status,
-    required this.isDeleted,
-    required this.commission,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.v,
   });
 
-  final Location? location;
-  final Review? review;
-  final dynamic id;
-  final dynamic name;
-  final dynamic vendorId;
-  final dynamic featureImage;
-  final List<dynamic> images;
-  final dynamic address;
-  final dynamic city;
-  final List<dynamic> kitchenStyle;
+  final String? id;
+  final String? name;
   final List<OpeningHr> openingHr;
-  final dynamic status;
-  final bool? isDeleted;
-  final Commission? commission;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final dynamic v;
 
-  factory Restaurant.fromJson(Map<dynamic, dynamic> json){
+  factory Restaurant.fromJson(Map<String, dynamic> json){
     return Restaurant(
-      location: json["location"] == null ? null : Location.fromJson(json["location"]),
-      review: json["review"] == null ? null : Review.fromJson(json["review"]),
       id: json["_id"],
       name: json["name"],
-      vendorId: json["vendorId"],
-      featureImage: json["featureImage"],
-      images: json["images"] == null ? [] : List<dynamic>.from(json["images"]!.map((x) => x)),
-      address: json["address"],
-      city: json["city"],
-      kitchenStyle: json["kitchenStyle"] == null ? [] : List<dynamic>.from(json["kitchenStyle"]!.map((x) => x)),
       openingHr: json["openingHr"] == null ? [] : List<OpeningHr>.from(json["openingHr"]!.map((x) => OpeningHr.fromJson(x))),
-      status: json["status"],
-      isDeleted: json["isDeleted"],
-      commission: json["commission"] == null ? null : Commission.fromJson(json["commission"]),
-      createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
-      updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
-      v: json["__v"],
     );
   }
 
 }
-
-class Commission {
-  Commission({
-    required this.verified,
-    required this.commissionRate,
-    required this.adminId,
-    required this.updatedAt,
-    required this.id,
-  });
-
-  final bool? verified;
-  final dynamic commissionRate;
-  final dynamic adminId;
-  final dynamic updatedAt;
-  final dynamic id;
-
-  factory Commission.fromJson(Map<dynamic, dynamic> json){
-    return Commission(
-      verified: json["verified"],
-      commissionRate: json["commissionRate"],
-      adminId: json["adminId"],
-      updatedAt: json["updatedAt"],
-      id: json["_id"],
-    );
-  }
-
-}
-
-class Location {
-  Location({
-    required this.coordinates,
-    required this.type,
-  });
-
-  final List<double> coordinates;
-  final dynamic type;
-
-  factory Location.fromJson(Map<dynamic, dynamic> json) {
-    return Location(
-      coordinates: json["coordinates"] == null
-          ? []
-          : List<double>.from(json["coordinates"].map((x) => (x as num).toDouble())),
-      type: json["type"],
-    );
-  }
-}
-
 
 class OpeningHr {
   OpeningHr({
     required this.day,
-    required this.openTime,
-    required this.closeTime,
     required this.isClosed,
-    required this.id,
   });
 
-  final dynamic day;
-  final dynamic openTime;
-  final dynamic closeTime;
+  final String? day;
   final bool? isClosed;
-  final dynamic id;
 
-  factory OpeningHr.fromJson(Map<dynamic, dynamic> json){
+  factory OpeningHr.fromJson(Map<String, dynamic> json){
     return OpeningHr(
       day: json["day"],
-      openTime: json["openTime"],
-      closeTime: json["closeTime"],
       isClosed: json["isClosed"],
-      id: json["_id"],
     );
   }
 
-}
-
-class Review {
-  Review({
-    required this.star,
-    required this.total,
-  });
-
-  final dynamic star;
-  final dynamic total;
-
-  factory Review.fromJson(Map<dynamic, dynamic> json){
-    return Review(
-      star: json["star"],
-      total: json["total"],
-    );
-  }
 }

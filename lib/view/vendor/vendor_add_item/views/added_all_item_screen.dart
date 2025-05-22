@@ -11,6 +11,7 @@ import 'package:tatify_app/view/vendor/vendor_profile/controller/my_restaurant_c
 
 import '../../../../res/app_colors/App_Colors.dart';
 import '../widget/added_all_item_header.dart';
+import '../widget/item_sticky_header_delegate_widget.dart';
 import 'edit_item_screen.dart';
 
 class AddedAllItemScreen extends StatelessWidget {
@@ -23,163 +24,134 @@ class AddedAllItemScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       body: SafeArea(
-        child: Obx(
-          ()=> RefreshIndicator(
-            onRefresh: () async{
-              await Future.wait([
-                controller.getFoods(isLoadMore: false,
-                    restaurantId: restaurantController.myRestaurantsModel.value.data?.id ?? '',
-                ),
-                restaurantController.getMyRestaurants(),
-              ]);
-            },
-            child: CustomScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              shrinkWrap: true,
-              slivers: [
-                const SliverToBoxAdapter(
-                  child: AddedAllItemHeader(),
-                ),
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: _StickyHeaderDelegate(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 0.0),
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Obx(
-                                      () => CustomButton(
-                                    title: 'On Going',
-                                    buttonColor: Colors.white,
-                                    borderRadius: 0,
-                                    titleColor: controller.selectedTab.value == 'onGoing' ? Colors.green : Colors.black,
-                                    border: Border(bottom: BorderSide(
-                                      width: 1,
-                                      color: controller.selectedTab.value == 'onGoing'
-                                          ? AppColors.secondaryColor
-                                          : Colors.black,
-                                    )),
-                                    onTap: () => controller.switchTab('onGoing'),
-                                  ),
-                                ),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await Future.wait([
+              controller.getFoods(
+                isLoadMore: false,
+                restaurantId: restaurantController.myRestaurantsModel.value.data?.id ?? '',
+              ),
+              restaurantController.getMyRestaurants(),
+            ]);
+          },
+          child: CustomScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            shrinkWrap: true,
+            slivers: [
+              const SliverToBoxAdapter(
+                child: AddedAllItemHeader(),
+              ),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: ItemStickyHeaderDelegateWidget(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 0.0),
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Obx(() => CustomButton(
+                            title: 'On Going',
+                            buttonColor: Colors.white,
+                            borderRadius: 0,
+                            titleColor: controller.selectedTab.value == 'onGoing'
+                                ? Colors.green
+                                : Colors.black,
+                            border: Border(
+                              bottom: BorderSide(
+                                width: 1,
+                                color: controller.selectedTab.value == 'onGoing'
+                                    ? AppColors.secondaryColor
+                                    : Colors.black,
                               ),
-                              Expanded(
-                                child: Obx(
-                                      () => CustomButton(
-                                    title: 'Closed',
-                                    buttonColor: Colors.white,
-                                    borderRadius: 0,
-                                    titleColor: controller.selectedTab.value == 'Closed' ? Colors.green : Colors.black,
-                                    border: Border(bottom: BorderSide(
-                                      width: 1,
-                                      color: controller.selectedTab.value == 'Closed'
-                                          ? AppColors.secondaryColor
-                                          : Colors.black,
-                                    )),
-                                    onTap: () => controller.switchTab('Closed'),
-                                  ),
-                                ),
+                            ),
+                            onTap: () => controller.switchTab('onGoing'),
+                          )),
+                        ),
+                        Expanded(
+                          child: Obx(() => CustomButton(
+                            title: 'Closed',
+                            buttonColor: Colors.white,
+                            borderRadius: 0,
+                            titleColor: controller.selectedTab.value == 'Closed'
+                                ? Colors.green
+                                : Colors.black,
+                            border: Border(
+                              bottom: BorderSide(
+                                width: 1,
+                                color: controller.selectedTab.value == 'Closed'
+                                    ? AppColors.secondaryColor
+                                    : Colors.black,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                            onTap: () => controller.switchTab('Closed'),
+                          )),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+              ),
 
-                // List content: On Going and Closed list
-                SliverList(
+              // Only this Obx remains for list updates
+              Obx(() {
+                final isLoading = controller.isLoading.value;
+                final selectedTab = controller.selectedTab.value;
+                final list = selectedTab == 'onGoing' ? controller.onGoingList : controller.onCloseList;
+
+                if (!isLoading && list.isEmpty) {
+                  return SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: EmptyRestaurantView(title: 'No item added yet'),
+                  );
+                }
+
+                return SliverList(
                   delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-
-                      if (controller.isLoading.value && index == controller.foodList.length) {
-                        return Center(
-                          child: CustomLoader(),
-                        );
+                      if (isLoading && index == list.length) {
+                        return Center(child: CustomLoader());
                       }
 
-                      if (controller.foodList.isEmpty && !controller.isLoading.value) {
-                        return EmptyRestaurantView(
-                          title: 'No item added yet',
-                        );
-                      }
+                      final item = list[index];
 
-                      var data = controller.foodList[index];
-                      print('food length ${controller.foodList.length}');
-                      return Obx(
-                            ()=> Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                          child: controller.selectedTab.value == 'onGoing'
-                              ? ItemWidget(
-                              title: data.itemName ?? '',
-                              price: data.price?.price?.toString() ?? '',
-                              discountPrice: data.price?.discountPrice?.toString() ?? '',
-                              offerDay: data.price?.offerDay ?? '',
-                              description: data.description ?? '',
-
-                              onEdit: () => Get.to(() => EditItemScreen(
-                                menuName: data.itemName ?? '',
-                                menuDescription: data.description ?? '',
-                                standardPrice: data.price?.price?.toString() ?? '',
-                                discountPrice: data.price?.discountPrice?.toString() ?? '',
-                                offerDay: data.price?.offerDay ?? '',
-                                menuId: data.id ?? '',
-                              )),
-
-                              isEdit: true
-                          )
-                              : ItemWidget(
-                              title: data.itemName ?? '',
-                              price: data.price?.price?.toString() ?? '',
-                              discountPrice: data.price?.discountPrice?.toString() ?? '',
-                              offerDay: data.price?.offerDay ?? '',
-                              description: data.description ?? '',
-                              isEdit: false
-                          ),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                        child: selectedTab == 'onGoing'
+                            ? ItemWidget(
+                          title: item.itemName ?? '',
+                          price: item.price?.price?.toString() ?? '',
+                          discountPrice: item.price?.discountPrice?.toString() ?? '',
+                          offerDay: item.price?.offerDay ?? '',
+                          description: item.description ?? '',
+                          onEdit: () => Get.to(() => EditItemScreen(
+                            menuName: item.itemName ?? '',
+                            menuDescription: item.description ?? '',
+                            standardPrice: item.price?.price?.toString() ?? '',
+                            discountPrice: item.price?.discountPrice?.toString() ?? '',
+                            offerDay: item.price?.offerDay ?? '',
+                            menuId: item.id ?? '',
+                          )),
+                          isEdit: true,
+                        )
+                            : ItemWidget(
+                          title: item.itemName ?? '',
+                          price: item.price?.price?.toString() ?? '',
+                          discountPrice: item.price?.discountPrice?.toString() ?? '',
+                          offerDay: item.price?.offerDay ?? '',
+                          description: item.description ?? '',
+                          isEdit: false,
                         ),
                       );
                     },
-                    childCount: controller.selectedTab.value == 'onGoing'
-                        ? controller.foodList.length  + (controller.isLoading.value ? 1 : 0)
-                        : controller.foodList.length,
+                    childCount: list.length + (isLoading ? 1 : 0),
                   ),
-                ),
-              ],
-            ),
+                );
+              }),
+            ],
           ),
         ),
       ),
     );
-  }
-}
-
-// Custom delegate for sticky header
-class _StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final Widget child;
-
-  _StickyHeaderDelegate({required this.child});
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Material(
-      elevation: 2.0,
-      child: child,
-    );
-  }
-
-  @override
-  double get maxExtent => Get.height / 12;
-
-  @override
-  double get minExtent => Get.height / 12;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
   }
 }

@@ -2,28 +2,34 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tatify_app/res/common_widget/custom_drop_down_widget.dart';
+import 'package:tatify_app/data/utils/custom_loader.dart';
 import 'package:tatify_app/res/common_widget/custom_row_widget.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
+import 'package:tatify_app/view/vendor/vendor_home/controller/net_income_controller.dart';
 import 'package:tatify_app/view/vendor/vendor_home/views/search_on_going_item_screen.dart';
-import 'package:tatify_app/view/vendor/vendor_home/views/vendor_restaurant_details_screen.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/first_grap_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/home_menu_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/second_grap_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/v_home_header_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_profile/controller/my_restaurant_controller.dart';
-
-import '../../../../res/app_colors/App_Colors.dart';
+import '../../vendor_add_item/controller/item_controller.dart';
+import '../../vendor_profile/controller/vendor_profile_controller.dart';
 
 class VendorHomeScreen extends StatelessWidget {
-  const VendorHomeScreen({super.key});
+  final MyRestaurantController myRestaurantController = Get.put(MyRestaurantController());
+  final VendorProfileController myProfileController = Get.put(VendorProfileController());
+  final ItemController foodItemController = Get.put(ItemController());
+
+  VendorHomeScreen({Key? key}) : super(key: key){
+    myRestaurantController.getMyRestaurants();
+    myProfileController.getProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    final MyRestaurantController myRestaurantController = Get.put(MyRestaurantController());
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -36,7 +42,12 @@ class VendorHomeScreen extends StatelessWidget {
             leading: SizedBox(),
             backgroundColor: Colors.transparent,
             flexibleSpace: FlexibleSpaceBar(
-              background: VHomeHeaderWidget(),
+              background: Obx(
+                ()=> VHomeHeaderWidget(
+                  userName: myProfileController.fullName.value.isNotEmpty ? myProfileController.fullName.value : 'User',
+                  restaurantName: myRestaurantController.myRestaurantsModel.value.data?.name ?? 'Not found',
+                ),
+              ),
             ),
           ),
 
@@ -45,67 +56,15 @@ class VendorHomeScreen extends StatelessWidget {
             delegate: SliverChildListDelegate(
               [
                 heightBox10,
-                Center(
-                  child: CustomText(
-                    title: 'Net Income',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
+                SizedBox(
+                  height: height / 2.2,
+                  child: NetIncomeChartWidget(),
                 ),
-                Center(
-                  child: CustomText(
-                    title: '\$9,349.85',
-                    fontSize: 28,
-                    color: AppColors.primaryColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+
 
                 heightBox10,
                 SizedBox(
-                  height: height / 2.8,
-                  child: FirstGrapWidget(),
-                ),
-
-                heightBox10,
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text.rich(
-                        textAlign: TextAlign.center,
-                        TextSpan(children: [
-                          TextSpan(
-                              text: 'Total Commission this month: ',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12)),
-                          TextSpan(
-                              text: '\$1,530',
-                              style: TextStyle(
-                                  color: AppColors.primaryColor,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16))
-                        ]),
-                      ),
-                      widthBox10,
-                      CustomDropDownWidget(
-                        width: width / 4,
-                        selectedValue: 'Year',
-                        items: ['Year', 'Month', 'Weeks', 'Today'],
-                        onChanged: (value) {},
-                        hintText: 'Year',
-                      ),
-                    ],
-                  ),
-                ),
-
-                heightBox20,
-                SizedBox(
-                  height: height / 3,
+                  height: height / 2.5,
                   child: SecondGrapWidget(),
                 ),
 
@@ -131,23 +90,34 @@ class VendorHomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                Obx(() => foodItemController.isLoading.value?
+                Center(child: CustomLoader(),):
+                foodItemController.onGoingList.isEmpty?
+                Center(child: CustomText(title: 'No item found', fontSize: 16,)):
                 ListView.builder(
                   shrinkWrap: true,
                   physics: ScrollPhysics(),
-                  itemCount: 3,
+                  itemCount: foodItemController.onGoingList.length,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
+                    var food = foodItemController.onGoingList[index];
                     return Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: GestureDetector(
                         onTap: () {
-                          Get.to(() => VendorRestaurantDetailsScreen());
+                          // Get.to(() => VendorRestaurantDetailsScreen());
                         },
-                        child: HomeMenuWidget(),
+                        child: HomeMenuWidget(
+                          foodName: food.itemName ?? '',
+                          foodPrice: food.price?.price?.toStringAsFixed(0) ?? '0',
+                          discountPrice: food.price?.discountPrice?.toStringAsFixed(0) ?? '0',
+                          offerDay: food.price?.offerDay ?? '',
+                          description: food.description ?? '',
+                        ),
                       ),
                     );
                   },
-                ),
+                ),),
               ],
             ),
           ),
@@ -155,4 +125,5 @@ class VendorHomeScreen extends StatelessWidget {
       ),
     );
   }
+
 }

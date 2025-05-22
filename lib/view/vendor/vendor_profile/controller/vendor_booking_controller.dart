@@ -19,6 +19,8 @@ class VendorBookingController extends GetxController{
     getCompleteBookRedeem();
   }
 
+  Future<void> onRefresh() async => getCompleteBookRedeem();
+
   Future<void> getCompleteBookRedeem() async {
     isLoading.value = true;
     try {
@@ -40,8 +42,6 @@ class VendorBookingController extends GetxController{
           getBookRedeemList.value = dataList;
           print('booking complete ${getBookRedeemList.length}');
         }
-
-
       }
     } catch (e) {
       print('get book redeem error $e');
@@ -49,4 +49,48 @@ class VendorBookingController extends GetxController{
       isLoading.value = false;
     }
   }
+
+  Future<void> getFilteredBookRedeem(DateTime selectedDate) async {
+    isLoading.value = true;
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        "Authorization": LocalStorage.getData(key: accessToken),
+      };
+
+      final responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: EndPoint.getRedeemURL(),
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null && responseBody['success'] == true) {
+        getBookRedeemModel.value = GetBookRedeemModel.fromJson(responseBody);
+        final dataList = getBookRedeemModel.value.data?.data;
+
+        if (dataList != null) {
+          final filteredList = dataList.where((e) {
+            final redeemDate = e.vendorRedeem?.redeemDate;
+            if (redeemDate == null || e.vendorRedeem?.redeemStatus != 'redeemed') {
+              return false;
+            }
+            final parsedDate = DateTime.tryParse(redeemDate.toString());
+            return parsedDate != null &&
+                parsedDate.year == selectedDate.year &&
+                parsedDate.month == selectedDate.month &&
+                parsedDate.day == selectedDate.day;
+          }).toList();
+
+          getBookRedeemList.value = filteredList;
+          print('filtered bookings ${getBookRedeemList.length}');
+        }
+      }
+    } catch (e) {
+      print('get filtered book redeem error $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
 }

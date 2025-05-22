@@ -1,8 +1,10 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tatify_app/data/local_database/local_data_base.dart';
 import 'package:tatify_app/view/user/user_home/view/home_dashboard.dart';
+import 'package:tatify_app/view/vendor/payment/views/pay_now_screen.dart';
 import 'package:tatify_app/view/vendor/vendor_home/views/vendor_home_dashboard.dart';
 
 import '../../../data/api_client/bace_client.dart';
@@ -99,10 +101,16 @@ class SignInController extends GetxController{
   /// sign up
   Future<void> loginMethod() async {
     isLoading.value = true;
+
+    String fcmToken = await getFcmTokenForLoggedInUser() ?? '';
+    if (fcmToken != null) {
+      print('FCM Token: $fcmToken');
+    }
     try {
       Map<String, String> body = {
         'email': emailC.text,
-        'password': passC.text
+        'password': passC.text,
+        'fcmToken': fcmToken
       };
 
       dynamic responseBody = await BaseClient.handleResponse(
@@ -125,7 +133,7 @@ class SignInController extends GetxController{
           LocalStorage.saveData(key: userType, data: role);
 
           if(responseBody['data']['user']['role'] == 'vendor'){
-            Get.to(() => VendorHomeDashboard());
+            Get.to(() => PayNowScreen());
           }if(responseBody['data']['user']['role'] == 'user'){
             Get.to(() => HomeDashboard());
           }
@@ -145,6 +153,24 @@ class SignInController extends GetxController{
     } finally {
       // Handle sign up success
       isLoading.value = false;
+    }
+  }
+
+  Future<String?> getFcmTokenForLoggedInUser() async {
+    try {
+      await FirebaseMessaging.instance.requestPermission();
+      String? token = await FirebaseMessaging.instance.getToken();
+
+      if (token != null) {
+        print('FCM Token: $token');
+      } else {
+        print('Failed to get FCM token');
+      }
+
+      return token;
+    } catch (e) {
+      print('Error getting FCM token: $e');
+      return null;
     }
   }
 

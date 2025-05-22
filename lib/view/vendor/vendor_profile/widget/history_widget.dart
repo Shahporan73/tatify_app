@@ -85,6 +85,7 @@ class HistoryWidget extends StatelessWidget {
                         ),
                         heightBox5,
                         Container(
+                          width: double.infinity,
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                               color: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tatify_app/res/common_widget/RoundTextField.dart';
 import 'package:tatify_app/view/user/user_home/view/user_restaurant_details_screen.dart';
 
 import '../../../../data/utils/custom_loader.dart';
@@ -15,9 +16,12 @@ class SearchRestaurantView extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
     final SingleRestaurantController singleRestaurantController = Get.put(SingleRestaurantController());
+    final TextEditingController _searchController = TextEditingController();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const MainAppBar(title: 'Search Restaurants'),
+      appBar: const MainAppBar(
+          title: 'Search Restaurants',
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           await homeController.getNearbyRestaurants();
@@ -37,40 +41,68 @@ class SearchRestaurantView extends StatelessWidget {
             );
           }
 
-          return ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: homeController.nearbyRestaurantList.length,
-            padding: EdgeInsets.zero,
-            itemBuilder: (context, index) {
-              var data = homeController.nearbyRestaurantList[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: GestureDetector(
-                  onTap: () {
-                    singleRestaurantController.
-                    getSingleRestaurant(restaurantId: data.id ?? '').then(
-                          (value) {
-                        Get.to(()=>UserRestaurantDetailsScreen(
-                          restaurantId: data.id ?? '',
-                        ));
+          return Obx(
+            ()=> Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: RoundTextField(
+                    prefixIcon: Icon(Icons.search_outlined, color: Colors.grey,),
+                      hint: 'Search Restaurants',
+                    controller: _searchController,
+                    onChanged: (p0) {
+                      singleRestaurantController.searchRestaurant(p0);
+                    },
+                    suffixIcon: _searchController.text.isNotEmpty
+                        ? GestureDetector(
+                      onTap: () {
+                        _searchController.clear();
                       },
-                    );
-
-                  },
-                  child: HomeListWidget(
-                    imagePath: data.featureImage ?? '',
-                    title: data.name ?? '',
-                    discountPrice: '6.99€',
-                    price: '9.99€',
-                    distance: '${data.distance?.toStringAsFixed(2)} km',
-                    reviewsAndRating: '4.3(17)',
-                    kitchenStyle: 'Kabab',
-                    on2for1Click: () {},
-                    onFreeSoftClick: () {},
+                      child: const Icon(Icons.clear, color: Colors.grey),
+                    )
+                        : null,
                   ),
                 ),
-              );
-            },
+                SizedBox(height: 16,),
+                Expanded(
+                  child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: homeController.nearbyRestaurantList.length,
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) {
+                      var data = homeController.nearbyRestaurantList[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: GestureDetector(
+                          onTap: () {
+                            singleRestaurantController.
+                            getSingleRestaurant(restaurantId: data.id ?? '').then(
+                                  (value) {
+                                Get.to(()=>UserRestaurantDetailsScreen(
+                                  restaurantId: data.id ?? '',
+                                ));
+                              },
+                            );
+
+                          },
+                          child: HomeListWidget(
+                            imagePath: data.featureImage ?? '',
+                            title: data.name ?? '',
+                            discountPrice: '6.99€',
+                            price: '9.99€',
+                            distance: '${data.distance?.toStringAsFixed(2)} km',
+                            reviewsAndRating: '4.3(17)',
+                            kitchenStyle: 'Kabab',
+                            on2for1Click: () {},
+                            onFreeSoftClick: () {},
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           );
         }),
       ),

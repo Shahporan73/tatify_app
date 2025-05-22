@@ -25,6 +25,8 @@ class BookingController extends GetxController {
     getBookRedeem();
   }
 
+  Future<void> onRefresh() async => getBookRedeem();
+
   Future<void> getBookRedeem() async {
     isLoading.value = true;
     try {
@@ -161,7 +163,7 @@ class BookingController extends GetxController {
         });
         return true;
       } else {
-        Get.rawSnackbar(message: 'Redeem failed');
+        Get.rawSnackbar(message: responseBody['message']);
         return false;
       }
     } catch (e) {

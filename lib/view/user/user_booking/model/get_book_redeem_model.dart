@@ -40,13 +40,13 @@ class Data {
 class BookingList {
   BookingList({
     required this.id,
+    required this.userRedeem,
     required this.user,
     required this.vendor,
     required this.food,
     required this.restaurant,
     required this.cash,
     required this.isDeleted,
-    required this.userRedeem,
     required this.vendorRedeem,
     required this.createdAt,
     required this.updatedAt,
@@ -54,13 +54,13 @@ class BookingList {
   });
 
   final String? id;
+  final RRedeem? userRedeem;
   final User? user;
   final String? vendor;
   final Food? food;
   final Restaurant? restaurant;
   final Cash? cash;
   final bool? isDeleted;
-  final RRedeem? userRedeem;
   final RRedeem? vendorRedeem;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -69,13 +69,13 @@ class BookingList {
   factory BookingList.fromJson(Map<String, dynamic> json){
     return BookingList(
       id: json["_id"],
+      userRedeem: json["userRedeem"] == null ? null : RRedeem.fromJson(json["userRedeem"]),
       user: json["user"] == null ? null : User.fromJson(json["user"]),
       vendor: json["vendor"],
       food: json["food"] == null ? null : Food.fromJson(json["food"]),
       restaurant: json["restaurant"] == null ? null : Restaurant.fromJson(json["restaurant"]),
       cash: json["cash"] == null ? null : Cash.fromJson(json["cash"]),
       isDeleted: json["isDeleted"],
-      userRedeem: json["userRedeem"] == null ? null : RRedeem.fromJson(json["userRedeem"]),
       vendorRedeem: json["vendorRedeem"] == null ? null : RRedeem.fromJson(json["vendorRedeem"]),
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
@@ -136,15 +136,21 @@ class Food {
 class Restaurant {
   Restaurant({
     required this.id,
+    required this.name,
+    required this.featureImage,
     required this.address,
   });
 
   final String? id;
+  final String? name;
+  final String? featureImage;
   final String? address;
 
   factory Restaurant.fromJson(Map<String, dynamic> json){
     return Restaurant(
       id: json["_id"],
+      name: json["name"],
+      featureImage: json["featureImage"],
       address: json["address"],
     );
   }
