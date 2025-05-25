@@ -75,6 +75,7 @@ dependencies:
   flutter_local_notifications: ^19.2.1
   month_year_picker: ^0.4.0+1
   syncfusion_flutter_datepicker: ^29.2.5
+  google_sign_in: ^6.3.0
 
 
 dev_dependencies:

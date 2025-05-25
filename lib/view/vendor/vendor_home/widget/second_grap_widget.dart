@@ -23,18 +23,22 @@ class SecondGrapWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           child: Obx(() {
             if (controller.isLoading.value) {
-              // Use your custom shimmer widget here instead of CircularProgressIndicator
               return CommissionShimmerWidget();
             }
 
+            // If empty, create default months with 0 commission so chart shows empty bars
+            List<_MonthlyData> graphData;
             if (controller.totalCommissionList.isEmpty) {
-              return const Text('No data available');
+              final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+              graphData = months
+                  .map((m) => _MonthlyData(m, 0, m == 'Dec' ? Colors.orange : Colors.green))
+                  .toList();
+            } else {
+              graphData = controller.totalCommissionList.map((item) {
+                final color = (item.monthName == 'Dec') ? Colors.orange : Colors.green;
+                return _MonthlyData(item.monthName ?? '', (item.totalCommission ?? 0).toDouble(), color);
+              }).toList();
             }
-
-            List<_MonthlyData> graphData = controller.totalCommissionList.map((item) {
-              final color = item.monthName == 'Dec' ? Colors.orange : Colors.green;
-              return _MonthlyData(item.monthName ?? '', (item.totalCommission ?? 0).toDouble(), color);
-            }).toList();
 
             final selectedIndex = controller.selectedMonthIndex.value;
 
@@ -49,19 +53,20 @@ class SecondGrapWidget extends StatelessWidget {
                       textAlign: TextAlign.center,
                       TextSpan(children: [
                         TextSpan(
-                            text: 'Total Commission this year: ',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12,
-                            ),),
+                          text: 'Total Commission this year: ',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                          ),
+                        ),
                         TextSpan(
-                            text: '\$${controller.totalCommissionModel.value.data?.totalCommission ?? 0}',
-                            style: TextStyle(
-                                color: AppColors.primaryColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                            ),
+                          text: '\$${controller.totalCommissionModel.value.data?.totalCommission ?? 0}',
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16,
+                          ),
                         )
                       ]),
                     ),
@@ -70,7 +75,12 @@ class SecondGrapWidget extends StatelessWidget {
                       onTap: () => _filterByYear(context),
                       child: Row(
                         children: [
-                          CustomText(title: 'Filter', fontSize: 13, color: Colors.black, fontWeight: FontWeight.bold,),
+                          CustomText(
+                            title: 'Filter',
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                           Icon(Icons.filter_alt_outlined, color: AppColors.black100),
                         ],
                       ),
@@ -118,7 +128,6 @@ class SecondGrapWidget extends StatelessWidget {
                     final data = entry.value;
                     final bool isSelected = idx == selectedIndex;
                     final bool isDec = data.month == 'Dec';
-                    // Limit label to 3 characters
                     final label = (data.month.length > 3) ? data.month.substring(0, 3) : data.month;
                     return GestureDetector(
                       onTap: () => controller.selectedMonthIndex.value = idx,
@@ -147,7 +156,7 @@ class SecondGrapWidget extends StatelessWidget {
 
   Future<int?> showSimpleYearPicker(BuildContext context) async {
     final currentYear = DateTime.now().year;
-    final years = List.generate(20, (index) => currentYear - index);
+    final years = List.generate(50, (index) => currentYear - index);
 
     return await showDialog<int>(
       context: context,
@@ -162,7 +171,6 @@ class SecondGrapWidget extends StatelessWidget {
       ),
     );
   }
-
 
   Future<void> _filterByYear(BuildContext context) async {
     final pickedYear = await showSimpleYearPicker(context);

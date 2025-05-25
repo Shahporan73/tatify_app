@@ -131,7 +131,7 @@ class CustomSliverAppbar extends StatelessWidget {
                       focusBorderRadius: 8,
                     ),
                   ),
-                  widthBox5,
+                 /* widthBox5,
                   InkWell(
                     onTap: () {
                       openFilterDialog(
@@ -151,7 +151,7 @@ class CustomSliverAppbar extends StatelessWidget {
                       ),
                       child: Image.asset(AppImages.filterIcon, scale: 4,),
                     ),
-                  )
+                  )*/
                 ],
               ),
             ],

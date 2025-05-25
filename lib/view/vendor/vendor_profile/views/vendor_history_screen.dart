@@ -44,6 +44,7 @@ class VendorHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final VendorBookingController controller = Get.put(VendorBookingController());
+    print('Booking complete ${controller.getBookRedeemList.length}');
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(

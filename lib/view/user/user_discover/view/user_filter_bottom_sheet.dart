@@ -7,6 +7,7 @@ import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/view/user/user_discover/controller/filter_controller.dart';
 import 'package:tatify_app/view/user/user_discover/view/filtered_result_screen.dart';
+import 'package:tatify_app/view/user/user_home/controller/home_controller.dart';
 
 class UserFilterBottomSheet extends StatefulWidget {
   const UserFilterBottomSheet({super.key});
@@ -18,18 +19,18 @@ class UserFilterBottomSheet extends StatefulWidget {
 class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
   final List<String> days = [
     "7days",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
   ];
 
   final FilterController controller = Get.put(FilterController());
   final TextEditingController decorationController = TextEditingController();
-
+  final HomeController restaurantController = Get.put(HomeController());
   @override
   void initState() {
     super.initState();
@@ -52,6 +53,8 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
     controller.removeHistoryTag(tag);
     controller.saveHistoryTags();
   }
+
+  String? dayParam;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +89,7 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                 ),
                 heightBox10,
                 CustomText(
-                  title: "Day",
+                  title: "Opening Days",
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
@@ -238,11 +241,22 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                         buttonColor: AppColors.secondaryColor,
                         titleColor: AppColors.whiteColor,
                         onTap: () {
+                          if (controller.selectedDay.value == "7days") {
+                            dayParam = days.where((d) => d != "7days").join(',');
+                          } else {
+                            dayParam = controller.selectedDay.value;
+                          }
+
                           controller.saveTags();
                           controller.saveHistoryTags();
                           Navigator.pop(context);
-                          Get.to(() => FilteredResultScreen());
-
+                          restaurantController.filterNearbyRestaurants(
+                            day: dayParam,
+                            kitchenStyle: controller.tags.join(','),
+                          ).then((value) {
+                            Get.to(() => FilteredResultScreen()
+                            );
+                          },);
                         },
                       ),
                     ),

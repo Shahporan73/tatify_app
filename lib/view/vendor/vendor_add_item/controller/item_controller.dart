@@ -9,6 +9,7 @@ import '../../../../data/api_client/bace_client.dart';
 import '../../../../data/api_client/end_point.dart';
 import '../../../../data/local_database/local_data_base.dart';
 import '../../../../data/utils/const_value.dart';
+import '../../vendor_profile/controller/my_restaurant_controller.dart';
 
 class ItemController extends GetxController {
   var isLoading = false.obs;
@@ -36,8 +37,8 @@ class ItemController extends GetxController {
     selectDay(selectedDay.value);
   }
 
-
-  Future<void> getFoods({bool isLoadMore = false, required String restaurantId}) async {
+  Future<void> getFoods(
+      {bool isLoadMore = false, required String restaurantId}) async {
     if (isLoading.value) return;
 
     if (!isLoadMore) {
@@ -59,10 +60,13 @@ class ItemController extends GetxController {
       final url = EndPoint.getFoodsURL(
         restaurantId: restaurantId,
         page: currentPage.value,
-        limit: 10,
+        limit: 9999999999999999,
       );
       dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(api: url, headers: headers),
+        await BaseClient.getRequest(
+            api: url,
+            headers: headers
+        ),
       );
 
       print('API Hit: $url');
@@ -80,8 +84,10 @@ class ItemController extends GetxController {
         final items = newModel.data?.result ?? [];
 
         // Separate items based on status
-        final ongoingItems = items.where((item) => item.status == "on-going").toList();
-        final closedItems = items.where((item) => item.status == "closed").toList();
+        final ongoingItems =
+            items.where((item) => item.status == "on-going").toList();
+        final closedItems =
+            items.where((item) => item.status == "closed").toList();
 
         if (!isLoadMore) {
           onGoingList.value = ongoingItems;
@@ -104,30 +110,67 @@ class ItemController extends GetxController {
     }
   }
 
+  Future<void> searchFoods({required String restaurantId, String? searchTerm}) async {
+    isLoading.value = true;
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': LocalStorage.getData(key: accessToken),
+      };
 
+      final url = EndPoint.getFoodsURL(
+        restaurantId: restaurantId,
+        searchTerm: searchTerm
+      );
 
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+            api: url,
+            headers: headers
+        ),
+      );
+
+      print('API Hit: $url');
+      print('Response Body: $responseBody');
+
+      if (responseBody != null && responseBody['success'] == true) {
+        final newModel = FoodItemModel.fromJson(responseBody);
+        final items = newModel.data?.result ?? [];
+        // Separate items based on status
+        final ongoingItems = items.where((item) => item.status == "on-going").toList();
+        onGoingList.value = ongoingItems;
+        onGoingList.addAll(ongoingItems);
+      } else {
+        print("Failed to load food data");
+      }
+    } catch (e) {
+      print('Error fetching food list: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
 
 
   Future<void> addItem({required BuildContext context}) async {
     isLoading.value = true;
     try {
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-      'Authorization': LocalStorage.getData(key: accessToken),
-    };
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': LocalStorage.getData(key: accessToken),
+      };
 
-    Map<String, dynamic> body = {
-      "itemName": menuNameController.text,
-      "description": descriptionController.text,
-      "price": {
-        "price": int.parse(standardPriceController.text),
-        "discountPrice": int.parse(discountController.text),
-        "offerDay": selectedDay.value.toLowerCase(),
-      }
-    };
+      Map<String, dynamic> body = {
+        "itemName": menuNameController.text,
+        "description": descriptionController.text,
+        "price": {
+          "price": int.parse(standardPriceController.text),
+          "discountPrice": int.parse(discountController.text),
+          "offerDay": selectedDay.value.toLowerCase(),
+        }
+      };
 
-    print('body $body');
+      print('body $body');
 
       var response = await http.post(
         Uri.parse(EndPoint.createFoodURL),
@@ -145,19 +188,18 @@ class ItemController extends GetxController {
       }
     } catch (e) {
       print('create food item error: $e');
-    }finally{
+    } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> updateItem({
-    required BuildContext context,
-    required String menuId,
-    required String menuName,
-    required String menuDescription,
-    required String standardPrice,
-    required String discountPrice
-  }) async {
+  Future<void> updateItem(
+      {required BuildContext context,
+      required String menuId,
+      required String menuName,
+      required String menuDescription,
+      required String standardPrice,
+      required String discountPrice}) async {
     isLoading.value = true;
     try {
       Map<String, String> headers = {
@@ -175,7 +217,6 @@ class ItemController extends GetxController {
         }
       };
 
-
       print('body $body');
 
       dynamic responseBody = await BaseClient.handleResponse(
@@ -185,7 +226,6 @@ class ItemController extends GetxController {
           headers: headers,
         ),
       );
-
 
       if (responseBody != null && responseBody['success'] == true) {
         selectedDay.value = "";
@@ -197,14 +237,12 @@ class ItemController extends GetxController {
       }
     } catch (e) {
       print('update food item error: $e');
-    }finally{
+    } finally {
       isLoading.value = false;
     }
   }
 
-
-
-  void switchTab(String newData){
+  void switchTab(String newData) {
     selectedTab.value = newData;
   }
 
@@ -224,7 +262,6 @@ class ItemController extends GetxController {
       }
   }*/
 
-
   void selectDay(String day) {
     if (day == "7days") {
       selectedDays.value = ["7days"];
@@ -243,6 +280,4 @@ class ItemController extends GetxController {
       }
     }
   }
-
-
 }

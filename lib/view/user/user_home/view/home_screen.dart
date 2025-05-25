@@ -16,17 +16,20 @@ import '../widget/custom_sliver_app_bar.dart';
 
 
 class UserHomeScreen extends StatelessWidget {
-  const UserHomeScreen({super.key});
+  final HomeController homeController = Get.put(HomeController());
+  final SingleRestaurantController singleRestaurantController = Get.put(SingleRestaurantController());
+  UserHomeScreen({super.key}){
+    homeController.getNearbyRestaurants();
+    homeController.getNearbyRestaurants();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = Get.put(HomeController());
-    final SingleRestaurantController singleRestaurantController = Get.put(SingleRestaurantController());
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(() {
         return RefreshIndicator(
+          color: AppColors.primaryColor,
           onRefresh: () async {
             await homeController.getNearbyRestaurants();
           },
@@ -91,7 +94,8 @@ class UserHomeScreen extends StatelessWidget {
                                 discountPrice: '6.99€',
                                 price: '9.99€',
                                 distance: '${data.distance?.toStringAsFixed(2)} km',
-                                reviewsAndRating: '4.3(17)',
+                                reviewsAndRating: '${data.review?.star?.toStringAsFixed(1) ?? 0.0}'
+                                    '(${data.review?.total ?? 0})',
                                 kitchenStyle: 'Kabab',
                                 on2for1Click: () {},
                                 onFreeSoftClick: () {},

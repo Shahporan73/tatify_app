@@ -125,7 +125,7 @@ class Commission {
   });
 
   final bool? verified;
-  final num? commissionRate;
+  final int? commissionRate;
   final dynamic adminId;
   final dynamic updatedAt;
   final String? id;
@@ -139,27 +139,24 @@ class Commission {
       id: json["_id"],
     );
   }
-}
 
+}
 
 class Location {
   Location({
-    required this.coordinates,
     required this.type,
+    required this.coordinates,
   });
 
-  final List<double> coordinates;
   final String? type;
+  final List<double> coordinates;
 
-  factory Location.fromJson(Map<String, dynamic> json) {
+  factory Location.fromJson(Map<String, dynamic> json){
     return Location(
-      coordinates: json["coordinates"] == null
-          ? []
-          : List<double>.from(json["coordinates"]!.map((x) => (x as num).toDouble())),
       type: json["type"],
+      coordinates: json["coordinates"] == null ? [] : List<double>.from(json["coordinates"]!.map((x) => x)),
     );
   }
-
 
 }
 
@@ -193,14 +190,17 @@ class OpeningHr {
 class Review {
   Review({
     required this.star,
+    required this.total,
   });
 
-  final num? star;
+  final double? star;
+  final int? total;
 
   factory Review.fromJson(Map<String, dynamic> json){
     return Review(
       star: json["star"],
+      total: json["total"],
     );
   }
-}
 
+}

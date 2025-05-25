@@ -158,11 +158,14 @@ class FaveDetailsHeaderWidget extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        CustomText(
-                          title: kitchenType,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.blackColor,
-                          fontSize: 12,
+                        Expanded(
+                          child: CustomText(
+                            title: kitchenType,
+                            maxLines: 2,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.blackColor,
+                            fontSize: 12,
+                          ),
                         ),
                       ],
                     ),

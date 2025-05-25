@@ -14,13 +14,16 @@ import 'package:tatify_app/view/user/user_booking/widget/booking_card_widget.dar
 import 'package:tatify_app/view/vendor/vendor_redeem/views/redeem_deal_screen.dart';
 
 import '../../../../data/utils/custom_loader.dart';
+import 'booking_deal_confirm_screen.dart';
 
 class UserBookingScreen extends StatelessWidget {
-  const UserBookingScreen({super.key});
+  final BookingController controller = Get.put(BookingController());
+  UserBookingScreen({super.key}){
+    controller.getBookRedeem();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final BookingController controller = Get.put(BookingController());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: MainAppBar(
@@ -30,7 +33,7 @@ class UserBookingScreen extends StatelessWidget {
       ),
       body: RefreshIndicator(
         color: AppColors.primaryColor,
-        onRefresh: () async{
+        onRefresh: () async {
           await controller.getBookRedeem();
         },
         child: Obx(
@@ -38,38 +41,65 @@ class UserBookingScreen extends StatelessWidget {
             print('getBookRedeemList ${controller.getBookRedeemList.length}');
             return SingleChildScrollView(
               padding: bodyPadding,
-              child: controller.isLoading.value ? CustomLoader() :
-              controller.getBookRedeemList.isEmpty && !controller.isLoading.value ?
-              EmptyRestaurantView(
-                title: 'No Booking Found',
-              ) : ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: controller.getBookRedeemList.length,
-                physics: ScrollPhysics(),
-                itemBuilder: (context, index) {
-                  var data = controller.getBookRedeemList[index];
-                  return GestureDetector(
-                    onTap: () {
-                      if (data.vendorRedeem?.redeemStatus == 'pending') {
-                        // Get.to(() => UserRedeemDealScreen(redeemId: data.id ?? '',));
-                        Get.to(() => MyQrCodeScreen(foodId: data.id ?? '',));
-                      }else{
-                        Get.rawSnackbar(message: 'Already Redeemed');
-                      }
-                    },
-                    child: BookingCardWidget(
-                      title: data.food?.itemName ?? 'Not Available',
-                      price: data.cash?.payableAmount?.toStringAsFixed(0) ?? '00',
-                      description: data.food?.description ?? 'Not Available',
-                      location: data.restaurant?.address ?? 'Not Available',
-                      isRedeem: data.vendorRedeem?.redeemStatus == 'pending' ? false : true,
-                      restaurantName: data.restaurant?.name ?? 'Not Available',
-                      restaurantImage: data.restaurant?.featureImage ?? placeholderImage,
-                    ),
-                  );
-                },
-              ),
+              child: controller.isLoading.value
+                  ? CustomLoader()
+                  : controller.getBookRedeemList.isEmpty &&
+                          !controller.isLoading.value
+                      ? EmptyRestaurantView(
+                          title: 'No Booking Found',
+                        )
+                      : ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemCount: controller.getBookRedeemList.length,
+                          physics: ScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            var data = controller.getBookRedeemList[index];
+                            return GestureDetector(
+                              onTap: () {
+                                if (data.vendorRedeem?.redeemStatus == 'pending') {
+                                  // Get.to(() => UserRedeemDealScreen(redeemId: data.id ?? '',));
+                                  Get.to(() => MyQrCodeScreen(
+                                        foodId: data.id ?? '',
+                                      ));
+                                } else {
+                                  Get.to(
+                                    () => BookingDealConfirmScreen(
+                                      restaurantImageUrl:
+                                          data.restaurant?.featureImage ??
+                                              placeholderImage,
+                                      itemName: data.food?.itemName ??
+                                          'Not Available',
+                                      itemPrice: data.cash?.payableAmount
+                                              ?.toStringAsFixed(0) ??
+                                          '00',
+                                      foodId: data.food?.id ?? '',
+                                    ),
+                                  );
+                                }
+                              },
+                              child: BookingCardWidget(
+                                title: data.food?.itemName ?? 'Not Available',
+                                price: data.cash?.payableAmount
+                                        ?.toStringAsFixed(0) ??
+                                    '00',
+                                description:
+                                    data.food?.description ?? 'Not Available',
+                                location:
+                                    data.restaurant?.address ?? 'Not Available',
+                                isRedeem:
+                                    data.vendorRedeem?.redeemStatus == 'pending'
+                                        ? false
+                                        : true,
+                                restaurantName:
+                                    data.restaurant?.name ?? 'Not Available',
+                                restaurantImage:
+                                    data.restaurant?.featureImage ??
+                                        placeholderImage,
+                              ),
+                            );
+                          },
+                        ),
             );
           },
         ),

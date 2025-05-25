@@ -26,6 +26,8 @@ import '../../../../res/common_widget/empty_restaurant_view.dart';
 import '../../../../res/utils/created_at.dart';
 import '../../../../res/utils/review_format.dart';
 import '../../user_home/controller/single_restaurant_controller.dart';
+import '../../user_home/view/extra_views/see_all_food_screen.dart';
+import '../../user_home/view/extra_views/see_all_review_screen.dart';
 import '../controller/favorite_controller.dart';
 import '../widget/fave_details_header_widget.dart';
 
@@ -95,6 +97,30 @@ class _UserFavDetailsScreenState extends State<UserFavDetailsScreen> {
                           );
                         },
                         childCount: min(controller.foodList.length, 2),
+                      ),
+                    ),
+                  ),
+
+                  SliverToBoxAdapter(
+                    child: const SizedBox(height: 5),
+                  ),
+
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: (controller.foodList.length == 0 || controller.foodList.length <= 2)
+                          ? SizedBox()
+                          : CustomButton(
+                        title: 'All Food (${controller.foodList.length})',
+                        buttonColor: AppColors.secondaryColor,
+                        borderRadius: 25,
+                        padding_vertical: 8,
+                        onTap: () {
+                          Get.to(
+                                () => SeeAllFoodScreen(foodList: controller.foodList),
+                            transition: Transition.downToUp,
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -209,14 +235,19 @@ class _UserFavDetailsScreenState extends State<UserFavDetailsScreen> {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: (data?.review?.total ?? 0) == 0
+                      child: (data?.review?.total ?? 0) <= 5
                           ? SizedBox()
                           : CustomButton(
                         title: 'All reviews (${data?.review?.total ?? 0})',
                         buttonColor: AppColors.secondaryColor,
                         borderRadius: 25,
                         padding_vertical: 8,
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(
+                                () => SeeAllReviewScreen(reviewList: controller.reviewList,),
+                            transition: Transition.downToUp,
+                          );
+                        },
                       ),
                     ),
                   ),

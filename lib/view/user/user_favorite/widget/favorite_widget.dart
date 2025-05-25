@@ -93,7 +93,7 @@ class FavoriteWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              heightBox8,
+              /*heightBox8,
               Row(
                 children: [
                   Expanded(
@@ -114,7 +114,7 @@ class FavoriteWidget extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              )*/
             ],
           ),),
         ],

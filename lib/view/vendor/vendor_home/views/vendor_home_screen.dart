@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tatify_app/data/utils/custom_loader.dart';
+import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/custom_row_widget.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
@@ -21,9 +22,17 @@ class VendorHomeScreen extends StatelessWidget {
   final VendorProfileController myProfileController = Get.put(VendorProfileController());
   final ItemController foodItemController = Get.put(ItemController());
 
-  VendorHomeScreen({Key? key}) : super(key: key){
+  VendorHomeScreen({Key? key}) : super(key: key) {
     myRestaurantController.getMyRestaurants();
     myProfileController.getProfile();
+  }
+
+  Future<void> _refreshItems() async {
+    await foodItemController.getFoods(
+      restaurantId: myRestaurantController.myRestaurantsModel.value.data?.id ?? '',
+    );
+    await myRestaurantController.getMyRestaurants();
+   await myProfileController.getProfile();
   }
 
   @override
@@ -32,98 +41,108 @@ class VendorHomeScreen extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          // Header section with sticky restaurant name
-          SliverAppBar(
-            expandedHeight: height / 4.8,
-            floating: false,
-            pinned: true,
-            leading: SizedBox(),
-            backgroundColor: Colors.transparent,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Obx(
-                ()=> VHomeHeaderWidget(
-                  userName: myProfileController.fullName.value.isNotEmpty ? myProfileController.fullName.value : 'User',
-                  restaurantName: myRestaurantController.myRestaurantsModel.value.data?.name ?? 'Not found',
+      body: RefreshIndicator(
+        displacement: 20,
+        color: AppColors.primaryColor,
+        onRefresh: _refreshItems,
+        child: CustomScrollView(
+          slivers: [
+            // Header section with sticky restaurant name
+            SliverAppBar(
+              expandedHeight: height / 4.8,
+              floating: false,
+              pinned: true,
+              leading: SizedBox(),
+              backgroundColor: Colors.transparent,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Obx(
+                      () => VHomeHeaderWidget(
+                    userName: myProfileController.fullName.value.isNotEmpty
+                        ? myProfileController.fullName.value
+                        : 'User',
+                    restaurantName:
+                    myRestaurantController.myRestaurantsModel.value.data?.name ?? 'Not found',
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // Content section below the header
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                heightBox10,
-                SizedBox(
-                  height: height / 2.2,
-                  child: NetIncomeChartWidget(),
-                ),
+            // Content section below the header
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  heightBox10,
+                  SizedBox(
+                    height: height / 2.2,
+                    child: NetIncomeChartWidget(),
+                  ),
 
+                  heightBox10,
+                  SizedBox(
+                    height: height / 2.5,
+                    child: SecondGrapWidget(),
+                  ),
 
-                heightBox10,
-                SizedBox(
-                  height: height / 2.5,
-                  child: SecondGrapWidget(),
-                ),
-
-                // OnGoing list
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: CustomRowWidget(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    title: CustomText(
-                      title: 'Ongoing Menu',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    value: IconButton(
-                      onPressed: () {
-                        Get.to(() => SearchOnGoingItemScreen(),
-                            transition: Transition.downToUp);
-                      },
-                      icon: Icon(
-                        Icons.search_outlined,
-                        size: 24,
+                  // OnGoing list
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: CustomRowWidget(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      title: CustomText(
+                        title: 'Ongoing Menu',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      value: IconButton(
+                        onPressed: () {
+                          Get.to(() => SearchOnGoingItemScreen(), transition: Transition.downToUp);
+                        },
+                        icon: Icon(
+                          Icons.search_outlined,
+                          size: 24,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Obx(() => foodItemController.isLoading.value?
-                Center(child: CustomLoader(),):
-                foodItemController.onGoingList.isEmpty?
-                Center(child: CustomText(title: 'No item found', fontSize: 16,)):
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  itemCount: foodItemController.onGoingList.length,
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
-                    var food = foodItemController.onGoingList[index];
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: GestureDetector(
-                        onTap: () {
-                          // Get.to(() => VendorRestaurantDetailsScreen());
-                        },
-                        child: HomeMenuWidget(
-                          foodName: food.itemName ?? '',
-                          foodPrice: food.price?.price?.toStringAsFixed(0) ?? '0',
-                          discountPrice: food.price?.discountPrice?.toStringAsFixed(0) ?? '0',
-                          offerDay: food.price?.offerDay ?? '',
-                          description: food.description ?? '',
+                  Obx(
+                        () => foodItemController.isLoading.value
+                        ? Center(child: CustomLoader())
+                        : foodItemController.onGoingList.isEmpty
+                        ? Center(child: CustomText(title: 'No item found', fontSize: 16))
+                        : ListView.builder(
+                          shrinkWrap: true,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: foodItemController.onGoingList.length,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            var food = foodItemController.onGoingList[index];
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: GestureDetector(
+                                onTap: () {
+                                  // Get.to(() => VendorRestaurantDetailsScreen());
+                                },
+                                child: HomeMenuWidget(
+                                  foodName: food.itemName ?? '',
+                                  foodPrice:
+                                  food.price?.price?.toStringAsFixed(0) ?? '0',
+                                  discountPrice:
+                                  food.price?.discountPrice?.toStringAsFixed(0) ??
+                                      '0',
+                                  offerDay: food.price?.offerDay ?? '',
+                                  description: food.description ?? '',
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                    );
-                  },
-                ),),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-
 }

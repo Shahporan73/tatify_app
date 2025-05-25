@@ -7,6 +7,7 @@ import 'package:tatify_app/res/app_images/App_images.dart';
 import 'package:tatify_app/res/common_widget/custom_network_image_widget.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
+import 'package:tatify_app/view/user/user_booking/view/booking_deal_confirm_screen.dart';
 
 class BookingCardWidget extends StatelessWidget {
   final String title;

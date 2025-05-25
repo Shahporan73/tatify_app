@@ -62,6 +62,7 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
 
     final position = await Geolocator.getCurrentPosition();
 
+    if (!mounted) return;
     setState(() {
       _initialPosition = LatLng(position.latitude, position.longitude);
     });
@@ -79,6 +80,8 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
     final ByteData byteData = await rootBundle.load(AppImages.customMarkerIcon);
     final Uint8List bytes = byteData.buffer.asUint8List();
     _customIcon = BitmapDescriptor.fromBytes(bytes);
+
+    if (!mounted) return;
     setState(() {}); // Update UI after loading icon
   }
 
@@ -102,15 +105,15 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
           position: LatLng(latitude, longitude),
           icon: _customIcon!,
           onTap: () => showBottomSheet(
-              restaurantImageUrl: restaurant.featureImage ?? '',
-              restaurantName: restaurant.name ?? '',
-              reviews: restaurant.review?.total?.toStringAsFixed(0) ?? '0',
-              rating: restaurant.review?.star?.toStringAsFixed(1) ?? '0.0',
-              distance: restaurant.distance?.toStringAsFixed(0) ?? '',
+            restaurantImageUrl: restaurant.featureImage ?? '',
+            restaurantName: restaurant.name ?? '',
+            reviews: restaurant.review?.total?.toStringAsFixed(0) ?? '0',
+            rating: restaurant.review?.star?.toStringAsFixed(1) ?? '0.0',
+            distance: restaurant.distance?.toStringAsFixed(0) ?? '',
             onTap: () {
               singleRestaurantController.getSingleRestaurant(restaurantId: restaurant.id ?? '').then((value) {
-                Get.to(()=> UserRestaurantDetailsScreen(restaurantId: restaurant.id ?? '',));
-              },);
+                Get.to(() => UserRestaurantDetailsScreen(restaurantId: restaurant.id ?? ''));
+              });
             },
           ),
           infoWindow: InfoWindow(title: restaurant.name),
@@ -134,7 +137,7 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
             children: [
               GoogleMap(
                 initialCameraPosition:
-                    CameraPosition(target: _initialPosition!, zoom: 15),
+                CameraPosition(target: _initialPosition!, zoom: 15),
                 markers: getMarkers(),
                 myLocationEnabled: true,
                 myLocationButtonEnabled: true,
@@ -229,7 +232,7 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
     required String reviews,
     required String rating,
     required String distance,
-    required VoidCallback onTap
+    required VoidCallback onTap,
   }) {
     showModalBottomSheet(
       context: context,

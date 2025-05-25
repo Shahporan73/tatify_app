@@ -10,6 +10,7 @@ class HomeController extends GetxController{
   RxBool isLoading = false.obs;
   var nearbyRestaurantModel = GetNearByRestaurantModel().obs;
   var nearbyRestaurantList = <RestaurantList>[].obs;
+  var filterNearbyRestaurantList = <RestaurantList>[].obs;
 
 
   @override
@@ -28,7 +29,7 @@ class HomeController extends GetxController{
       };
       dynamic responseBody = await BaseClient.handleResponse(
         await BaseClient.getRequest(
-          api: EndPoint.nearbyRestaurantsURL(),
+          api: EndPoint.nearbyRestaurantsURL(limit: 99999999999999999),
           headers: headers,
         ),
       );
@@ -42,4 +43,80 @@ class HomeController extends GetxController{
       isLoading.value = false;
     }
   }
+
+  Future<void> searchNearbyRestaurants({String? searchTerm}) async {
+    isLoading.value = true;
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': await LocalStorage.getData(key: accessToken),
+      };
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: EndPoint.nearbyRestaurantsURL(searchTerm: searchTerm, limit: 9999,),
+          headers: headers,
+        ),
+      );
+      if (responseBody != null && responseBody['success'] == true) {
+        nearbyRestaurantModel.value = GetNearByRestaurantModel.fromJson(responseBody);
+        nearbyRestaurantList.value = nearbyRestaurantModel.value.data?.result ?? [];
+      }
+    } catch (e) {
+      print('get nearby restaurants error $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+
+  Future<void> getCityList() async {
+    isLoading.value = true;
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': await LocalStorage.getData(key: accessToken),
+      };
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: EndPoint.nearbyRestaurantsURL(limit: 99999999999999999),
+          headers: headers,
+        ),
+      );
+      if (responseBody != null && responseBody['success'] == true) {
+        nearbyRestaurantModel.value = GetNearByRestaurantModel.fromJson(responseBody);
+        nearbyRestaurantList.value = nearbyRestaurantModel.value.data?.result ?? [];
+      }
+    } catch (e) {
+      print('get nearby restaurants error $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> filterNearbyRestaurants({String? day, String? kitchenStyle}) async {
+    isLoading.value = true;
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': await LocalStorage.getData(key: accessToken),
+      };
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.getRequest(
+          api: '${EndPoint.nearbyRestaurantsURL()}?day=$day&kitchenstyle=$kitchenStyle',
+          headers: headers,
+        ),
+      );
+      if (responseBody != null && responseBody['success'] == true) {
+        nearbyRestaurantModel.value = GetNearByRestaurantModel.fromJson(responseBody);
+        filterNearbyRestaurantList.value = nearbyRestaurantModel.value.data?.result ?? [];
+      }
+    } catch (e) {
+      print('get nearby restaurants error $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
 }

@@ -40,12 +40,14 @@ class ReviewList {
   final RestaurantFood? restaurantFood;
   final UserInfo? userInfo;
 
-  factory ReviewList.fromJson(Map<String, dynamic> json){
+  factory ReviewList.fromJson(Map<String, dynamic> json) {
     return ReviewList(
       id: json["_id"],
       user: json["user"],
       foodId: json["foodId"],
-      ratings: json["ratings"],
+      ratings: json["ratings"] == null
+          ? null
+          : (json["ratings"] is int ? (json["ratings"] as int).toDouble() : json["ratings"] as double),
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
       restaurantFood: json["restaurantFood"] == null ? null : RestaurantFood.fromJson(json["restaurantFood"]),

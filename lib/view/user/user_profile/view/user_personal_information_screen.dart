@@ -102,6 +102,11 @@ class UserPersonalInformationScreen extends StatelessWidget {
                           onTap: (){}
                       ),
                       ProfileItemWidget(
+                          icon: Icons.location_on_outlined,
+                          title: controller.address.value.isNotEmpty ? controller.address.value : 'Not found',
+                          onTap: (){}
+                      ),
+                      ProfileItemWidget(
                           icon: Icons.email_outlined,
                           title: controller.email.value.isNotEmpty ? controller.email.value : 'Not found',
                           onTap: (){}
