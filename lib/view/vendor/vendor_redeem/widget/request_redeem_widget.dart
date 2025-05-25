@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tatify_app/data/utils/launch_url_service.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
@@ -136,7 +137,8 @@ class RequestRedeemWidget extends StatelessWidget {
                         onTap: () {
                           showDialog(
                             context: context,
-                            builder: (context) => ShowFullScreenImageDialog(imageUrl: userImage),
+                            builder: (context) =>
+                                ShowFullScreenImageDialog(imageUrl: userImage),
                           );
                         },
                         child: CircleAvatar(
@@ -145,11 +147,12 @@ class RequestRedeemWidget extends StatelessWidget {
                       ),
                     ),
                     trailing: InkWell(
-                      onTap: () => LaunchUrlService().makePhoneCall(phoneNumber: userPhone),
-                        child: Icon(
-                      Icons.phone,
-                      color: AppColors.blackColor,
-                       ),
+                      onTap: () => LaunchUrlService()
+                          .makePhoneCall(phoneNumber: userPhone),
+                      child: Icon(
+                        Icons.phone,
+                        color: AppColors.blackColor,
+                      ),
                     ),
                     title: CustomText(
                       title: userName,
@@ -158,7 +161,8 @@ class RequestRedeemWidget extends StatelessWidget {
                       color: AppColors.blackColor,
                     ),
                     subtitle: InkWell(
-                      onTap: () => LaunchUrlService().sendEmail(email: userEmail),
+                      onTap: () =>
+                          LaunchUrlService().sendEmail(email: userEmail),
                       child: CustomText(
                         title: userEmail,
                         fontSize: 10,
@@ -166,7 +170,7 @@ class RequestRedeemWidget extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  Row(
+                  isRedeem?Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -189,6 +193,39 @@ class RequestRedeemWidget extends StatelessWidget {
                         fontSize: 18,
                       )
                     ],
+                  ):
+                  Container(
+                    width: Get.width,
+                    margin: EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            offset: Offset(0, 1))
+                      ],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.document_scanner_outlined,
+                          color: AppColors.secondaryColor,
+                          size: 16,
+                        ),
+                        widthBox10,
+                        CustomText(title: 'Scan to redeem',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            color: AppColors.black100
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: height / 18,

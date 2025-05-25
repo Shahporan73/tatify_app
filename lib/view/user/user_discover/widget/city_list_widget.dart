@@ -51,7 +51,7 @@ class CityListWidget extends StatelessWidget {
                 onTap: () {
                   controller.selectedCity.value = city;
                   Navigator.pop(context);
-                  Get.to(()=>FilteredResultScreen());
+                  // Get.to(()=>FilteredResultScreen(filteredRestaurants: [],));
                 },
               ));
             },

@@ -20,9 +20,11 @@ class MyRestaurantController extends GetxController {
   var tags = <String>[].obs;
 
   // Updated openingHours to be a Map
-  RxMap<String, Map<String, dynamic>> openingHours = <String, Map<String, dynamic>>{}.obs;
+  RxMap<String, Map<String, dynamic>> openingHours =
+      <String, Map<String, dynamic>>{}.obs;
 
-  final TextEditingController restaurantNameController = TextEditingController();
+  final TextEditingController restaurantNameController =
+      TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
 
@@ -33,7 +35,6 @@ class MyRestaurantController extends GetxController {
   var address = "".obs;
   var latitude = 0.0.obs;
   var longitude = 0.0.obs;
-
 
   final ItemController itemController = Get.put(ItemController());
 
@@ -102,6 +103,7 @@ class MyRestaurantController extends GetxController {
           latitude.value = myRestaurantsModel.value.data?.location?.coordinates[1] ?? 0.0;
           longitude.value = myRestaurantsModel.value.data?.location?.coordinates[0] ?? 0.0;
           itemController.getFoods(restaurantId: myRestaurantsModel.value.data?.id ?? '');
+          itemController.searchFoods(restaurantId: myRestaurantsModel.value.data?.id ?? '');
         }
 
         // Initialize tags and opening hours from API response (if available)
@@ -133,7 +135,9 @@ class MyRestaurantController extends GetxController {
   }
 
   // Update restaurant
-  Future<void> updateRestaurant({required double latitude, required double longitude, required BuildContext context}) async {
+  Future<void> updateRestaurant(
+      {
+      required BuildContext context}) async {
     isLoading.value = true;
     try {
       Map<String, String> headers = {
@@ -155,8 +159,11 @@ class MyRestaurantController extends GetxController {
 
         openingHourList.add({
           "day": day.toLowerCase(),
-          "openTime": isClosed || openTime == null ? "00:00" : formatTo24Hour(openTime),
-          "closeTime": isClosed || closeTime == null ? "00:00" : formatTo24Hour(closeTime),
+          "openTime":
+              isClosed || openTime == null ? "00:00" : formatTo24Hour(openTime),
+          "closeTime": isClosed || closeTime == null
+              ? "00:00"
+              : formatTo24Hour(closeTime),
           "isClosed": isClosed,
         });
       });
@@ -169,7 +176,7 @@ class MyRestaurantController extends GetxController {
         'city': cityController.text.trim(),
         'location': {
           'type': 'Point',
-          'coordinates': [longitude, latitude],
+          'coordinates': [longitude.value, latitude.value],
         },
         'openingHr': openingHourList,
       };

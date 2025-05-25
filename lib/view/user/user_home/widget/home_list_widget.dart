@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tatify_app/data/utils/get_relative_time.dart';
 import 'package:tatify_app/res/common_widget/custom_button.dart';
 
 import '../../../../res/app_colors/App_Colors.dart';
@@ -55,6 +56,7 @@ class HomeListWidget extends StatelessWidget {
             children: [
               CustomText(
                 title: title,
+                maxLines: 1,
                 color: AppColors.blackColor,
                 fontSize: 14, fontWeight: FontWeight.w600,
               ),
@@ -96,7 +98,7 @@ class HomeListWidget extends StatelessWidget {
                       ),
                       SizedBox(width: 3,),
                       CustomText(
-                        title: kitchenStyle,
+                        title: getLimitedWord(kitchenStyle, 5),
                         color: AppColors.black100,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -118,7 +120,7 @@ class HomeListWidget extends StatelessWidget {
                 ],
               ),
 
-              heightBox5,
+              /*heightBox5,
               Row(
                 children: [
                   Expanded(
@@ -170,7 +172,7 @@ class HomeListWidget extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              )*/
             ],
           ),),
         ],

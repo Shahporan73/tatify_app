@@ -144,50 +144,6 @@ class SingleRestaurantController extends GetxController{
     }
   }
 
-  Future<void> searchRestaurant(String query) async {
-    isLoading.value = true;
-    try {
-      final String? token = await LocalStorage.getData(key: accessToken);
-      if (token == null || token.isEmpty) {
-        throw Exception('Authorization token is missing.');
-      }
-
-      final Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        'Authorization': token,
-      };
-
-      final Map<String, String>? queryParams = query.isEmpty ? null : {'search': query.trim()};
-
-      final dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(
-          api: EndPoint.getMyRestaurantsURL,
-          params: queryParams,
-          headers: headers,
-        ),
-      );
-
-      if (responseBody != null && responseBody['success'] == true) {
-        singleRestaurantModel.value = SingleRestaurantModel.fromJson(responseBody);
-
-        final restaurantData = singleRestaurantModel.value.data;
-        if (restaurantData != null) {
-          final String restaurantId = restaurantData.id.toString();
-          await Future.wait([
-            getRestaurantFood(restaurantId: restaurantId),
-            getRestaurantReviews(restaurantId: restaurantId),
-          ]);
-        }
-      } else {
-        print('Search restaurant returned unsuccessful response.');
-      }
-    } catch (error, stackTrace) {
-      print('Error during restaurant search: $error');
-      print(stackTrace);
-    } finally {
-      isLoading.value = false;
-    }
-  }
 
 
 }

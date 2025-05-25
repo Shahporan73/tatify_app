@@ -161,11 +161,14 @@ class RestaurantDetailsHeaderWidget extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            CustomText(
-                              title: kitchenType,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.blackColor,
-                              fontSize: 14,
+                            Expanded(
+                              child: CustomText(
+                                title: kitchenType,
+                                maxLines: 2,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.blackColor,
+                                fontSize: 14,
+                              ),
                             ),
                           ],
                         ),

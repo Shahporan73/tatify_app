@@ -61,7 +61,8 @@ class UserFavoriteScreen extends StatelessWidget {
                             child: FavoriteWidget(
                               imagePath: data?.featureImage ?? '',
                               title: data?.name ?? '',
-                              reviewsAndRating: '4.3(17)',
+                              reviewsAndRating: '${data?.review?.star?.toStringAsFixed(1) ?? 0.0}'
+                                  '(${data?.review?.total?.toStringAsFixed(0) ?? 0})',
                               distance: '2km',
                               on2for1Click: () {},
                               onFreeSoftClick: () {},

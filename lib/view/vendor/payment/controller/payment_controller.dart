@@ -82,15 +82,15 @@ class PaymentController extends GetxController {
         'Authorization': LocalStorage.getData(key: accessToken),
       };
 
-      Map<String, dynamic> body = {
-        "amount": 327,
-        "currency": "eur"
-      };
+      // Map<String, dynamic> body = {
+      //   "amount": 327,
+      //   "currency": "eur"
+      // };
 
       final http.Response response = await http.post(
         url,
         headers: headers,
-        body: jsonEncode(body),
+        body: jsonEncode({}),
       );
 
       if (response.statusCode == 200) {

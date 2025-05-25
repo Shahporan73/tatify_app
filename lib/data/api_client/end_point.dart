@@ -10,6 +10,9 @@ class EndPoint {
   static const String loginURL = '$BASE_URL/auth/login';
   static const String verifyEmailByOtpURL = '$BASE_URL/user/email-verify';
 
+  // social auth endpoint
+  static const String socialAuthURL = '$BASE_URL/auth/social-auth';
+
   static String resendOtpUrl({required dynamic email}) => '$BASE_URL/user/send-verify-otp/$email';
 
   // forgot password
@@ -29,8 +32,9 @@ class EndPoint {
   static const String aboutUsURL = '$BASE_URL/pat/about';
 
 //   nearby restaurants
-  static String nearbyRestaurantsURL({double? lat, double? long, String? distance, int? limit}) {
+  static String nearbyRestaurantsURL({String? searchTerm, double? lat, double? long, String? distance, int? limit}) {
     final queryParams = <String, String>{};
+    if (searchTerm != null) queryParams['searchTerm'] = searchTerm.toString();
     if (lat != null) queryParams['lat'] = lat.toString();
     if (long != null) queryParams['long'] = long.toString();
     if (distance != null) queryParams['distance'] = distance.toString();
@@ -76,10 +80,10 @@ class EndPoint {
 
 //   food
   static const String createFoodURL = '$BASE_URL/foods/create';
-  static String getFoodsURL({String? restaurantId, String? searchTerm,int? limit, int? page}) {
+  static String getFoodsURL({String? restaurantId, String? searchTerm, int? limit, int? page}) {
     final queryParams = <String, String>{};
     if (restaurantId != null) queryParams['restaurant'] = restaurantId.toString();
-    if (searchTerm != null) queryParams['long'] = searchTerm.toString();
+    if (searchTerm != null) queryParams['searchTerm'] = searchTerm.toString();
     if (limit != null) queryParams['limit'] = limit.toString();
     if (page != null) queryParams['page'] = page.toString();
 
@@ -99,6 +103,6 @@ class EndPoint {
   static String getTotalCommissionURL({required String year}) => '$BASE_URL/overview/vendor-commission?year=$year';
 
 //   payment
-  static const String paymentURL = '$BASE_URL/subscription/pay';
+  static const String paymentURL = '$BASE_URL/subscription/pay/68319b404105371904e806d6';
 
 }

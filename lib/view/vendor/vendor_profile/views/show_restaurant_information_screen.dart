@@ -54,8 +54,8 @@ class _ShowRestaurantInformationScreenState
     }
   }
 
-  double? latitude;
-  double? longitude;
+  // double? latitude;
+  // double? longitude;
 
   Future<void> _getLocationData() async {
     try {
@@ -65,8 +65,8 @@ class _ShowRestaurantInformationScreenState
       print('Address: ${location['address']}');
 
       setState(() {
-        latitude = location['latitude'];
-        longitude = location['longitude'];
+        controller.latitude.value = location['latitude'];
+        controller.longitude.value = location['longitude'];
       });
       controller.addressController.text = location['address'];
     } catch (e) {
@@ -224,8 +224,8 @@ class _ShowRestaurantInformationScreenState
                 title: 'Update',
                 onTap: () {
                   controller.updateRestaurant(
-                      latitude: latitude ?? 0.0,
-                      longitude: longitude ?? 0.0,
+                      // latitude: latitude ?? 0.0,
+                      // longitude: longitude ?? 0.0,
                       context: context
                   );
                 },

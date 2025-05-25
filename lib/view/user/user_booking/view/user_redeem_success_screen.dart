@@ -16,7 +16,7 @@ class UserRedeemSuccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(
       Duration(seconds: 3),() {
-      Get.offAll(BookingDealConfirmScreen());
+      // Get.offAll(BookingDealConfirmScreen());
     },
     );
     return Scaffold(
