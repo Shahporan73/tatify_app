@@ -57,312 +57,312 @@ class _UserFavDetailsScreenState extends State<UserFavDetailsScreen> {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       body: Obx(() {
-            var data = controller.singleRestaurantModel.value.data;
-            return SafeArea(
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: FaveDetailsHeaderWidget(
-                      restaurantImage: data?.featureImage ?? placeholderImage,
-                      restaurantName: data?.name ?? 'Not Available',
-                      rating: data?.review?.star?.toStringAsFixed(2) ?? '0.0',
-                      kitchenType: (data?.kitchenStyle ?? []).join(', '),
-                      restaurantId: widget.restaurantId ?? '',
-                    ),
+        var data = controller.singleRestaurantModel.value.data;
+        return SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: FaveDetailsHeaderWidget(
+                  restaurantImage: data?.featureImage ?? placeholderImage,
+                  restaurantName: data?.name ?? 'not_available'.tr,
+                  rating: data?.review?.star?.toStringAsFixed(2) ?? '0.0',
+                  kitchenType: (data?.kitchenStyle ?? []).join(', '),
+                  restaurantId: widget.restaurantId ?? '',
+                ),
+              ),
+
+              // User details items list
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                      if (controller.isLoadingFood.value && index == controller.foodList.length) {
+                        return Center(child: CustomLoader());
+                      }
+
+                      if (controller.foodList.isEmpty && !controller.isLoadingFood.value) {
+                        return EmptyRestaurantView(
+                          title: 'food_not_available'.tr,
+                        );
+                      }
+                      var food = controller.foodList[index];
+                      return UserDetailsItemWidget(
+                        foodName: food.itemName ?? 'not_available'.tr,
+                        standardPrice: food.price?.price.toString() ?? '0',
+                        discountPrice: food.price?.discountPrice.toString() ?? '0',
+                        offerDays: food.price?.offerDay ?? '',
+                        description: food.description ?? 'not_available'.tr,
+                        foodId: food.id ?? '',
+                      );
+                    },
+                    childCount: min(controller.foodList.length, 2),
                   ),
+                ),
+              ),
 
-                  // User details items list
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                          if (controller.isLoadingFood.value && index == controller.foodList.length) {
-                            return Center(child: CustomLoader());
-                          }
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 5),
+              ),
 
-                          if (controller.foodList.isEmpty && !controller.isLoadingFood.value) {
-                            return EmptyRestaurantView(
-                              title: 'Food Not Available',
-                            );
-                          }
-                          var food = controller.foodList[index];
-                          return UserDetailsItemWidget(
-                            foodName: food.itemName ?? 'Not Available',
-                            standardPrice: food.price?.price.toString() ?? '0',
-                            discountPrice: food.price?.discountPrice.toString() ?? '0',
-                            offerDays: food.price?.offerDay ?? '',
-                            description: food.description ?? 'Not Available',
-                            foodId: food.id ?? '',
-                          );
-                        },
-                        childCount: min(controller.foodList.length, 2),
-                      ),
-                    ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: (controller.foodList.length == 0 || controller.foodList.length <= 2)
+                      ? SizedBox()
+                      : CustomButton(
+                    title: 'all_food'.trParams({'count': controller.foodList.length.toString()}),
+                    buttonColor: AppColors.secondaryColor,
+                    borderRadius: 25,
+                    padding_vertical: 8,
+                    onTap: () {
+                      Get.to(
+                            () => SeeAllFoodScreen(foodList: controller.foodList),
+                        transition: Transition.downToUp,
+                      );
+                    },
                   ),
+                ),
+              ),
 
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 5),
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 20),
+              ),
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'ratings_reviews'.tr,
+                    style:
+                    TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
+                ),
+              ),
 
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: (controller.foodList.length == 0 || controller.foodList.length <= 2)
-                          ? SizedBox()
-                          : CustomButton(
-                        title: 'All Food (${controller.foodList.length})',
-                        buttonColor: AppColors.secondaryColor,
-                        borderRadius: 25,
-                        padding_vertical: 8,
-                        onTap: () {
-                          Get.to(
-                                () => SeeAllFoodScreen(foodList: controller.foodList),
-                            transition: Transition.downToUp,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 10),
+              ),
 
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 20),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'Ratings & reviews',
-                        style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 10),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            data?.review?.star?.toStringAsFixed(2) ?? '0.0',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          RatingBarIndicator(
-                            itemCount: 5,
-                            itemSize: 18,
-                            rating: data?.review?.star ?? 0.0,
-                            itemBuilder: (context, index) => const Icon(
-                              Icons.star,
-                              color: AppColors.secondaryColor,
-                              size: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 5),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        '${data?.review?.total ?? 0} reviews',
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        data?.review?.star?.toStringAsFixed(2) ?? '0.0',
                         style: TextStyle(
-                          color: AppColors.black100,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
                         ),
                       ),
-                    ),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: const Divider(color: AppColors.secondaryColor),
-                  ),
-
-                  // Reviews list
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                          if (controller.isLoadingReview.value && index == controller.reviewList.length) {
-                            return Center(child: CustomLoader());
-                          }
-                          if (controller.reviewList.isEmpty && !controller.isLoadingReview.value) {
-                            return EmptyRestaurantView(
-                              title: 'Reviews Not Available',
-                            );
-                          }
-
-                          var review = controller.reviewList[index];
-
-                          String date = createdAt(review.createdAt.toString());
-
-                          print('created at date: $date');
-                          return UserReviewsWidget(
-                            rating: review.ratings ?? 0.0,
-                            review: reviewFormat(review.ratings ?? 0.0),
-                            userImage: review.userInfo?.profileImage ?? placeholderImage,
-                            userName: review.userInfo?.name ?? 'Not Available',
-                            createdTime: createdAt(review.createdAt.toString()),
-                          );
-                        },
-                        childCount: min(controller.reviewList.length, 5),
+                      const SizedBox(width: 8),
+                      RatingBarIndicator(
+                        itemCount: 5,
+                        itemSize: 18,
+                        rating: data?.review?.star ?? 0.0,
+                        itemBuilder: (context, index) => const Icon(
+                          Icons.star,
+                          color: AppColors.secondaryColor,
+                          size: 14,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 20),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: (data?.review?.total ?? 0) <= 5
-                          ? SizedBox()
-                          : CustomButton(
-                        title: 'All reviews (${data?.review?.total ?? 0})',
-                        buttonColor: AppColors.secondaryColor,
-                        borderRadius: 25,
-                        padding_vertical: 8,
-                        onTap: () {
-                          Get.to(
-                                () => SeeAllReviewScreen(reviewList: controller.reviewList,),
-                            transition: Transition.downToUp,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 20),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.location_on_outlined,
-                              color: AppColors.secondaryColor, size: 24),
-                          SizedBox(width: 8),
-                          Text('Location',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 41, top: 4),
-                      child: CustomText(
-                        title: data?.address ?? '',
-                      ),
-                    ),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 10),
-                  ),
-
-                  // Map
-                  SliverToBoxAdapter(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      width: double.infinity,
-                      height: height / 3.5,
-                      child: MapWidget(
-                        latitude: data?.location?.coordinates[1] ?? 0.0,
-                        longitude: data?.location?.coordinates[0] ?? 0.0,
-                        address: data?.address ?? '',
-                      ),
-                    ),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 20),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: Container(
-                      height: Get.height / 3.5,
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.watch_later_outlined,
-                                color: AppColors.secondaryColor,
-                                size: 19,
-                              ),
-                              widthBox10,
-                              CustomText(
-                                title: 'Opening hours',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              )
-                            ],
-                          ),
-                          heightBox5,
-                          Expanded(
-                            child: controller.isLoading.value
-                                ? CustomLoader(
-                              size: 28,
-                            )
-                                : ListView.builder(
-                              itemCount: data?.openingHr.length ?? 0,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return TimeScheduleWidget(
-                                  day: data?.openingHr[index].day ?? '',
-                                  openTime: data?.openingHr[index].openTime ?? '',
-                                  closeTime:data?.openingHr[index].closeTime ??'',
-                                  isClosed: data?.openingHr[index].isClosed ??false,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SliverToBoxAdapter(
-                    child: const SizedBox(height: 50),
-                  ),
-                ],
+                ),
               ),
-            );
-          },
-        ),
+
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 5),
+              ),
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    '${data?.review?.total ?? 0} ${'reviews'.tr}',
+                    style: TextStyle(
+                      color: AppColors.black100,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ),
+
+              SliverToBoxAdapter(
+                child: const Divider(color: AppColors.secondaryColor),
+              ),
+
+              // Reviews list
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                      if (controller.isLoadingReview.value && index == controller.reviewList.length) {
+                        return Center(child: CustomLoader());
+                      }
+                      if (controller.reviewList.isEmpty && !controller.isLoadingReview.value) {
+                        return EmptyRestaurantView(
+                          title: 'reviews_not_available'.tr,
+                        );
+                      }
+
+                      var review = controller.reviewList[index];
+
+                      String date = createdAt(review.createdAt.toString());
+
+                      print('created at date: $date');
+                      return UserReviewsWidget(
+                        rating: review.ratings ?? 0.0,
+                        review: reviewFormat(review.ratings ?? 0.0),
+                        userImage: review.userInfo?.profileImage ?? placeholderImage,
+                        userName: review.userInfo?.name ?? 'not_available'.tr,
+                        createdTime: createdAt(review.createdAt.toString()),
+                      );
+                    },
+                    childCount: min(controller.reviewList.length, 5),
+                  ),
+                ),
+              ),
+
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 20),
+              ),
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: (data?.review?.total ?? 0) <= 5
+                      ? SizedBox()
+                      : CustomButton(
+                    title: 'all_reviews'.trParams({'count': (data?.review?.total ?? 0).toString()}),
+                    buttonColor: AppColors.secondaryColor,
+                    borderRadius: 25,
+                    padding_vertical: 8,
+                    onTap: () {
+                      Get.to(
+                            () => SeeAllReviewScreen(reviewList: controller.reviewList,),
+                        transition: Transition.downToUp,
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 20),
+              ),
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.location_on_outlined,
+                          color: AppColors.secondaryColor, size: 24),
+                      SizedBox(width: 8),
+                      Text('location',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 41, top: 4),
+                  child: CustomText(
+                    title: data?.address ?? '',
+                  ),
+                ),
+              ),
+
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 10),
+              ),
+
+              // Map
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  width: double.infinity,
+                  height: height / 3.5,
+                  child: MapWidget(
+                    latitude: data?.location?.coordinates[1] ?? 0.0,
+                    longitude: data?.location?.coordinates[0] ?? 0.0,
+                    address: data?.address ?? '',
+                  ),
+                ),
+              ),
+
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 20),
+              ),
+
+              SliverToBoxAdapter(
+                child: Container(
+                  height: Get.height / 3.5,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.watch_later_outlined,
+                            color: AppColors.secondaryColor,
+                            size: 19,
+                          ),
+                          widthBox10,
+                          CustomText(
+                            title: 'opening_hours'.tr,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          )
+                        ],
+                      ),
+                      heightBox5,
+                      Expanded(
+                        child: controller.isLoading.value
+                            ? CustomLoader(
+                          size: 28,
+                        )
+                            : ListView.builder(
+                          itemCount: data?.openingHr.length ?? 0,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return TimeScheduleWidget(
+                              day: data?.openingHr[index].day ?? '',
+                              openTime: data?.openingHr[index].openTime ?? '',
+                              closeTime:data?.openingHr[index].closeTime ??'',
+                              isClosed: data?.openingHr[index].isClosed ??false,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 50),
+              ),
+            ],
+          ),
+        );
+      },
+      ),
     );
   }
 }
 
 
 TextStyle titleStyle = GoogleFonts.poppins(
-fontSize: 12,
-  fontWeight: FontWeight.w400,
-  color: Color(0xff5C5C5C)
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: Color(0xff5C5C5C)
 );

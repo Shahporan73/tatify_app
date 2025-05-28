@@ -89,7 +89,7 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                 ),
                 heightBox10,
                 CustomText(
-                  title: "Opening Days",
+                  title: "opening_days".tr,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
@@ -130,7 +130,7 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                 ),
                 heightBox20,
                 CustomText(
-                  title: "Kitchen Style",
+                  title: "kitchen_style".tr,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
@@ -173,7 +173,7 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                       TextField(
                         controller: decorationController,
                         decoration: InputDecoration(
-                          hintText: 'Enter style and press Enter',
+                          hintText: 'enter_style_and_press_enter'.tr,
                           border: InputBorder.none,
                           hintStyle: GoogleFonts.urbanist(
                             color: const Color(0xff595959),
@@ -225,7 +225,7 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                   children: [
                     Expanded(
                       child: CustomButton(
-                        title: 'Reset all',
+                        title: 'reset_all'.tr,
                         buttonColor: Colors.white,
                         titleColor: AppColors.secondaryColor,
                         border: Border.all(color: AppColors.secondaryColor),
@@ -237,7 +237,7 @@ class _UserFilterBottomSheetState extends State<UserFilterBottomSheet> {
                     widthBox20,
                     Expanded(
                       child: CustomButton(
-                        title: 'Apply',
+                        title: 'apply'.tr,
                         buttonColor: AppColors.secondaryColor,
                         titleColor: AppColors.whiteColor,
                         onTap: () {

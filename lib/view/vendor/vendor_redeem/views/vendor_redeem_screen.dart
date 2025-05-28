@@ -23,54 +23,60 @@ class VendorRedeemScreen extends StatelessWidget {
     final BookingController bookingController = Get.put(BookingController());
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: MainAppBar(title: 'Request'),
+      appBar: MainAppBar(title: 'request'.tr),
       body: RefreshIndicator(
         color: AppColors.primaryColor,
-        onRefresh: () async{
+        onRefresh: () async {
           await bookingController.onRefresh();
         },
-        child: Obx(() {
-          return  Padding(
-            padding: bodyPadding,
-            child: bookingController.isLoading.value ? CustomLoader() :
-                bookingController.getBookRedeemList.isEmpty ?
-                EmptyRestaurantView(title: 'No Request Found',) :
-            ListView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: bookingController.getBookRedeemList.length,
-              physics: AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                var data = bookingController.getBookRedeemList[index];
-                return GestureDetector(
-                  onTap: () {
-                    if (data.vendorRedeem?.redeemStatus == 'pending') {
-                      // Get.to(()=>RedeemDealScreen(redeemId: data.id ?? '',));
-                      Get.to(()=>VendorQrScanScreen());
-                    }else{
-                      Get.rawSnackbar(message: 'Already Redeemed');
-                    }
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(1),
-                    child: RequestRedeemWidget(
-                      title: data.food?.itemName ?? 'Not Available',
-                      price: data.cash?.payableAmount?.toStringAsFixed(0) ?? '00',
-                      description: data.food?.description ?? 'Not Available',
-                      location: data.restaurant?.address ?? 'Not Available',
-                      isRedeem: data.vendorRedeem?.redeemStatus == 'pending' ? false : true,
-                      userImage: data.user?.profileImage ?? placeholderImage,
-                      userEmail: data.user?.email ?? '',
-                      userName: data.user?.name ?? '',
-                      userPhone: data.user?.phoneNumber ?? '',
+        child: Obx(
+              () {
+            return Padding(
+              padding: bodyPadding,
+              child: bookingController.isLoading.value
+                  ? CustomLoader()
+                  : bookingController.getBookRedeemList.isEmpty
+                  ? EmptyRestaurantView(title: 'no_request_found'.tr)
+                  : ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: bookingController.getBookRedeemList.length,
+                physics: AlwaysScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  var data = bookingController.getBookRedeemList[index];
+                  return GestureDetector(
+                    onTap: () {
+                      if (data.vendorRedeem?.redeemStatus == 'pending') {
+                        // Get.to(()=>RedeemDealScreen(redeemId: data.id ?? '',));
+                        Get.to(() => VendorQrScanScreen());
+                      } else {
+                        Get.rawSnackbar(
+                          message: 'already_redeemed'.tr,
+                        );
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(1),
+                      child: RequestRedeemWidget(
+                        title: data.food?.itemName ?? 'not_available'.tr,
+                        price: data.cash?.payableAmount?.toStringAsFixed(0) ?? '00',
+                        description: data.food?.description ?? 'not_available'.tr,
+                        location: data.restaurant?.address ?? 'not_available'.tr,
+                        isRedeem:
+                        data.vendorRedeem?.redeemStatus == 'pending' ? false : true,
+                        userImage: data.user?.profileImage ?? placeholderImage,
+                        userEmail: data.user?.email ?? '',
+                        userName: data.user?.name ?? '',
+                        userPhone: data.user?.phoneNumber ?? '',
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          );
-        },),
-      )
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

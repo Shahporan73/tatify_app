@@ -31,7 +31,7 @@ class BookDealSuccessScreen extends StatelessWidget {
           ),
           heightBox10,
           CustomText(
-            title: 'Deal booked!',
+            title: 'deal_booked'.tr,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -39,7 +39,7 @@ class BookDealSuccessScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: CustomText(
-              title: 'Enjoy your meal at Chicken Bericious',
+              title: 'enjoy_your_meal'.trParams({'restaurant': 'Chicken Bericious'}),
               fontSize: 14,
               fontWeight: FontWeight.w400,
             ),
@@ -49,8 +49,7 @@ class BookDealSuccessScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: CustomText(
               textAlign: TextAlign.center,
-              title:
-                  'Plus, be on time for your table reservation at the restaurant.',
+              title: 'be_on_time_for_reservation'.tr,
               fontSize: 14,
               fontWeight: FontWeight.w400,
             ),
@@ -58,15 +57,13 @@ class BookDealSuccessScreen extends StatelessWidget {
 
           Spacer(),
           CustomButton(
-            width: Get.width / 1.1,
-              title: 'Done',
+              width: Get.width / 1.1,
+              title: 'done'.tr,
               buttonColor: AppColors.secondaryColor,
-              onTap: (){
+              onTap: () {
                 Navigator.of(context).pop();
-              }
-          ),
+              }),
           heightBox20
-
         ],
       ),
     );

@@ -8,7 +8,6 @@ import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/view/user/user_booking/controller/booking_controller.dart';
 import 'package:tatify_app/view/vendor/vendor_redeem/views/redeem_success_screen.dart';
 
-
 class RedeemDealScreen extends StatefulWidget {
   final String redeemId;
   const RedeemDealScreen({Key? key, required this.redeemId}) : super(key: key);
@@ -40,7 +39,7 @@ class _RedeemDealScreenState extends State<RedeemDealScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomText(
-              title: "Redeem deal\nnow",
+              title: "redeem_deal_now".tr,
               textAlign: TextAlign.center,
               color: AppColors.blackColor,
               fontWeight: FontWeight.w600,
@@ -56,7 +55,7 @@ class _RedeemDealScreenState extends State<RedeemDealScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Confirmed!", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text("confirmed".tr, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(width: 8),
                     Icon(Icons.check_circle, color: Colors.white),
                   ],
@@ -75,7 +74,7 @@ class _RedeemDealScreenState extends State<RedeemDealScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Redeem Failed. Tap to go back",
+                      Text("redeem_failed_tap_to_go_back".tr,
                           style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                       SizedBox(width: 8),
                       Icon(Icons.error, color: Colors.white),
@@ -87,7 +86,7 @@ class _RedeemDealScreenState extends State<RedeemDealScreen> {
               SlideAction(
                 outerColor: Colors.grey[400]!,
                 innerColor: Colors.white,
-                text: "Slide To Redeem",
+                text: "slide_to_redeem".tr,
                 textStyle: TextStyle(color: Colors.black54, fontSize: 16, fontWeight: FontWeight.bold),
                 onSubmit: () async {
                   bool success = await controller.vendorRedeem(redeemId: widget.redeemId);
@@ -102,4 +101,3 @@ class _RedeemDealScreenState extends State<RedeemDealScreen> {
     );
   }
 }
-

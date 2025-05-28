@@ -19,7 +19,7 @@ class OtpVerifySheet extends StatelessWidget {
 
   final OtpController otpController = Get.put(OtpController());
   final ForgotSheetController forgotSheetController =
-      Get.put(ForgotSheetController());
+  Get.put(ForgotSheetController());
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class OtpVerifySheet extends StatelessWidget {
                 children: [
                   heightBox10,
                   CustomText(
-                    title: 'Enter 4 Digits Code',
+                    title: 'enter_4_digits_code'.tr,
                     style: GoogleFonts.rubik(
                       fontSize: 24,
                       fontWeight: FontWeight.w500,
@@ -55,8 +55,7 @@ class OtpVerifySheet extends StatelessWidget {
                   ),
                   heightBox20,
                   CustomText(
-                    title:
-                        'Enter the 4 digits code that you received on your email.',
+                    title: 'enter_4_digits_code_received_email'.tr,
                     style: GoogleFonts.rubik(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -71,35 +70,36 @@ class OtpVerifySheet extends StatelessWidget {
                   ),
                   heightBox20,
                   Obx(
-                    () => otpController.secondsRemaining.value == 0
+                        () => otpController.secondsRemaining.value == 0
                         ? Center(
-                            child: InkWell(
-                              onTap: () => otpController.ResendOtpForForgot(
-                                  forgotSheetController.emailController.text,
-                                context,
-                              ),
-                              child: CustomText(
-                                title: 'Resend code',
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.secondaryColor,
-                                fontSize: 14,
-                                decoration: TextDecoration.underline,
-                                decorationColor: AppColors.secondaryColor,
-                              ),
-                            ),
-                          )
+                      child: InkWell(
+                        onTap: () => otpController.ResendOtpForForgot(
+                          forgotSheetController.emailController.text,
+                          context,
+                        ),
+                        child: CustomText(
+                          title: 'resend_code'.tr,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.secondaryColor,
+                          fontSize: 14,
+                          decoration: TextDecoration.underline,
+                          decorationColor: AppColors.secondaryColor,
+                        ),
+                      ),
+                    )
                         : Center(
-                            child: CustomText(
-                                title: 'Resend otp in ${otpController.secondsRemaining.value} seconds',
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.primaryColor,
-                                fontSize: 14),
-                          ),
+                      child: CustomText(
+                          title:
+                          '${'resend_otp_in_seconds'.tr} ${otpController.secondsRemaining.value}',
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor,
+                          fontSize: 14),
+                    ),
                   ),
                   heightBox20,
                   Obx(
-                    () => CustomButton(
-                      title: 'Verify OTP',
+                        () => CustomButton(
+                      title: 'verify_otp'.tr,
                       isLoading: otpController.isLoading.value,
                       onTap: () {
                         otpController.verifyOtpForgotMail(context: context);

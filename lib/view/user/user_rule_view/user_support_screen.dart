@@ -22,7 +22,7 @@ class UserSupportScreen extends StatelessWidget {
     final RuleController controller = Get.put(RuleController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'About us'),
+      appBar: MainAppBar(title: 'about_us'.tr),
       body: Obx(
             ()=> SingleChildScrollView(
           padding: bodyPadding,

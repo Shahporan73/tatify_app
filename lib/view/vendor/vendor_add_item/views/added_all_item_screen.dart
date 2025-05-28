@@ -7,29 +7,34 @@ import 'package:tatify_app/res/common_widget/custom_button.dart';
 import 'package:tatify_app/res/common_widget/empty_restaurant_view.dart';
 import 'package:tatify_app/view/vendor/vendor_add_item/controller/item_controller.dart';
 import 'package:tatify_app/view/vendor/vendor_add_item/widget/item_widget.dart';
+import 'package:tatify_app/view/vendor/vendor_add_item/widget/item_widget_shimmer.dart';
 import 'package:tatify_app/view/vendor/vendor_profile/controller/my_restaurant_controller.dart';
 
 import '../../../../res/app_colors/App_Colors.dart';
+import '../../../../res/common_widget/custom_alert_dialog.dart';
 import '../widget/added_all_item_header.dart';
 import '../widget/item_sticky_header_delegate_widget.dart';
 import 'edit_item_screen.dart';
 
 class AddedAllItemScreen extends StatelessWidget {
-  const AddedAllItemScreen({super.key});
+  final ItemController controller = Get.put(ItemController());
+  final MyRestaurantController restaurantController = Get.put(MyRestaurantController());
+  AddedAllItemScreen({super.key}){
+    controller.getFoods(isLoadMore: true);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ItemController controller = Get.put(ItemController());
-    final MyRestaurantController restaurantController = Get.put(MyRestaurantController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       body: SafeArea(
         child: RefreshIndicator(
+          color: AppColors.primaryColor,
           onRefresh: () async {
+            controller.selectedTab.value = 'onGoing';
             await Future.wait([
               controller.getFoods(
                 isLoadMore: false,
-                restaurantId: restaurantController.myRestaurantsModel.value.data?.id ?? '',
               ),
               restaurantController.getMyRestaurants(),
             ]);
@@ -51,7 +56,7 @@ class AddedAllItemScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Obx(() => CustomButton(
-                            title: 'On Going',
+                            title: 'on_going'.tr,
                             buttonColor: Colors.white,
                             borderRadius: 0,
                             titleColor: controller.selectedTab.value == 'onGoing'
@@ -70,7 +75,7 @@ class AddedAllItemScreen extends StatelessWidget {
                         ),
                         Expanded(
                           child: Obx(() => CustomButton(
-                            title: 'Closed',
+                            title: 'closed'.tr,
                             buttonColor: Colors.white,
                             borderRadius: 0,
                             titleColor: controller.selectedTab.value == 'Closed'
@@ -102,15 +107,16 @@ class AddedAllItemScreen extends StatelessWidget {
                 if (!isLoading && list.isEmpty) {
                   return SliverFillRemaining(
                     hasScrollBody: false,
-                    child: EmptyRestaurantView(title: 'No item added yet'),
+                    child: EmptyRestaurantView(title: 'no_item_added_yet'.tr),
                   );
                 }
 
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
+
                       if (isLoading && index == list.length) {
-                        return Center(child: CustomLoader());
+                        return Center(child: ItemWidgetShimmer(count: 3));
                       }
 
                       final item = list[index];
@@ -133,6 +139,18 @@ class AddedAllItemScreen extends StatelessWidget {
                             menuId: item.id ?? '',
                           )),
                           isEdit: true,
+                          onDelete: () {
+                            CustomAlertDialog().customAlert(
+                              context: context,
+                              isLoading: controller.isDeletingLoading,
+                              title: "alert".tr,
+                              message: 'are_you_sure_you_want_to_delete_item'.tr,
+                              NegativebuttonText: "cancel".tr,
+                              PositivvebuttonText: "confirm".tr,
+                              onPositiveButtonPressed: () => controller.deleteItem(foodId: item.id ?? '', context: context),
+                              onNegativeButtonPressed: () => Navigator.of(context).pop(),
+                            );
+                          },
                         )
                             : ItemWidget(
                           title: item.itemName ?? '',
@@ -140,7 +158,27 @@ class AddedAllItemScreen extends StatelessWidget {
                           discountPrice: item.price?.discountPrice?.toString() ?? '',
                           offerDay: item.price?.offerDay ?? '',
                           description: item.description ?? '',
-                          isEdit: false,
+                          isEdit: true,
+                          onEdit: () => Get.to(() => EditItemScreen(
+                            menuName: item.itemName ?? '',
+                            menuDescription: item.description ?? '',
+                            standardPrice: item.price?.price?.toString() ?? '',
+                            discountPrice: item.price?.discountPrice?.toString() ?? '',
+                            offerDay: item.price?.offerDay ?? '',
+                            menuId: item.id ?? '',
+                          )),
+                          onDelete: () {
+                            CustomAlertDialog().customAlert(
+                              context: context,
+                              isLoading: controller.isDeletingLoading,
+                              title: "alert".tr,
+                              message: 'are_you_sure_you_want_to_delete_item'.tr,
+                              NegativebuttonText: "cancel".tr,
+                              PositivvebuttonText: "confirm".tr,
+                              onPositiveButtonPressed: () => controller.deleteItem(foodId: item.id ?? '', context: context),
+                              onNegativeButtonPressed: () => Navigator.of(context).pop(),
+                            );
+                          },
                         ),
                       );
                     },

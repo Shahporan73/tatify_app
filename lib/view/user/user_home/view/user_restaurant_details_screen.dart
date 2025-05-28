@@ -35,7 +35,6 @@ class UserRestaurantDetailsScreen extends StatefulWidget {
 }
 
 class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScreen> {
-
   late final SingleRestaurantController controller;
 
   @override
@@ -47,19 +46,17 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       body: Obx(
-        () {
+            () {
           if (controller.isLoading.value) {
             return Center(child: CustomLoader());
-          }else
-          if (controller.singleRestaurantModel.value.data == null) {
-            return EmptyRestaurantView(title: 'Restaurant Not Available');
+          } else if (controller.singleRestaurantModel.value.data == null) {
+            return EmptyRestaurantView(title: 'restaurant_not_available'.tr);
           }
 
           var data = controller.singleRestaurantModel.value.data;
@@ -69,7 +66,7 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                 SliverToBoxAdapter(
                   child: RestaurantDetailsHeaderWidget(
                     restaurantImage: data?.featureImage ?? placeholderImage,
-                    restaurantName: data?.name ?? 'Not Available',
+                    restaurantName: data?.name ?? 'not_available'.tr,
                     rating: data?.review?.star?.toStringAsFixed(2) ?? '0.0',
                     kitchenType: data?.kitchenStyle.join(', ') ?? '',
                     restaurantId: widget.restaurantId ?? '',
@@ -81,7 +78,7 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) {
+                          (context, index) {
                         if (controller.isLoadingFood.value &&
                             index == controller.foodList.length) {
                           return Center(child: CustomLoader());
@@ -90,18 +87,18 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                         if (controller.foodList.isEmpty &&
                             !controller.isLoadingFood.value) {
                           return EmptyRestaurantView(
-                            title: 'Food Not Available',
+                            title: 'food_not_available'.tr,
                           );
                         }
 
                         var food = controller.foodList[index];
                         return UserDetailsItemWidget(
-                          foodName: food.itemName ?? 'Not Available',
+                          foodName: food.itemName ?? 'not_available'.tr,
                           standardPrice: food.price?.price.toString() ?? '0',
                           discountPrice:
-                              food.price?.discountPrice.toString() ?? '0',
+                          food.price?.discountPrice.toString() ?? '0',
                           offerDays: food.price?.offerDay ?? '',
-                          description: food.description ?? 'Not Available',
+                          description: food.description ?? 'not_available'.tr,
                           foodId: food.id ?? '',
                         );
                       },
@@ -120,7 +117,7 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                     child: (controller.foodList.length == 0 || controller.foodList.length <= 2)
                         ? SizedBox()
                         : CustomButton(
-                      title: 'All Food (${controller.foodList.length})',
+                      title: 'all_food'.trParams({'count': controller.foodList.length.toString()}),
                       buttonColor: AppColors.secondaryColor,
                       borderRadius: 25,
                       padding_vertical: 8,
@@ -134,19 +131,17 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                   ),
                 ),
 
-
-
                 SliverToBoxAdapter(
                   child: const SizedBox(height: 20),
                 ),
 
                 SliverToBoxAdapter(
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
-                      'Ratings & reviews',
+                      'ratings_and_reviews'.tr,
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -192,7 +187,7 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
-                      '${data?.review?.total ?? 0} reviews',
+                      '${data?.review?.total ?? 0} ${'reviews'.tr}',
                       style: TextStyle(
                         color: AppColors.black100,
                         fontWeight: FontWeight.w500,
@@ -211,7 +206,7 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) {
+                          (context, index) {
                         if (controller.isLoadingReview.value &&
                             index == controller.reviewList.length) {
                           return Center(child: CustomLoader());
@@ -219,7 +214,7 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                         if (controller.reviewList.isEmpty &&
                             !controller.isLoadingReview.value) {
                           return EmptyRestaurantView(
-                            title: 'Reviews Not Available',
+                            title: 'reviews_not_available'.tr,
                           );
                         }
 
@@ -232,8 +227,8 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                           rating: review.ratings ?? 0.0,
                           review: reviewFormat(review.ratings ?? 0.0),
                           userImage:
-                              review.userInfo?.profileImage ?? placeholderImage,
-                          userName: review.userInfo?.name ?? 'Not Available',
+                          review.userInfo?.profileImage ?? placeholderImage,
+                          userName: review.userInfo?.name ?? 'not_available'.tr,
                           createdTime: createdAt(review.createdAt.toString()),
                         );
                       },
@@ -252,17 +247,17 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                     child: (data?.review?.total ?? 0) <= 5
                         ? SizedBox()
                         : CustomButton(
-                            title: 'All reviews (${data?.review?.total ?? 0})',
-                            buttonColor: AppColors.secondaryColor,
-                            borderRadius: 25,
-                            padding_vertical: 8,
-                            onTap: () {
-                              Get.to(
-                                () => SeeAllReviewScreen(reviewList: controller.reviewList,),
-                                transition: Transition.downToUp,
-                              );
-                            },
-                          ),
+                      title: 'all_reviews'.trParams({'count': (data?.review?.total ?? 0).toString()}),
+                      buttonColor: AppColors.secondaryColor,
+                      borderRadius: 25,
+                      padding_vertical: 8,
+                      onTap: () {
+                        Get.to(
+                              () => SeeAllReviewScreen(reviewList: controller.reviewList),
+                          transition: Transition.downToUp,
+                        );
+                      },
+                    ),
                   ),
                 ),
 
@@ -274,13 +269,13 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Row(
-                      children: const [
-                        Icon(Icons.location_on_outlined,
+                      children: [
+                        const Icon(Icons.location_on_outlined,
                             color: AppColors.secondaryColor, size: 24),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
-                          'Location',
-                          style: TextStyle(fontSize: 18),
+                          'location'.tr,
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -326,14 +321,14 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.watch_later_outlined,
                               color: AppColors.secondaryColor,
                               size: 19,
                             ),
                             widthBox10,
                             CustomText(
-                              title: 'Opening hours',
+                              title: 'opening_hours'.tr,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             )
@@ -343,26 +338,24 @@ class _UserRestaurantDetailsScreenState extends State<UserRestaurantDetailsScree
                         Expanded(
                           child: controller.isLoading.value
                               ? CustomLoader(
-                                  size: 28,
-                                )
+                            size: 28,
+                          )
                               : ListView.builder(
-                                  itemCount: data?.openingHr.length ?? 0,
-                                  shrinkWrap: true,
-                                  physics: ScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return TimeScheduleWidget(
-                                      day: data?.openingHr[index].day ?? '',
-                                      openTime:
-                                          data?.openingHr[index].openTime ?? '',
-                                      closeTime:
-                                          data?.openingHr[index].closeTime ??
-                                              '',
-                                      isClosed:
-                                          data?.openingHr[index].isClosed ??
-                                              false,
-                                    );
-                                  },
-                                ),
+                            itemCount: data?.openingHr.length ?? 0,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return TimeScheduleWidget(
+                                day: data?.openingHr[index].day ?? '',
+                                openTime:
+                                data?.openingHr[index].openTime ?? '',
+                                closeTime:
+                                data?.openingHr[index].closeTime ?? '',
+                                isClosed:
+                                data?.openingHr[index].isClosed ?? false,
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),

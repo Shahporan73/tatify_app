@@ -11,6 +11,7 @@ import 'package:tatify_app/view/user/user_profile/controller/my_profile_controll
 import 'package:tatify_app/view/user/user_profile/view/user_profile_edit_screen.dart';
 import 'package:tatify_app/view/user/user_profile/widget/profile_item_widget.dart';
 import '../../../../res/app_colors/App_Colors.dart';
+import '../../../../res/common_widget/custom_alert_dialog.dart';
 
 class UserPersonalInformationScreen extends StatelessWidget {
   const UserPersonalInformationScreen({super.key});
@@ -24,7 +25,7 @@ class UserPersonalInformationScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       body: Obx(
-        ()=> Stack(
+            () => Stack(
           children: [
             Positioned(
               top: 0,
@@ -37,22 +38,31 @@ class UserPersonalInformationScreen extends StatelessWidget {
                     color: AppColors.secondaryColor,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(25),
-                        bottomRight: Radius.circular(25)
-                    )
-                ),
+                        bottomRight: Radius.circular(25))),
                 child: Column(
                   children: [
-                    CustomAppBar(appBarName: 'Personal Information', titleColor: Colors.white, leadingColor: Colors.white,),
+                    CustomAppBar(
+                      appBarName: 'personal_information'.tr,
+                      titleColor: Colors.white,
+                      leadingColor: Colors.white,
+                    ),
                     heightBox20,
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundColor: AppColors.primaryColor,
-                      backgroundImage: NetworkImage(
-                        controller.profileImage.value.isNotEmpty ? controller.profileImage.value :
-                        placeholderImage,
+                    InkWell(
+                      onTap: () {
+                        CustomAlertDialog().showFullScreenImageDialog(context: context, imageUrl: controller.profileImage.value.isEmpty
+                            ? placeholderImage :
+                        controller.profileImage.value);
+                      },
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundColor: AppColors.primaryColor,
+                        backgroundImage: NetworkImage(
+                          controller.profileImage.value.isNotEmpty
+                              ? controller.profileImage.value
+                              : placeholderImage,
+                        ),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -73,44 +83,47 @@ class UserPersonalInformationScreen extends StatelessWidget {
                           color: Colors.black.withOpacity(0.1),
                           spreadRadius: 1,
                           blurRadius: 1,
-                          offset: Offset(0, 1)
-                      )
-                    ]
-                ),
+                          offset: Offset(0, 1))
+                    ]),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       ProfileItemWidget(
                           icon: Icons.person_outline,
-                          title: controller.fullName.value.isNotEmpty ? controller.fullName.value : 'User name',
-                          onTap: (){}
-                      ),
+                          title: controller.fullName.value.isNotEmpty
+                              ? controller.fullName.value
+                              : 'user_name'.tr,
+                          onTap: () {}),
                       ProfileItemWidget(
                           icon: Icons.calendar_month_outlined,
-                          title: controller.dateOfBirth.value.isNotEmpty ? controller.dateOfBirth.value : 'Not found',
-                          onTap: (){}
-                      ),
-
+                          title: controller.dateOfBirth.value.isNotEmpty
+                              ? controller.dateOfBirth.value
+                              : 'not_found'.tr,
+                          onTap: () {}),
                       ProfileItemWidget(
                           icon: Icons.male_outlined,
-                          title: controller.gender.value.isNotEmpty ? controller.gender.value : 'Not found',
-                          onTap: (){}
-                      ),
+                          title: controller.gender.value.isNotEmpty
+                              ? controller.gender.value
+                              : 'not_found'.tr,
+                          onTap: () {}),
                       ProfileItemWidget(
                           icon: Icons.phone_outlined,
-                          title: controller.phoneNumber.value.isNotEmpty ? controller.phoneNumber.value : 'Not found',
-                          onTap: (){}
-                      ),
+                          title: controller.phoneNumber.value.isNotEmpty
+                              ? controller.phoneNumber.value
+                              : 'not_found'.tr,
+                          onTap: () {}),
                       ProfileItemWidget(
                           icon: Icons.location_on_outlined,
-                          title: controller.address.value.isNotEmpty ? controller.address.value : 'Not found',
-                          onTap: (){}
-                      ),
+                          title: controller.address.value.isNotEmpty
+                              ? controller.address.value
+                              : 'not_found'.tr,
+                          onTap: () {}),
                       ProfileItemWidget(
                           icon: Icons.email_outlined,
-                          title: controller.email.value.isNotEmpty ? controller.email.value : 'Not found',
-                          onTap: (){}
-                      ),
+                          title: controller.email.value.isNotEmpty
+                              ? controller.email.value
+                              : 'not_found'.tr,
+                          onTap: () {}),
                     ],
                   ),
                 ),
@@ -123,21 +136,21 @@ class UserPersonalInformationScreen extends StatelessWidget {
               right: 16,
               left: 16,
               child: CustomButton(
-                    title: 'Edit',
-                    onTap: () {
-                      print('edit');
-                      Get.to(()=>UserProfileEditScreen(
-                          profileImage: controller.profileImage.value,
-                          fullName: controller.fullName.value,
-                          phoneNumber: controller.phoneNumber.value,
-                          gander: controller.gender.value,
-                          dateOfBirth: controller.dateOfBirth.value,
-                          email: controller.email.value,
-                          id: controller.id.value,
-                        ),
-                      );
-                    },
-                ),
+                title: 'edit'.tr,
+                onTap: () {
+                  print('edit');
+                  Get.to(() => UserProfileEditScreen(
+                    profileImage: controller.profileImage.value,
+                    fullName: controller.fullName.value,
+                    phoneNumber: controller.phoneNumber.value,
+                    gander: controller.gender.value,
+                    dateOfBirth: controller.dateOfBirth.value,
+                    address: controller.address.value,
+                    email: controller.email.value,
+                    id: controller.id.value,
+                  ));
+                },
+              ),
             ),
           ],
         ),

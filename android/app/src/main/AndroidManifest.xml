@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:label="Taste Thub"
+        android:label="Taste Hub"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

@@ -51,7 +51,7 @@ class _BookingDealConfirmScreenState extends State<BookingDealConfirmScreen> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
         children: [
-          CustomText(title: title, fontSize: 16, fontWeight: FontWeight.w500),
+          CustomText(title: title.tr, fontSize: 16, fontWeight: FontWeight.w500),
           const SizedBox(width: 5),
           RatingBar.builder(
             initialRating: rating,
@@ -127,7 +127,7 @@ class _BookingDealConfirmScreenState extends State<BookingDealConfirmScreen> {
                     color: AppColors.secondaryColor,
                   ),
                   CustomText(
-                    title: '🌟€${widget.itemPrice} 🌟',
+                    title: '🌟 €${widget.itemPrice} 🌟',
                     fontWeight: FontWeight.w600,
                     fontSize: 20,
                     color: AppColors.blackColor,
@@ -135,7 +135,7 @@ class _BookingDealConfirmScreenState extends State<BookingDealConfirmScreen> {
                   heightBox20,
                   Center(
                     child: CustomText(
-                      title: 'How is your experience?',
+                      title: 'how_is_your_experience'.tr,
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
                       color: AppColors.blackColor,
@@ -147,37 +147,37 @@ class _BookingDealConfirmScreenState extends State<BookingDealConfirmScreen> {
                   ),
                   heightBox20,
                   buildRatingRow(
-                      "Service:", serviceRating, reviewFormat(serviceRating),
-                      (rating) {
-                    setState(() {
-                      serviceRating = rating;
-                    });
-                  }),
-                  buildRatingRow("Food:", foodRating, reviewFormat(foodRating),
-                      (rating) {
-                    setState(() {
-                      foodRating = rating;
-                    });
-                  }),
+                      "service".tr + ":", serviceRating, reviewFormat(serviceRating),
+                          (rating) {
+                        setState(() {
+                          serviceRating = rating;
+                        });
+                      }),
+                  buildRatingRow("food".tr + ":", foodRating, reviewFormat(foodRating),
+                          (rating) {
+                        setState(() {
+                          foodRating = rating;
+                        });
+                      }),
                   buildRatingRow(
-                      "Ambience:", ambienceRating, reviewFormat(ambienceRating),
-                      (rating) {
-                    setState(() {
-                      ambienceRating = rating;
-                    });
-                  }),
-                  buildRatingRow("Cleanliness:", cleanlinessRating,
-                      reviewFormat(cleanlinessRating), (rating) {
-                    setState(() {
-                      cleanlinessRating = rating;
-                    });
-                  }),
+                      "ambience".tr + ":", ambienceRating, reviewFormat(ambienceRating),
+                          (rating) {
+                        setState(() {
+                          ambienceRating = rating;
+                        });
+                      }),
+                  buildRatingRow("cleanliness".tr + ":",
+                      cleanlinessRating, reviewFormat(cleanlinessRating), (rating) {
+                        setState(() {
+                          cleanlinessRating = rating;
+                        });
+                      }),
                   heightBox10,
                   Center(
                     child: Column(
                       children: [
                         CustomText(
-                            title: "Your overall rating",
+                            title: "your_overall_rating".tr,
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
                         const SizedBox(height: 5),
@@ -189,7 +189,7 @@ class _BookingDealConfirmScreenState extends State<BookingDealConfirmScreen> {
                           itemCount: 5,
                           itemSize: 24,
                           itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          const EdgeInsets.symmetric(horizontal: 4.0),
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
                             color: Colors.green,
@@ -213,41 +213,41 @@ class _BookingDealConfirmScreenState extends State<BookingDealConfirmScreen> {
                   ),
                   Spacer(),
                   Obx(
-                    () => controller.isLoading.value
+                        () => controller.isLoading.value
                         ? Center(child: CustomLoader())
                         : Row(
-                            children: [
-                              Expanded(
-                                child: CustomButton(
-                                  title: 'Cancel',
-                                  buttonColor: Colors.white,
-                                  titleColor: AppColors.primaryColor,
-                                  border:
-                                      Border.all(color: AppColors.primaryColor),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ),
-                              widthBox10,
-                              Expanded(
-                                child: CustomButton(
-                                  title: 'Submit',
-                                  buttonColor: AppColors.secondaryColor,
-                                  titleColor: AppColors.whiteColor,
-                                  onTap: () {
-                                    controller.submitRating(
-                                        foodId: widget.foodId,
-                                        service: serviceRating,
-                                        food: foodRating,
-                                        ambience: ambienceRating,
-                                        cleanliness: cleanlinessRating,
-                                        context: context);
-                                  },
-                                ),
-                              ),
-                            ],
+                      children: [
+                        Expanded(
+                          child: CustomButton(
+                            title: 'cancel'.tr,
+                            buttonColor: Colors.white,
+                            titleColor: AppColors.primaryColor,
+                            border:
+                            Border.all(color: AppColors.primaryColor),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
                           ),
+                        ),
+                        widthBox10,
+                        Expanded(
+                          child: CustomButton(
+                            title: 'submit'.tr,
+                            buttonColor: AppColors.secondaryColor,
+                            titleColor: AppColors.whiteColor,
+                            onTap: () {
+                              controller.submitRating(
+                                  foodId: widget.foodId,
+                                  service: serviceRating,
+                                  food: foodRating,
+                                  ambience: ambienceRating,
+                                  cleanliness: cleanlinessRating,
+                                  context: context);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

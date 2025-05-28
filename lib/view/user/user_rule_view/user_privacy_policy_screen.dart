@@ -22,7 +22,7 @@ class UserPrivacyPolicyScreen extends StatelessWidget {
     final RuleController controller = Get.put(RuleController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'Privacy Policy'),
+      appBar: MainAppBar(title: 'privacy_policy'.tr),
       body: Obx(
         ()=> SingleChildScrollView(
           padding: bodyPadding,

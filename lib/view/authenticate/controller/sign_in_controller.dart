@@ -161,7 +161,9 @@ class SignInController extends GetxController {
           Get.rawSnackbar(
               message: responseBody['message'],
               backgroundColor: Colors.green,
-              snackPosition: SnackPosition.TOP);
+              snackPosition: SnackPosition.TOP
+          );
+
         } else {
           Get.rawSnackbar(
               message: responseBody['message'],

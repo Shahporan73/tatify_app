@@ -70,15 +70,15 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
   // Function to validate inputs before continuing
   bool _validateInputs() {
     if (controller.restaurantNameController.text.trim().isEmpty) {
-      Get.rawSnackbar(message: 'Restaurant name is required');
+      Get.rawSnackbar(message: 'restaurant_name_required'.tr);
       return false;
     }
     if (controller.addressController.text.trim().isEmpty) {
-      Get.rawSnackbar(message: 'Restaurant address is required');
+      Get.rawSnackbar(message: 'restaurant_address_required'.tr);
       return false;
     }
     if (controller.cityController.text.trim().isEmpty) {
-      Get.rawSnackbar(message: 'City is required');
+      Get.rawSnackbar(message: 'city_required'.tr);
       return false;
     }
     // Validate opening and closing times
@@ -87,14 +87,13 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
         var openingTime = controller.openingTimes[day];
         var closingTime = controller.closingTimes[day];
         if (openingTime == null || closingTime == null) {
-          Get.rawSnackbar(message: 'Opening and Closing times must be set for $day');
+          Get.rawSnackbar(message: 'opening_closing_times_required'.trArgs([day]));
           return false;
         }
       }
     }
     return true;
   }
-
 
   double? latitude;
   double? longitude;
@@ -130,7 +129,7 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
 
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: const MainAppBar(title: 'Restaurant Information'),
+      appBar: MainAppBar(title: 'restaurant_information'.tr),
       body: SingleChildScrollView(
         padding: bodyPadding,
         child: Column(
@@ -157,7 +156,7 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
                   Icon(Icons.cloud_upload_outlined, color: AppColors.primaryColor),
                   widthBox5,
                   CustomText(
-                    title: 'Upload restaurant photo',
+                    title: 'upload_restaurant_photo'.tr,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: AppColors.secondaryColor,
@@ -167,7 +166,7 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
               onTap: controller.pickImage,
             )),
             heightBox10,
-            Text('Kitchen Style', style: customLabelStyle),
+            Text('kitchen_style'.tr, style: customLabelStyle),
             heightBox10,
             Obx(() => Container(
               width: double.infinity,
@@ -198,7 +197,7 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
                   TextField(
                     controller: controller.kitchenStyleController,
                     decoration: InputDecoration(
-                      hintText: 'Enter style and press Enter',
+                      hintText: 'enter_style_and_press_enter'.tr,
                       border: InputBorder.none,
                       hintStyle: GoogleFonts.urbanist(
                         color: Color(0xff595959),
@@ -212,33 +211,33 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
               ),
             )),
             heightBox10,
-            Text('Restaurant Name', style: customLabelStyle),
+            Text('restaurant_name'.tr, style: customLabelStyle),
             heightBox10,
             RoundTextField(
-              hint: 'Enter your restaurant name',
+              hint: 'enter_your_restaurant_name'.tr,
               controller: controller.restaurantNameController,
             ),
             heightBox10,
-            Text('Restaurant Address', style: customLabelStyle),
+            Text('restaurant_address'.tr, style: customLabelStyle),
             heightBox10,
             RoundTextField(
-              hint: 'Enter your restaurant address',
+              hint: 'enter_your_restaurant_address'.tr,
               controller: controller.addressController,
               prefixIcon: Icon(Icons.location_on_outlined),
               readOnly: false,
             ),
             heightBox10,
-            Text('City', style: customLabelStyle),
+            Text('city'.tr, style: customLabelStyle),
             heightBox10,
             RoundTextField(
-              hint: 'Enter your city name',
+              hint: 'enter_your_city_name'.tr,
               controller: controller.cityController,
               prefixIcon: Icon(Icons.location_on_outlined),
             ),
             heightBox20,
             Row(
               children: [
-                Text("Opening Hours", style: customLabelStyle),
+                Text("opening_hours".tr, style: customLabelStyle),
                 SizedBox(width: 8),
                 Icon(Icons.access_time, size: 18),
               ],
@@ -262,7 +261,7 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
             heightBox20,
             Obx(
                   () => CustomButton(
-                title: 'Continue',
+                title: 'continue'.tr,
                 isLoading: controller.isLoading.value,
                 onTap: () {
                   if (_validateInputs()) {

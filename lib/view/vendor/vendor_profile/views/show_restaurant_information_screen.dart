@@ -79,7 +79,7 @@ class _ShowRestaurantInformationScreenState
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'Restaurant Information'),
+      appBar: MainAppBar(title: 'restaurant_information'.tr),
       body: SingleChildScrollView(
         padding: bodyPadding,
         child: Obx(() {
@@ -99,7 +99,7 @@ class _ShowRestaurantInformationScreenState
               ),
 
               heightBox10,
-              Text('Kitchen Style', style: customLabelStyle),
+              Text('kitchen_style'.tr, style: customLabelStyle),
               heightBox10,
               Container(
                 width: double.infinity,
@@ -128,7 +128,7 @@ class _ShowRestaurantInformationScreenState
                     TextField(
                       controller: TextEditingController(),
                       decoration: InputDecoration(
-                        hintText: 'Enter style and press Enter',
+                        hintText: 'enter_style_and_press_enter'.tr,
                         border: InputBorder.none,
                         hintStyle: GoogleFonts.urbanist(
                           color: Color(0xff595959),
@@ -144,27 +144,27 @@ class _ShowRestaurantInformationScreenState
                 ),
               ),
               heightBox10,
-              Text('Restaurant Name', style: customLabelStyle),
+              Text('restaurant_name'.tr, style: customLabelStyle),
               heightBox10,
               RoundTextField(
-                hint: 'Enter your restaurant name',
+                hint: 'enter_your_restaurant_name'.tr,
                 controller: controller.restaurantNameController,
               ),
               heightBox10,
-              Text('Restaurant Address', style: customLabelStyle),
+              Text('restaurant_address'.tr, style: customLabelStyle),
               heightBox10,
               RoundTextField(
-                hint: 'Enter your restaurant address',
+                hint: 'enter_restaurant_address'.tr,
                 controller: controller.addressController,
                 prefixIcon: Icon(Icons.location_on_outlined),
                 readOnly: true,
                 onTap: () {
                   CustomAlertDialog().customAlert(
                       context: context,
-                      title: 'Warning',
-                      message: 'Are you sure you want to update your address?',
-                      NegativebuttonText: "No",
-                      PositivvebuttonText: "Yes",
+                      title: 'warning'.tr,
+                      message: 'are_you_sure_you_want_to_update_your_address'.tr,
+                      NegativebuttonText: "no".tr,
+                      PositivvebuttonText: "yes".tr,
                       onNegativeButtonPressed: () {
                         print('No');
                         Navigator.pop(context);
@@ -178,15 +178,15 @@ class _ShowRestaurantInformationScreenState
                 },
               ),
               heightBox10,
-              Text('City', style: customLabelStyle),
+              Text('city'.tr, style: customLabelStyle),
               heightBox10,
               RoundTextField(
-                hint: 'Enter your city name',
+                hint: 'enter_city_name'.tr,
                 controller: controller.cityController,
                 prefixIcon: Icon(Icons.location_on_outlined),
               ),
               heightBox10,
-              Text('Opening Hours', style: customLabelStyle),
+              Text('opening_hours'.tr, style: customLabelStyle),
               SizedBox(height: 10),
               ListView(
                 shrinkWrap: true,
@@ -221,7 +221,7 @@ class _ShowRestaurantInformationScreenState
 
               heightBox20,
               CustomButton(
-                title: 'Update',
+                title: 'update'.tr,
                 onTap: () {
                   controller.updateRestaurant(
                       // latitude: latitude ?? 0.0,

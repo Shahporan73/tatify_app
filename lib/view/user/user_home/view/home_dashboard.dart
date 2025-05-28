@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
@@ -75,7 +76,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                         ? Image.asset(AppImages.homeActive, scale: 4)
                         : Image.asset(AppImages.homeInactive, scale: 4),
                   ),
-                  text: 'Home',
+                  text: 'home'.tr,
                   textStyle: navBarStyle,
                   /*GoogleFonts.poppins(
                     fontSize: 10,
@@ -92,12 +93,12 @@ class _HomeDashboardState extends State<HomeDashboard> {
                     Image.asset(AppImages.discoverActive, scale: 4,):
                     Image.asset(AppImages.discoverInactive, scale: 4,),
                   ),
-                  text: 'Discover',
+                  text: 'discover'.tr,
                   textStyle: navBarStyle,
                 ),
                 GButton(
                   icon: Icons.home,
-                  text: 'Booking',
+                  text: 'booking'.tr,
                   leading: SizedBox(
                     width: 24,  // Set appropriate width
                     height: 24,  // Set appropriate height
@@ -108,7 +109,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 ),
                 GButton(
                   icon: Icons.home,
-                  text: 'Favorites',
+                  text: 'favorites'.tr,
                   leading: SizedBox(
                     width: 24,  // Set appropriate width
                     height: 24,  // Set appropriate height
@@ -120,7 +121,7 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 ),
                 GButton(
                   icon: Icons.home,
-                  text: 'Profile',
+                  text: 'profile'.tr,
                   leading: SizedBox(
                     width: 24,  // Set appropriate width
                     height: 24,  // Set appropriate height

@@ -6,6 +6,7 @@ import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/custom_alert_dialog.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/common_widget/main_app_bar.dart';
+import 'package:tatify_app/view/user/user_profile/view/change_language_screen.dart';
 import 'package:tatify_app/view/user/user_settings/view/user_change_password_screen.dart';
 
 class VendorSettingScreen extends StatelessWidget {
@@ -43,6 +44,23 @@ class VendorSettingScreen extends StatelessWidget {
                     fullscreenDialog: true,
                     transition: Transition.rightToLeft,
                     duration: Duration(milliseconds: 300),
+                  );
+                },
+              ),
+
+              ListTile(
+                title: CustomText(
+                    title: "Change Password",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: Colors.black
+                ),
+                trailing: Icon(Icons.navigate_next, color: AppColors.blackColor,),
+                leading: Icon(Icons.language_outlined),
+                onTap: () {
+                  Get.to(() => ChangeLanguageScreen(),
+                    fullscreenDialog: true,
+                    transition: Transition.rightToLeft
                   );
                 },
               ),

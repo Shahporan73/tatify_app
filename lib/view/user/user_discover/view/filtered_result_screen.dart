@@ -25,20 +25,19 @@ class FilteredResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: "Results"),
+      appBar: MainAppBar(title: 'results'.tr),
       body: Obx(
-        ()=> Padding(
+            () => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: homeController.isLoading.value ?
-          Center(child: CustomLoader()) :
-          homeController.filterNearbyRestaurantList.isEmpty ?
-          EmptyRestaurantView(title: 'No Restaurants Found',) :
-          ListView.builder(
+          child: homeController.isLoading.value
+              ? Center(child: CustomLoader())
+              : homeController.filterNearbyRestaurantList.isEmpty
+              ? EmptyRestaurantView(title: 'no_restaurants_found'.tr)
+              : ListView.builder(
               itemCount: homeController.filterNearbyRestaurantList.length,
               shrinkWrap: true,
               physics: ScrollPhysics(),
               itemBuilder: (context, index) {
-
                 var data = homeController.filterNearbyRestaurantList[index];
                 return GestureDetector(
                   onTap: () {
@@ -52,7 +51,7 @@ class FilteredResultScreen extends StatelessWidget {
                   },
                   child: HomeListWidget(
                     imagePath: data.featureImage ?? placeholderImage,
-                    title: data.name ?? 'Not found',
+                    title: data.name ?? 'not_found'.tr,
                     discountPrice: '6.99€',
                     price: '9.99€',
                     distance: '${data.distance?.toStringAsFixed(0) ?? 0} km',
@@ -63,8 +62,7 @@ class FilteredResultScreen extends StatelessWidget {
                     onFreeSoftClick: () {},
                   ),
                 );
-              }
-          ),
+              }),
         ),
       ),
     );

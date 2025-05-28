@@ -48,10 +48,10 @@ class VendorProfileScreen extends StatelessWidget {
             right: 0,
             left: 0,
             child: Obx(
-              () => Container(
+                  () => Container(
                 height: height / 2,
                 padding:
-                    EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
+                EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
                 decoration: BoxDecoration(
                   color: AppColors.secondaryColor,
                   borderRadius: BorderRadius.only(
@@ -62,27 +62,42 @@ class VendorProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     CustomAppBar(
-                      appBarName: 'Profile',
+                      appBarName: 'profile'.tr,
                       titleColor: Colors.white,
                       widget: SizedBox(),
                     ),
                     heightBox20,
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundColor: AppColors.primaryColor,
-                      backgroundImage: NetworkImage(
-                        controller.profileImage.value.isNotEmpty ? controller.profileImage.value :
-                        placeholderImage,
+                    InkWell(
+                      onTap: () {
+                        CustomAlertDialog().showFullScreenImageDialog(
+                          context: context,
+                          imageUrl: controller.profileImage.value.isNotEmpty ?
+                          controller.profileImage.value : placeholderImage,
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundColor: AppColors.primaryColor,
+                        backgroundImage: NetworkImage(
+                          controller.profileImage.value.isNotEmpty ? controller.profileImage.value :
+                          placeholderImage,
+                        ),
                       ),
                     ),
                     heightBox10,
                     CustomText(
                       title: controller.fullName.value.isNotEmpty ?
-                      controller.fullName.value : 'User Name',
+                      controller.fullName.value : 'user_name'.tr,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                       fontSize: 18,
-                    )
+                    ),
+                    CustomText(
+                      title: 'Payment status: ${controller.paymentStatus.value}',
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
                   ],
                 ),
               ),
@@ -111,38 +126,38 @@ class VendorProfileScreen extends StatelessWidget {
                   children: [
                     ProfileItemWidget(
                         icon: Icons.person,
-                        title: 'Personal Information',
+                        title: 'personal_information'.tr,
                         onTap: () {
                           Get.to(() => VendorPersonalInformationScreen());
                         }),
                     ProfileItemWidget(
                         icon: Icons.restaurant,
-                        title: 'Restaurant Information',
+                        title: 'restaurant_information'.tr,
                         onTap: () {
                           Get.to(() => ShowRestaurantInformationScreen());
                         }),
                     ProfileItemWidget(
                         icon: Icons.reviews_outlined,
-                        title: 'Ratting & Review',
+                        title: 'rating_and_review'.tr,
                         onTap: () {
                           Get.to(() => VendorShowReviewsScreen());
                         }),
                     /*ProfileItemWidget(
                         icon: Icons.menu_open_sharp,
-                        title: 'Discount Items',
+                        title: 'discount_items'.tr,
                         onTap: (){
                           // Get.to(() => UserSettingScreen());
                         }
                     ),*/
                     ProfileItemWidget(
                         icon: Icons.watch_later,
-                        title: 'History',
+                        title: 'history'.tr,
                         onTap: () {
                           Get.to(() => VendorHistoryScreen());
                         }),
                     ProfileItemWidget(
                         icon: Icons.settings,
-                        title: 'Settings',
+                        title: 'settings'.tr,
                         onTap: (){
                           Get.to(() => UserSettingScreen());
                         }
@@ -150,37 +165,37 @@ class VendorProfileScreen extends StatelessWidget {
 
                     ProfileItemWidget(
                         icon: Icons.description,
-                        title: 'Terms of Services',
+                        title: 'terms_of_services'.tr,
                         onTap: (){
                           Get.to(() => UserTermsAndConditionScreen());
                         }
                     ),
                     ProfileItemWidget(
                         icon: Icons.privacy_tip,
-                        title: 'Privacy Policy',
+                        title: 'privacy_policy'.tr,
                         onTap: (){
                           Get.to(() => UserPrivacyPolicyScreen());
                         }
                     ),
                     ProfileItemWidget(
                         icon: Icons.info_outline,
-                        title: 'About Us',
+                        title: 'about_us'.tr,
                         onTap: (){
                           Get.to(() => UserSupportScreen());
                         }
                     ),
                     ProfileItemWidget(
                       icon: Icons.logout,
-                      title: 'Logout',
+                      title: 'logout'.tr,
                       iconColor: Colors.red,
                       titleColor: Colors.red,
                       onTap: (){
                         CustomAlertDialog().customAlert(
                           context: context,
-                          title: 'Want to logout?',
-                          message: 'Are your sure you want to logout?',
-                          NegativebuttonText: "Cancel",
-                          PositivvebuttonText: "Logout",
+                          title: 'want_to_logout'.tr,
+                          message: 'are_you_sure_logout'.tr,
+                          NegativebuttonText: "cancel".tr,
+                          PositivvebuttonText: "logout".tr,
                           onPositiveButtonPressed: () {
                             LocalStorage.removeData(key: accessToken);
                             Get.offAll(() => SignInScreen());

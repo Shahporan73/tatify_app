@@ -93,7 +93,7 @@ class _CountryCodePickerState extends State<CountryCodePicker> {
                 selectorTextStyle: TextStyle(
                   color: _focusNode.hasFocus ? Colors.red : Colors.black,
                 ),
-                initialValue: PhoneNumber(isoCode: 'LT'),
+                initialValue: PhoneNumber(isoCode: 'DE'),
                 formatInput: true,
                 inputDecoration: InputDecoration(
                   hintText: widget.hintText,

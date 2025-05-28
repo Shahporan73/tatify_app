@@ -15,7 +15,7 @@ class UserRedeemSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(
-      Duration(seconds: 3),() {
+      Duration(seconds: 3), () {
       // Get.offAll(BookingDealConfirmScreen());
     },
     );
@@ -25,21 +25,26 @@ class UserRedeemSuccessScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-
           LottieLoaderWidget(
             repeat: false,
             lottieAssetPath: AppImages.successAnim,
           ),
 
-          CustomText(title: 'Deal Redeemed!', fontSize: 22, fontWeight: FontWeight.w600,),
+          CustomText(
+            title: 'deal_redeemed'.tr,
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+          ),
           heightBox10,
-          Padding(padding: EdgeInsets.symmetric(horizontal: 30),
-            child: CustomText(title: 'Your Redeemed Has Been Successfully Completed.',
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: CustomText(
+              title: 'redeem_success_message'.tr,
               fontSize: 14,
               fontWeight: FontWeight.w400,
               textAlign: TextAlign.center,
-            ),),
-
+            ),
+          ),
         ],
       ),
     );

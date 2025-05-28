@@ -7,6 +7,7 @@ import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/custom_alert_dialog.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/common_widget/main_app_bar.dart';
+import 'package:tatify_app/view/user/user_profile/view/change_language_screen.dart';
 import 'package:tatify_app/view/user/user_settings/controller/setting_controller.dart';
 import 'package:tatify_app/view/user/user_settings/view/user_change_password_screen.dart';
 import '../../user_rule_view/user_privacy_policy_screen.dart';
@@ -22,7 +23,7 @@ class UserSettingScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(
-          title: "Settings",
+          title: "settings".tr,
         centerTitle: true,
         backgroundColor: AppColors.bgColor,
       ),
@@ -34,7 +35,7 @@ class UserSettingScreen extends StatelessWidget {
             children: [
               ListTile(
                 title: CustomText(
-                    title: "Change Password",
+                    title: "change_password".tr,
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
                     color: Colors.black
@@ -52,7 +53,23 @@ class UserSettingScreen extends StatelessWidget {
 
               ListTile(
                 title: CustomText(
-                    title: "Delete Account",
+                    title: "change_language".tr,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: Colors.black
+                ),
+                trailing: Icon(Icons.navigate_next, color: AppColors.blackColor,),
+                leading: Icon(Icons.language),
+                onTap: () {
+                  Get.to(() => ChangeLanguageScreen(),
+                    fullscreenDialog: true,
+                  );
+                },
+              ),
+
+              ListTile(
+                title: CustomText(
+                    title: "delete_account".tr,
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
                     color: Colors.red

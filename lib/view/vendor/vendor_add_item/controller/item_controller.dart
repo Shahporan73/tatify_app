@@ -13,9 +13,11 @@ import '../../vendor_profile/controller/my_restaurant_controller.dart';
 
 class ItemController extends GetxController {
   var isLoading = false.obs;
+  var isDeletingLoading = false.obs;
   var selectedDay = "".obs;
 
   var selectedTab = 'onGoing'.obs;
+  var itemStatus = 'on-going'.obs;
   var selectedDays = <String>[].obs;
 
   final menuNameController = TextEditingController();
@@ -30,15 +32,20 @@ class ItemController extends GetxController {
   RxInt currentPage = 1.obs;
   RxInt totalPages = 1.obs;
 
+
+  void updateItemStatus(String value) {
+    itemStatus.value = value;
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    getFoods(isLoadMore: false);
     selectDay(selectedDay.value);
   }
 
-  Future<void> getFoods(
-      {bool isLoadMore = false, required String restaurantId}) async {
+  Future<void> getFoods({bool isLoadMore = false}) async {
     if (isLoading.value) return;
 
     if (!isLoadMore) {
@@ -52,13 +59,17 @@ class ItemController extends GetxController {
     isLoading.value = true;
 
     try {
+
+      String? restid = await LocalStorage.getData(key: restaurantId);
+
+
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Authorization': LocalStorage.getData(key: accessToken),
       };
 
       final url = EndPoint.getFoodsURL(
-        restaurantId: restaurantId,
+        restaurantId: restid,
         page: currentPage.value,
         limit: 9999999999999999,
       );
@@ -83,15 +94,13 @@ class ItemController extends GetxController {
 
         final items = newModel.data?.result ?? [];
 
-        // Separate items based on status
-        final ongoingItems =
-            items.where((item) => item.status == "on-going").toList();
-        final closedItems =
-            items.where((item) => item.status == "closed").toList();
+        // Separate items based on status - match exact strings returned by API
+        final ongoingItems = items.where((item) => item.status == "on-going").toList();
+        final closedItems = items.where((item) => item.status == "closed").toList();
 
         if (!isLoadMore) {
-          onGoingList.value = ongoingItems;
-          onCloseList.value = closedItems;
+          onGoingList.assignAll(ongoingItems);
+          onCloseList.assignAll(closedItems);
         } else {
           onGoingList.addAll(ongoingItems);
           onCloseList.addAll(closedItems);
@@ -110,16 +119,17 @@ class ItemController extends GetxController {
     }
   }
 
-  Future<void> searchFoods({required String restaurantId, String? searchTerm}) async {
+  Future<void> searchFoods({String? searchTerm}) async {
     isLoading.value = true;
     try {
+      String? restid = await LocalStorage.getData(key: restaurantId);
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Authorization': LocalStorage.getData(key: accessToken),
       };
 
       final url = EndPoint.getFoodsURL(
-        restaurantId: restaurantId,
+        restaurantId: restid,
         searchTerm: searchTerm
       );
 
@@ -179,8 +189,13 @@ class ItemController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        Navigator.of(context).pop();
+        await getFoods();
         selectedDay.value = "";
+        menuNameController.clear();
+        descriptionController.clear();
+        standardPriceController.clear();
+        discountController.clear();
+        Navigator.of(context).pop();
         Get.rawSnackbar(message: 'Food created successfully');
       } else {
         print('Failed to create food item: ${response.statusCode}');
@@ -214,7 +229,8 @@ class ItemController extends GetxController {
           "price": int.parse(standardPrice),
           "discountPrice": int.parse(discountPrice),
           "offerDay": selectedDay.value.toLowerCase(),
-        }
+        },
+        'status': itemStatus.value
       };
 
       print('body $body');
@@ -228,17 +244,56 @@ class ItemController extends GetxController {
       );
 
       if (responseBody != null && responseBody['success'] == true) {
+        getFoods();
         selectedDay.value = "";
         Get.rawSnackbar(message: 'Food updated successfully');
         Navigator.of(context).pop();
       } else {
-        print('Failed to create food item: ${responseBody.statusCode}');
+        print('Failed to update food item: ${responseBody.statusCode}');
         print('Response: ${responseBody.body}');
       }
     } catch (e) {
       print('update food item error: $e');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+
+  Future<void> deleteItem({required String foodId, required BuildContext context}) async {
+    isDeletingLoading.value = true;
+    try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': LocalStorage.getData(key: accessToken),
+      };
+
+      Map<String, dynamic> body = {
+        'status': 'archived'
+      };
+
+      print('body $body');
+
+      dynamic responseBody = await BaseClient.handleResponse(
+        await BaseClient.putRequest(
+          api: EndPoint.updateFoodURL(foodId: foodId),
+          body: body,
+          headers: headers,
+        ),
+      );
+
+      if (responseBody != null && responseBody['success'] == true) {
+        getFoods();
+        Navigator.of(context).pop();
+        Get.rawSnackbar(message: 'delete_success'.tr, backgroundColor: Colors.red);
+      } else {
+        print('Failed to delete food item: ${responseBody.statusCode}');
+        print('Response: ${responseBody.body}');
+      }
+    } catch (e) {
+      print('Delete food item error: $e');
+    } finally {
+      isDeletingLoading.value = false;
     }
   }
 

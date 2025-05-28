@@ -22,9 +22,7 @@ class SearchOnGoingItemScreen extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
 
   Future<void> _refreshItems() async {
-    await itemController.getFoods(
-      restaurantId: myRestaurantController.myRestaurantsModel.value.data?.id ?? '',
-    );
+    await itemController.getFoods();
   }
 
   @override
@@ -33,7 +31,7 @@ class SearchOnGoingItemScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(
-        title: 'Search',
+        title: 'search'.tr,
         backgroundColor: AppColors.bgColor,
       ),
       body: Obx(
@@ -42,7 +40,7 @@ class SearchOnGoingItemScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: RoundTextField(
-                hint: 'Search',
+                hint: 'search'.tr,
                 controller: searchController,
                 prefixIcon: Icon(
                   Icons.search_outlined,
@@ -56,18 +54,12 @@ class SearchOnGoingItemScreen extends StatelessWidget {
                   ),
                   onPressed: () {
                     searchController.clear();
-                    foodItemController.getFoods(
-                        restaurantId:
-                        myRestaurantController.myRestaurantsModel.value.data?.id ?? '');
+                    foodItemController.getFoods();
                   },
                 )
                     : null,
                 onChanged: (p0) {
-                  foodItemController.searchFoods(
-                    restaurantId:
-                    myRestaurantController.myRestaurantsModel.value.data?.id ?? '',
-                    searchTerm: p0,
-                  );
+                  foodItemController.searchFoods(searchTerm: p0,);
                 },
               ),
             ),
@@ -80,7 +72,7 @@ class SearchOnGoingItemScreen extends StatelessWidget {
                   : foodItemController.onGoingList.isEmpty
                   ? Center(
                   child: CustomText(
-                    title: 'No item found',
+                    title: 'no_item_found'.tr,
                     fontSize: 16,
                   ))
                   : RefreshIndicator(

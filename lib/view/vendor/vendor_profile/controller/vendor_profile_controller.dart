@@ -23,6 +23,7 @@ class VendorProfileController extends GetxController {
   var profileImage = ''.obs;
   var address = ''.obs;
   var id = ''.obs;
+  var paymentStatus = ''.obs;
 
   // Rx variable to hold the image
   var imagePath = Rxn<String>();
@@ -62,6 +63,7 @@ class VendorProfileController extends GetxController {
         phoneNumber.value = responseBody['data']['phoneNumber']?.toString() ?? '';
         address.value = responseBody['data']['address']?.toString() ?? '';
         email.value = responseBody['data']['email']?.toString() ?? '';
+        paymentStatus.value = responseBody['data']['payment']['status']?.toString() ?? 'Unpaid';
         profileImage.value = responseBody['data']['profileImage']?.toString() ?? '';
         id.value = responseBody['data']['_id']?.toString() ?? '';
         print('phoneNumber $phoneNumber');

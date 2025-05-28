@@ -102,8 +102,7 @@ class MyRestaurantController extends GetxController {
           address.value = myRestaurantsModel.value.data?.address ?? '';
           latitude.value = myRestaurantsModel.value.data?.location?.coordinates[1] ?? 0.0;
           longitude.value = myRestaurantsModel.value.data?.location?.coordinates[0] ?? 0.0;
-          itemController.getFoods(restaurantId: myRestaurantsModel.value.data?.id ?? '');
-          itemController.searchFoods(restaurantId: myRestaurantsModel.value.data?.id ?? '');
+         await LocalStorage.saveData(key: restaurantId, data: myRestaurantsModel.value.data?.id ?? '');
         }
 
         // Initialize tags and opening hours from API response (if available)

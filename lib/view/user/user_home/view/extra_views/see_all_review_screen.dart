@@ -19,7 +19,7 @@ class SeeAllReviewScreen extends StatelessWidget {
     print('reviewList ${reviewList.length}');
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: MainAppBar(title: 'Reviews'),
+      appBar: MainAppBar(title: 'reviews'.tr),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ListView.builder(
@@ -33,7 +33,7 @@ class SeeAllReviewScreen extends StatelessWidget {
               review: reviewFormat(review.ratings ?? 0.0),
               userImage:
               review.userInfo?.profileImage ?? placeholderImage,
-              userName: review.userInfo?.name ?? 'Not Available',
+              userName: review.userInfo?.name ?? 'not_available'.tr,
               createdTime: createdAt(review.createdAt.toString()),
             );
           },

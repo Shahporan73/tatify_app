@@ -30,13 +30,13 @@ class VendorShowReviewsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       appBar: MainAppBar(
-        title: 'Rating & Review',
+        title: 'rating_and_review'.tr,
         backgroundColor: AppColors.whiteColor,
       ),
       body: SingleChildScrollView(
         padding: bodyPadding,
         child: Obx(
-          () => Column(
+              () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
@@ -60,7 +60,7 @@ class VendorShowReviewsScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            '${controller.reviewList.length}\n ratings',
+                            '${controller.reviewList.length}\n${'ratings'.tr}',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.urbanist(
                               fontSize: 12,
@@ -74,7 +74,6 @@ class VendorShowReviewsScreen extends StatelessWidget {
                       Expanded(
                         child: Column(
                           children: [
-                            // Rating Bar >> average total star count
                             RatingBarWidget(
                               starCount: 5,
                               fillPercent: 0.8,
@@ -108,7 +107,7 @@ class VendorShowReviewsScreen extends StatelessWidget {
 
                   heightBox20,
                   CustomText(
-                    title: '${controller.reviewList.length} reviews',
+                    title: '${controller.reviewList.length} ${'reviews'.tr}',
                     color: AppColors.black100,
                     fontWeight: FontWeight.w500,
                     fontSize: 12,
@@ -116,11 +115,13 @@ class VendorShowReviewsScreen extends StatelessWidget {
                   Divider(
                     color: AppColors.secondaryColor,
                   ),
-                  controller.isLoadingReview.value ? CustomLoader() :
-                  controller.reviewList.isEmpty ? EmptyRestaurantView(
-                    title: 'No Review Available',
-                  ) :
-                  ListView.builder(
+                  controller.isLoadingReview.value
+                      ? CustomLoader()
+                      : controller.reviewList.isEmpty
+                      ? EmptyRestaurantView(
+                    title: 'no_review_available'.tr,
+                  )
+                      : ListView.builder(
                     itemCount: controller.reviewList.length,
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
@@ -130,9 +131,12 @@ class VendorShowReviewsScreen extends StatelessWidget {
                       return ShowReviewsWidget(
                         rating: review.ratings ?? 0.0,
                         review: reviewFormat(review.ratings ?? 0.0),
-                        userImage: review.userInfo?.profileImage ?? placeholderImage,
-                        userName: review.userInfo?.name ?? 'Not Available',
-                        createdTime: createdAt(review.createdAt.toString()),
+                        userImage: review.userInfo?.profileImage ??
+                            placeholderImage,
+                        userName: review.userInfo?.name ??
+                            'not_available'.tr,
+                        createdTime:
+                        createdAt(review.createdAt.toString()),
                       );
                     },
                   ),

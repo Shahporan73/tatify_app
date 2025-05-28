@@ -45,38 +45,34 @@ class WelcomeScreen extends StatelessWidget {
               fit: BoxFit.contain,
             ),
             CustomText(
-              title: 'Let’s get started!',
+              title: 'lets_get_started'.tr,
               fontSize: 22,
               fontWeight: FontWeight.w600,
               color: AppColors.blackColor,
             ),
             heightBox5,
             CustomText(
-              title: 'Login to Stay healthy and fit',
+              title: 'login_to_stay_healthy_and_fit'.tr,
               fontSize: 18,
               fontWeight: FontWeight.w400,
               color: AppColors.blackColor,
             ),
             heightBox20,
             CustomButton(
-                title: 'Log In',
-                onTap: () {
-                  Get.to(
-                        () => SignInScreen(),
-                  );
-                }
+              title: 'log_in'.tr,
+              onTap: () {
+                Get.to(() => SignInScreen());
+              },
             ),
             heightBox10,
             CustomButton(
-                title: 'Sign Up',
-                buttonColor: Colors.transparent,
-                titleColor: AppColors.secondaryColor,
-                border: Border.all(color: AppColors.secondaryColor),
-                onTap: () {
-                  Get.to(
-                    () => SignUpScreen(),
-                  );
-                }
+              title: 'sign_up'.tr,
+              buttonColor: Colors.transparent,
+              titleColor: AppColors.secondaryColor,
+              border: Border.all(color: AppColors.secondaryColor),
+              onTap: () {
+                Get.to(() => SignUpScreen());
+              },
             ),
           ],
         ),

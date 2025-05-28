@@ -21,8 +21,8 @@ class SearchRestaurantView extends StatelessWidget {
     final TextEditingController _searchController = TextEditingController();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const MainAppBar(
-          title: 'Search Restaurants',
+      appBar: MainAppBar(
+          title: 'search_restaurants'.tr,
       ),
       body: RefreshIndicator(
         color: AppColors.primaryColor,
@@ -35,7 +35,7 @@ class SearchRestaurantView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: RoundTextField(
                 prefixIcon: Icon(Icons.search_outlined, color: Colors.grey,),
-                hint: 'Search Restaurants',
+                hint: 'search_restaurants'.tr,
                 controller: _searchController,
                 onChanged: (p0) {
                   homeController.searchNearbyRestaurants(searchTerm: p0);
@@ -55,7 +55,7 @@ class SearchRestaurantView extends StatelessWidget {
               child: Obx(() =>
               homeController.isLoading.value? Center(child: CustomLoader()):
               homeController.nearbyRestaurantList.isEmpty?
-              EmptyRestaurantView(title: 'No Restaurants Found',) :
+              EmptyRestaurantView(title: 'no_restaurant_found'.tr,) :
               ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: homeController.nearbyRestaurantList.length,
@@ -82,7 +82,7 @@ class SearchRestaurantView extends StatelessWidget {
                         discountPrice: '6.99€',
                         price: '9.99€',
                         distance: '${data.distance?.toStringAsFixed(2)} km',
-                        reviewsAndRating: '4.3(17)',
+                        reviewsAndRating: '${data.review?.star?.toStringAsFixed(1)??0.0}(${data.review?.total??0})',
                         kitchenStyle: 'Kabab',
                         on2for1Click: () {},
                         onFreeSoftClick: () {},

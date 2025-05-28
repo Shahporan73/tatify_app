@@ -28,9 +28,7 @@ class VendorHomeScreen extends StatelessWidget {
   }
 
   Future<void> _refreshItems() async {
-    await foodItemController.getFoods(
-      restaurantId: myRestaurantController.myRestaurantsModel.value.data?.id ?? '',
-    );
+    await foodItemController.getFoods();
     await myRestaurantController.getMyRestaurants();
    await myProfileController.getProfile();
   }
@@ -89,7 +87,7 @@ class VendorHomeScreen extends StatelessWidget {
                     child: CustomRowWidget(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       title: CustomText(
-                        title: 'Ongoing Menu',
+                        title: 'ongoing_menu'.tr,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -108,10 +106,10 @@ class VendorHomeScreen extends StatelessWidget {
                         () => foodItemController.isLoading.value
                         ? Center(child: CustomLoader())
                         : foodItemController.onGoingList.isEmpty
-                        ? Center(child: CustomText(title: 'No item found', fontSize: 16))
+                        ? Center(child: CustomText(title: 'no_item_found'.tr, fontSize: 16))
                         : ListView.builder(
                           shrinkWrap: true,
-                          physics: AlwaysScrollableScrollPhysics(),
+                          physics: NeverScrollableScrollPhysics(),
                           itemCount: foodItemController.onGoingList.length,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {

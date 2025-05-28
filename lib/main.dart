@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/date_symbol_data_file.dart';
 import 'package:tatify_app/data/local_database/local_data_base.dart';
 import 'package:tatify_app/data/utils/const_value.dart';
 import 'package:tatify_app/view/vendor/payment/views/pay_now_screen.dart';
@@ -14,6 +15,7 @@ import 'package:tatify_app/view/splash/view/splash_screen.dart';
 import 'package:tatify_app/view/user/user_home/view/home_dashboard.dart';
 import 'package:tatify_app/view/vendor/vendor_home/views/vendor_home_dashboard.dart';
 
+import 'data/language/translation.dart';
 import 'data/service/notification_service.dart';
 import 'firebase_options.dart';
 import 'package:month_year_picker/month_year_picker.dart';
@@ -76,6 +78,9 @@ class MyApp extends StatelessWidget {
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     ));
+
+    String? locale = LocalStorage.getData(key: language);
+
     return GetMaterialApp(
       title: 'Testy point restaurant app',
       debugShowCheckedModeBanner: false,
@@ -84,12 +89,20 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+
+      useInheritedMediaQuery: true,
+      locale: locale != null ? Locale(locale) : Get.deviceLocale,
+      fallbackLocale: Locale('de'),
+      translations: MyTranslations(),
+
+      // localization for month year picker package
       supportedLocales: const [
         Locale('en', 'US'),
       ],
       localizationsDelegates: [
         MonthYearPickerLocalizations.delegate,
       ],
+
       home: LocalStorage.getData(key: accessToken) != null? (
       LocalStorage.getData(key: userType) == 'vendor' ? VendorHomeDashboard() : HomeDashboard()
       ) : SplashScreen(),

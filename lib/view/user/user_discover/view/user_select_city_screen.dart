@@ -31,7 +31,7 @@ class UserSelectCityScreen extends StatelessWidget {
             ),
           ),
           CustomText(
-            title: 'First select a city',
+            title: 'first_select_city'.tr,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -40,37 +40,34 @@ class UserSelectCityScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: CustomText(
               textAlign: TextAlign.center,
-              title:
-                  'Where would you like to go? Just choose a city from the list.',
+              title: 'choose_city_from_list'.tr,
               fontSize: 14,
               fontWeight: FontWeight.w400,
             ),
           ),
           heightBox20,
           CustomButton(
-              title: 'Open city list',
-              borderRadius: 25,
-              width: Get.width / 2,
-              onTap: (){
-                Get.bottomSheet(
-                  Container(
-                    height: Get.height * 0.8,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
+            title: 'open_city_list'.tr,
+            borderRadius: 25,
+            width: Get.width / 2,
+            onTap: () {
+              Get.bottomSheet(
+                Container(
+                  height: Get.height * 0.8,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
-                    child: CityListWidget(),
                   ),
-                  isScrollControlled: true, // Allows full height modal
-                );
-              }
+                  child: CityListWidget(),
+                ),
+                isScrollControlled: true, // Allows full height modal
+              );
+            },
           ),
-
           Spacer(),
-
           Container(
             decoration: BoxDecoration(
               color: Colors.grey.shade100, // Light background
@@ -88,14 +85,16 @@ class UserSelectCityScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildButton(
-                    icon: Icons.filter_list, text: "Filter",
+                  icon: Icons.filter_list,
+                  text: "filter".tr,
                   onTap: () {
                     Navigator.pop(context);
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                        borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
                       ),
                       builder: (context) {
                         return UserFilterBottomSheet();
@@ -109,21 +108,25 @@ class UserSelectCityScreen extends StatelessWidget {
                   color: Colors.grey.shade300,
                 ),
                 _buildButton(
-                    icon: Icons.map, text: "Map",
+                  icon: Icons.map,
+                  text: "map".tr,
                   onTap: () {
-                      Navigator.of(context).pop();
-                  }
+                    Navigator.of(context).pop();
+                  },
                 ),
               ],
             ),
           ),
-
           heightBox50,
         ],
       ),
     );
   }
-  Widget _buildButton({required IconData icon, required String text, required VoidCallback onTap}) {
+
+  Widget _buildButton(
+      {required IconData icon,
+        required String text,
+        required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Padding(

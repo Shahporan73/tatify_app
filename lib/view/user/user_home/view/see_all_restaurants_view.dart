@@ -18,7 +18,7 @@ class SeeAllRestaurantsView extends StatelessWidget {
     final SingleRestaurantController singleRestaurantController = Get.put(SingleRestaurantController());
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const MainAppBar(title: 'All Restaurants'),
+      appBar: MainAppBar(title: 'all_restaurants'.tr),
       body: Obx(() {
         if (homeController.isLoading.value) {
           // Show loader inside a scrollable widget so RefreshIndicator works
@@ -46,10 +46,12 @@ class SeeAllRestaurantsView extends StatelessWidget {
             },
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
-              children: const [
+              children: [
                 SizedBox(
                   height: 300,
-                  child: Center(child: Text('No Restaurants Found')),
+                  child: Center(
+                    child: Text('no_restaurants_found'.tr),
+                  ),
                 ),
               ],
             ),

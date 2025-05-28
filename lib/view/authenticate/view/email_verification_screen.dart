@@ -17,7 +17,7 @@ import 'package:tatify_app/view/authenticate/view/sign_in_screen.dart';
 class EmailVerificationScreen extends StatelessWidget {
   final bool? isVendor;
   final String email;
-  const EmailVerificationScreen({super.key, this.isVendor=false, required this.email});
+  const EmailVerificationScreen({super.key, this.isVendor = false, required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class EmailVerificationScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(
-        title: 'Email Verification',
+        title: 'email_verification'.tr,
         backgroundColor: AppColors.bgColor,
       ),
       body: Padding(
@@ -46,12 +46,12 @@ class EmailVerificationScreen extends StatelessWidget {
                 height: 20,
               ),
               CustomText(
-                  title:'Please enter the 6 digit code that was sent $email',
-                  color: AppColors.primaryColor,
-                  fontSize: 18,
+                title: '${'please_enter_the_6_digit_code_that_was_sent'.tr} $email',
+                color: AppColors.primaryColor,
+                fontSize: 18,
                 textAlign: TextAlign.center,
               ),
-          
+
               SizedBox(
                 height: Get.height / 10,
               ),
@@ -60,14 +60,14 @@ class EmailVerificationScreen extends StatelessWidget {
                 borderColor: Colors.grey,
                 controllers: controller.otpControllers,
               ),
-          
+
               heightBox20,
-              Obx(() => controller.secondsRemaining.value == 0?
-              Center(
+              Obx(() => controller.secondsRemaining.value == 0
+                  ? Center(
                 child: InkWell(
                   onTap: () => controller.resendOtp(email),
                   child: CustomText(
-                    title: 'Resend code',
+                    title: 'resend_code'.tr,
                     fontWeight: FontWeight.w600,
                     color: AppColors.secondaryColor,
                     fontSize: 14,
@@ -75,33 +75,24 @@ class EmailVerificationScreen extends StatelessWidget {
                     decorationColor: AppColors.secondaryColor,
                   ),
                 ),
-              ):
-              Center(
+              )
+                  : Center(
                 child: CustomText(
-                    title: 'Resend otp in ${controller.secondsRemaining.value} seconds',
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primaryColor,
-                    fontSize: 14
+                  title: '${'resend_otp_in_seconds'.tr} ${controller.secondsRemaining.value}',
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primaryColor,
+                  fontSize: 14,
                 ),
-              ),
-              ),
-          
+              )),
+
               heightBox50,
-              Obx(
-                ()=> CustomButton(
-                    title: 'Verify OTP',
-                    isLoading: controller.isLoading.value,
-                    onTap: () {
-                      // if(isVendor==true){
-                      //   Get.to(()=>RestaurantInformationScreen());
-                      // }else if(isVendor==false){
-                      //   controller.otpSubmitted(email, isVendor ?? false);
-                      // }
-                      controller.otpSubmitted(email, isVendor ?? false);
-                    },
-                ),
-              ),
-          
+              Obx(() => CustomButton(
+                title: 'verify_otp'.tr,
+                isLoading: controller.isLoading.value,
+                onTap: () {
+                  controller.otpSubmitted(email, isVendor ?? false);
+                },
+              )),
             ],
           ),
         ),

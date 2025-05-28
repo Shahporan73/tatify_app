@@ -119,8 +119,20 @@ class RestaurantController extends GetxController {
 
       if (response.statusCode == 200) {
         print('Success: ${response.body}');
+
+        var responseBody = jsonDecode(response.body);
+
+        var resId = responseBody['data']['_id'];
+        print('resId $resId');
+        await LocalStorage.saveData(key: restaurantId, data: resId);
+
+
         Get.offAll(() => SignInScreen());
-        Get.rawSnackbar(message: 'Success');
+
+
+        Get.rawSnackbar(message: 'Restaurant created successfully');
+      }else if(response.statusCode == 413) {
+        Get.rawSnackbar(message: 'Image size is too large');
       } else {
         print('Error ${response.statusCode}: ${response.body}');
         var responseBody = jsonDecode(response.body);
@@ -138,7 +150,7 @@ class RestaurantController extends GetxController {
   }
 
   Future<void> pickImage() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 50);
     if (picked != null) {
       pickedImage.value = File(picked.path);
     }

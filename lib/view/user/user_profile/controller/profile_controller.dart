@@ -9,6 +9,7 @@ class UserProfileController extends GetxController{
   final TextEditingController dobController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
   // Rx variable to hold the image

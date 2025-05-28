@@ -34,14 +34,14 @@ class AddItemScreen extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'Add a menu for your customers', backgroundColor: AppColors.bgColor,),
+      appBar: MainAppBar(title: 'add_a_menu_for_your_customers'.tr, backgroundColor: AppColors.bgColor,),
       body: SingleChildScrollView(
         padding: bodyPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RoundTextField(
-                hint: 'Enter menu name',
+                hint: 'enter_menu_name'.tr,
               controller: controller.menuNameController,
             ),
 
@@ -50,7 +50,7 @@ class AddItemScreen extends StatelessWidget {
               maxLine: 5,
               height: height / 8,
               vertical_padding: 5,
-              hint: 'Enter menu  description',
+              hint: 'enter_menu_description'.tr,
               controller: controller.descriptionController,
             ),
 
@@ -65,7 +65,7 @@ class AddItemScreen extends StatelessWidget {
                 Expanded(
                   child: Center(
                       child: CustomText(
-                    title: 'Pricing',
+                    title: 'pricing'.tr,
                         fontWeight: FontWeight.w400,
                         color: AppColors.whiteDarker,
                   )),
@@ -81,7 +81,7 @@ class AddItemScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomText(
-                        title: 'Standard price',
+                        title: 'standard_price'.tr,
                         fontWeight: FontWeight.w400,
                         color: AppColors.whiteDarker,
                       ),
@@ -108,7 +108,7 @@ class AddItemScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomText(
-                        title: 'Discount price',
+                        title: 'discount_price'.tr,
                         fontWeight: FontWeight.w400,
                         color: AppColors.whiteDarker,
                       ),
@@ -133,7 +133,7 @@ class AddItemScreen extends StatelessWidget {
             heightBox20,
             Center(
                 child: CustomText(
-                  title: 'Offer Days',
+                  title: 'offer_days'.tr,
                   fontWeight: FontWeight.w500,
                   color: AppColors.whiteDarker,
                 ),
@@ -171,9 +171,23 @@ class AddItemScreen extends StatelessWidget {
             heightBox20,
             Obx(
               ()=> CustomButton(
-                  title: 'Submit',
+                  title: 'submit'.tr,
                   isLoading: controller.isLoading.value,
                   onTap: (){
+
+                    if(controller.menuNameController.text.isEmpty ||
+                    controller.descriptionController.text.isEmpty ||
+                    controller.standardPriceController.text.isEmpty ||
+                    controller.discountController.text.isEmpty ||
+                    controller.selectedDays.isEmpty){
+                      Get.rawSnackbar(
+                        message: 'please_fill_all_the_fields'.tr,
+                        backgroundColor: Colors.red,
+                        snackPosition: SnackPosition.TOP,
+                      );
+                      return;
+                    }
+
                    controller.addItem(context: context);
                   }
               ),

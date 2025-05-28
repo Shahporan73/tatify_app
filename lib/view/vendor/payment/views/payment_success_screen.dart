@@ -62,7 +62,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                   elevation: 5,
                 ),
                 child: Text(
-                  'Go to Dashboard',
+                  'go_to_dashboard'.tr,
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,

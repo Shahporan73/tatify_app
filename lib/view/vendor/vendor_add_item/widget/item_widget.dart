@@ -18,6 +18,7 @@ class ItemWidget extends StatelessWidget {
   final String offerDay;
   final String description;
   final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
   const ItemWidget(
       {super.key,
       this.isEdit = false,
@@ -25,7 +26,9 @@ class ItemWidget extends StatelessWidget {
       required this.price,
       required this.discountPrice,
       required this.offerDay,
-      required this.description, this.onEdit});
+      required this.description, this.onEdit,
+        this.onDelete
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +89,7 @@ class ItemWidget extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: '$discountPrice€',
+                            text: ' $discountPrice€',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 11,
@@ -145,7 +148,7 @@ class ItemWidget extends StatelessWidget {
                       ),
                       widthBox5,
                       CustomText(
-                        title: 'On-site',
+                        title: 'on_site'.tr,
                         fontWeight: FontWeight.w600,
                         fontSize: 11,
                         color: AppColors.whiteColor,
@@ -165,7 +168,7 @@ class ItemWidget extends StatelessWidget {
           ),
           heightBox8,
           CustomButton(
-              title: 'Use as Template',
+              title: 'use_as_template'.tr,
               borderRadius: 25,
               padding_vertical: 8,
               buttonColor: AppColors.secondaryColor,
@@ -174,7 +177,7 @@ class ItemWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     CustomText(
-                      title: 'Use as Template',
+                      title: 'use_as_template'.tr,
                       fontSize: 14,
                       color: Colors.white,
                     ),
@@ -189,22 +192,8 @@ class ItemWidget extends StatelessWidget {
                           )
                         : SizedBox(),
                     widthBox5,
-                    GestureDetector(
-                      onTap: () {
-                        CustomAlertDialog().customAlert(
-                          context: context,
-                          title: "Alert",
-                          message: 'Are you sure you want to delete item?',
-                          NegativebuttonText: "Cancel",
-                          PositivvebuttonText: "Confirm",
-                          onPositiveButtonPressed: () {
-                            Navigator.of(context).pop();
-                            Get.rawSnackbar(message: "Delete successful");
-                          },
-                          onNegativeButtonPressed: () =>
-                              Navigator.of(context).pop(),
-                        );
-                      },
+                    InkWell(
+                      onTap: onDelete,
                       child: Image.asset(
                         AppImages.deleteIcon,
                         width: 20,
