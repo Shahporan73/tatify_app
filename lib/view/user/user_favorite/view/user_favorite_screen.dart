@@ -23,7 +23,7 @@ class UserFavoriteScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(
-        title: 'Favorite',
+        title: 'favorite'.tr,
         leading: SizedBox(),
         backgroundColor: AppColors.bgColor,
       ),

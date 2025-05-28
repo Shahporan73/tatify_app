@@ -41,7 +41,7 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      Get.snackbar('Location Disabled', 'Please enable location services');
+      Get.snackbar('location_disabled'.tr, 'please_enable_location_services'.tr);
       return;
     }
 
@@ -50,13 +50,13 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
       permission = await Geolocator.requestPermission();
 
       if (permission == LocationPermission.denied) {
-        Get.snackbar('Permission Denied', 'Location permission denied');
+        Get.snackbar('permission_denied'.tr, 'location_permission_denied'.tr);
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      Get.snackbar('Permission Denied', 'Location permissions are permanently denied');
+      Get.snackbar('permission_denied'.tr, 'location_permissions_permanently_denied'.tr);
       return;
     }
 
@@ -166,7 +166,7 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
                     children: [
                       Expanded(
                         child: CustomButton(
-                          title: "Filter",
+                          title: "filter".tr,
                           buttonColor: Colors.white,
                           borderRadius: 25,
                           widget: Row(
@@ -174,7 +174,8 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.filter_list),
-                              Text("Filter"),
+                              SizedBox(width: 5),
+                              Text("filter".tr),
                             ],
                           ),
                           onTap: () {
@@ -207,7 +208,8 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.list),
-                              Text("List"),
+                              SizedBox(width: 5),
+                              Text("list".tr),
                             ],
                           ),
                           onTap: () {
@@ -275,40 +277,6 @@ class _UserDiscoverScreenState extends State<UserDiscoverScreen> {
                     ],
                   ),
                 ),
-                /* Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          "\$10 Discount",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.orange,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          "Free soft drink",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),*/
               ],
             ),
           ),

@@ -167,7 +167,7 @@ class MyProfileController extends GetxController {
 
 // Method to pick the image from the gallery
   Future<void> pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80,);
     if (pickedFile != null) {
       imagePath.value = pickedFile.path;
     }

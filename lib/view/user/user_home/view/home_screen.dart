@@ -49,14 +49,14 @@ class UserHomeScreen extends StatelessWidget {
                         padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 0),
                         child: CustomRowWidget(
                           title: CustomText(
-                            title: 'Nearby Restaurant',
+                            title: 'nearby_restaurants'.tr,
                             color: AppColors.primaryColor,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                           value: InkWell(
                             onTap: () => Get.to(() => SeeAllRestaurantsView(), transition: Transition.rightToLeft),
-                            child: CustomText(title: 'See all', color: Colors.green),
+                            child: CustomText(title: 'see_all'.tr, color: Colors.green),
                           ),
                         ),
                       ),
@@ -68,7 +68,7 @@ class UserHomeScreen extends StatelessWidget {
                         child: Center(child: CustomLoader()),
                       )
                           : homeController.nearbyRestaurantList.isEmpty
-                          ? EmptyRestaurantView(title: 'No Restaurants Found')
+                          ? EmptyRestaurantView(title: 'no_restaurants_found'.tr)
                           : ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),

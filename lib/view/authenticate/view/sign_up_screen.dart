@@ -75,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 Center(
                   child: CustomText(
-                    title: 'Sign Up',
+                    title: 'sign_up'.tr,
                     fontSize: 26,
                     fontWeight: FontWeight.w600,
                   ),
@@ -90,18 +90,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // full name
                 Visibility(
-                  visible: controller.selectedRole.value =="User" || controller.selectedRole.value =="Vendor",
+                  visible: controller.selectedRole.value == "User" ||
+                      controller.selectedRole.value == "Vendor",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10,
                       Text(
-                        'Full name',
+                        'full_name'.tr,
                         style: customLabelStyle,
                       ),
                       heightBox5,
                       RoundTextField(
-                        hint: 'Enter your full name',
+                        hint: 'enter_your_full_name'.tr,
                         controller: validationController.nameController,
                         prefixIcon: Icon(
                           Icons.person,
@@ -114,18 +115,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // bank name
                 Visibility(
-                  visible: controller.selectedRole.value =="Vendor",
+                  visible: controller.selectedRole.value == "Vendor",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10,
                       Text(
-                        'Bank name',
+                        'bank_name'.tr,
                         style: customLabelStyle,
                       ),
                       heightBox5,
                       RoundTextField(
-                        hint: 'Enter bank name',
+                        hint: 'enter_bank_name'.tr,
                         controller: validationController.bankNameController,
                       )
                     ],
@@ -134,18 +135,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // holder name
                 Visibility(
-                  visible: controller.selectedRole.value =="Vendor",
+                  visible: controller.selectedRole.value == "Vendor",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10,
                       Text(
-                        'Holder Name',
+                        'holder_name'.tr,
                         style: customLabelStyle,
                       ),
                       heightBox5,
                       RoundTextField(
-                        hint: 'Enter holder name',
+                        hint: 'enter_holder_name'.tr,
                         controller: validationController.holderNameController,
                       )
                     ],
@@ -154,19 +155,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // IBAN
                 Visibility(
-                  visible: controller.selectedRole.value =="Vendor",
+                  visible: controller.selectedRole.value == "Vendor",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10,
                       Text(
-                        'IBAN',
+                        'iban'.tr,
                         style: customLabelStyle,
                       ),
                       heightBox5,
                       RoundTextField(
                         controller: validationController.ibanNumberController,
-                        hint: 'Enter your IBAN number',
+                        hint: 'enter_your_iban_number'.tr,
                         prefixIcon: Icon(
                           Icons.call_to_action_rounded,
                           color: Colors.grey,
@@ -176,75 +177,63 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
 
-
                 // Phone number
                 Visibility(
-                  visible: controller.selectedRole.value =="User" || controller.selectedRole.value =="Vendor",
+                  visible: controller.selectedRole.value == "User" ||
+                      controller.selectedRole.value == "Vendor",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10,
                       CountryCodePicker(
                           controller: validationController.phoneController,
-                          titleText: 'Phone Number',
-                          hintText: 'Enter phone number'
-                      ),
+                          titleText: 'phone_number'.tr,
+                          hintText: 'enter_phone_number'.tr),
                     ],
                   ),
                 ),
 
                 // address
                 Visibility(
-                  visible: controller.selectedRole.value =="User",
+                  visible: controller.selectedRole.value == "User",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10,
                       Text(
-                        'Address',
+                        'address'.tr,
                         style: customLabelStyle,
                       ),
                       heightBox5,
                       RoundTextField(
                         controller: validationController.addressController,
-                        hint: 'Enter your address',
+                        hint: 'enter_your_address'.tr,
                         readOnly: false,
                         prefixIcon: Icon(
                           Icons.location_on,
                           color: Colors.grey,
                         ),
-                        /*onTap: () async {
-                          try {
-                            var location = await LocationServiceWithAddress.getCurrentLocationWithAddress();
-                            print('Latitude: ${location['latitude']}');
-                            print('Longitude: ${location['longitude']}');
-                            print('Address: ${location['address']}');
-                            validationController.addressController.text = location['address'];
-                          } catch (e) {
-                            print('Error: $e');
-                          }
-                        },*/
                       )
                     ],
                   ),
                 ),
 
-
                 // Email
                 Visibility(
-                  visible: controller.selectedRole.value =="User" || controller.selectedRole.value =="Vendor",
+                  visible: controller.selectedRole.value == "User" ||
+                      controller.selectedRole.value == "Vendor",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10,
                       Text(
-                        'Email',
+                        'email'.tr,
                         style: customLabelStyle,
                       ),
                       heightBox5,
                       RoundTextField(
                         controller: validationController.emailController,
-                        hint: 'Enter your email',
+                        hint: 'enter_your_email'.tr,
                         prefixIcon: Icon(
                           Icons.email,
                           color: Colors.grey,
@@ -256,26 +245,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // password
                 Visibility(
-                  visible: controller.selectedRole.value =="User" || controller.selectedRole.value =="Vendor",
+                  visible: controller.selectedRole.value == "User" ||
+                      controller.selectedRole.value == "Vendor",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10,
                       Text(
-                        'Password',
+                        'password'.tr,
                         style: customLabelStyle,
                       ),
                       heightBox5,
                       RoundTextField(
                         controller: validationController.passwordController,
-                        hint: '************',
+                        hint: 'password_hint'.tr,
                         prefixIcon: Icon(
                           Icons.lock,
                           color: Colors.grey,
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            controller.isPasswordVisible.value ? Icons.remove_red_eye : Icons.visibility_off,
+                            controller.isPasswordVisible.value
+                                ? Icons.remove_red_eye
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             controller.togglePasswordVisibility();
@@ -289,26 +281,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // confirm password
                 Visibility(
-                  visible: controller.selectedRole.value =="User" || controller.selectedRole.value =="Vendor",
+                  visible: controller.selectedRole.value == "User" ||
+                      controller.selectedRole.value == "Vendor",
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10,
                       Text(
-                        'Confirm Password',
+                        'confirm_password'.tr,
                         style: customLabelStyle,
                       ),
                       heightBox5,
                       RoundTextField(
                         controller: validationController.confirmPasswordController,
-                        hint: '************',
+                        hint: 'password_hint'.tr,
                         prefixIcon: Icon(
                           Icons.lock,
                           color: Colors.grey,
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            controller.isConfirmPasswordVisible.value ? Icons.remove_red_eye : Icons.visibility_off,
+                            controller.isConfirmPasswordVisible.value
+                                ? Icons.remove_red_eye
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             controller.toggleConfirmPasswordVisibility();
@@ -329,43 +324,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       activeColor: AppColors.secondaryColor,
                       isChecked: controller.isChecked.value,
                       onChanged: (bool) {
-                        controller.isChecked.value =
-                        !controller.isChecked.value;
+                        controller.isChecked.value = !controller.isChecked.value;
                       },
                     ),
                     widthBox10,
                     Expanded(
                       child: RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                            text: 'By creating an account, I accept the ',
-                            style: GoogleFonts.poppins(
-                                color: AppColors.blackColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          TextSpan(
-                            text: 'Terms & Conditions',
-                            style: GoogleFonts.poppins(
-                                color: AppColors.secondaryColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          TextSpan(
-                            text: ' & ',
-                            style: GoogleFonts.poppins(
-                                color: AppColors.blackColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          TextSpan(
-                            text: 'Privacy Policy',
-                            style: GoogleFonts.poppins(
-                                color: AppColors.secondaryColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ],),),
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'by_creating_an_account_i_accept_the'.tr,
+                              style: GoogleFonts.poppins(
+                                  color: AppColors.blackColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            TextSpan(
+                              text: 'terms_conditions'.tr,
+                              style: GoogleFonts.poppins(
+                                  color: AppColors.secondaryColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            TextSpan(
+                              text: ' & ',
+                              style: GoogleFonts.poppins(
+                                  color: AppColors.blackColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            TextSpan(
+                              text: 'privacy_policy'.tr,
+                              style: GoogleFonts.poppins(
+                                  color: AppColors.secondaryColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -390,27 +387,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // sign up
                 heightBox10,
-                controller.isChecked.value ?
-                CustomButton(
-                  title: 'Sign Up',
+                controller.isChecked.value
+                    ? CustomButton(
+                  title: 'sign_up'.tr,
                   isLoading: controller.isLoading.value,
                   onTap: () async {
-                    String? validationError = validationController.validateCreateUserAccount();
-                    String? validationVendorError = validationController.validateCreateVendorAccount();
+                    String? validationError =
+                    validationController.validateCreateUserAccount();
+                    String? validationVendorError =
+                    validationController.validateCreateVendorAccount();
 
-                    if(controller.selectedRole.value == 'User'){
-                      if(validationError != null){
-                        Get.snackbar("Error", validationError, snackPosition: SnackPosition.TOP, backgroundColor: Colors.red, colorText: Colors.white);
-                      }else{
+                    if (controller.selectedRole.value == 'User') {
+                      if (validationError != null) {
+                        Get.snackbar(
+                            "error".tr,
+                            validationError,
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white);
+                      } else {
                         try {
-                          // var location = await LocationServiceWithAddress.getCurrentLocationWithAddress();
-                          // print('Latitude: ${location['latitude']}');
-                          // print('Longitude: ${location['longitude']}');
-                          // print('Address: ${location['address']}');
-
                           controller.createUserAccount(
                             fullName: validationController.nameController.text,
-                            phoneNumber: validationController.phoneController.text,
+                            phoneNumber:
+                            validationController.phoneController.text,
                             address: validationController.addressController.text,
                             email: validationController.emailController.text,
                             password: validationController.passwordController.text,
@@ -421,10 +421,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           print('Error: $e');
                         }
                       }
-                    }else{
-                      if(validationVendorError != null){
-                        Get.snackbar("Error", validationVendorError, snackPosition: SnackPosition.TOP, backgroundColor: Colors.red, colorText: Colors.white);
-                      }else{
+                    } else {
+                      if (validationVendorError != null) {
+                        Get.snackbar(
+                            "error".tr,
+                            validationVendorError,
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white);
+                      } else {
                         controller.createVendorAccount(
                           fullName: validationController.nameController.text,
                           phoneNumber: validationController.phoneController.text,
@@ -435,43 +440,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ibanNumber: validationController.ibanNumberController.text,
                         );
                       }
-                      // Get.to(() => EmailVerificationScreen(isVendor: true, email: '',));
                     }
                   },
-                ):
-                CustomButton(
-                    title: 'Sign Up',
-                    onTap: () {},
-                    buttonColor: Colors.transparent,
-                    border: Border.all(color: AppColors.primaryColor),
-                    titleColor: AppColors.primaryColor
-                ),
-
-
-                // sign in with google
-                heightBox10,
-                CustomButton(
-                  title: 'Sign Up',
-                  border: Border.all(color: Color(0xffEDEDED)),
-                  buttonColor: Colors.white,
-                  widget: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        AppImages.googleLogo,
-                        scale: 4,
-                      ),
-                      widthBox10,
-                      CustomText(
-                          title: 'Continue with google',
-                          color: AppColors.blackColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500
-                      ),
-                    ],
-                  ),
+                )
+                    : CustomButton(
+                  title: 'sign_up'.tr,
                   onTap: () {},
+                  buttonColor: Colors.transparent,
+                  border: Border.all(color: AppColors.primaryColor),
+                  titleColor: AppColors.primaryColor,
                 ),
 
                 //already have an account
@@ -481,28 +458,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     RichText(
-                        text: TextSpan(children: [
+                      text: TextSpan(
+                        children: [
                           TextSpan(
-                            text: 'Already have an account? ',
+                            text: 'already_have_an_account'.tr,
                             style: GoogleFonts.poppins(
                                 color: AppColors.blackColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600),
                           ),
                           TextSpan(
-                            text: 'Log In',
+                            text: 'log_in'.tr,
                             style: GoogleFonts.poppins(
                                 color: AppColors.secondaryColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Get.to(
-                                        ()=>SignInScreen()
-                                );
+                                Get.to(() => SignInScreen());
                               },
                           ),
-                        ])),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
 
@@ -515,4 +493,3 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
-

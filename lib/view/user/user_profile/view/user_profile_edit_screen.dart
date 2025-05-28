@@ -20,6 +20,7 @@ class UserProfileEditScreen extends StatelessWidget {
   final String phoneNumber;
   final String gander;
   final String dateOfBirth;
+  final String address;
   final String email;
   final String id;
 
@@ -32,6 +33,7 @@ class UserProfileEditScreen extends StatelessWidget {
     required this.dateOfBirth,
     required this.email,
     required this.id,
+    required this.address,
   });
 
   final UserProfileController userProfileController = Get.put(UserProfileController());
@@ -46,10 +48,11 @@ class UserProfileEditScreen extends StatelessWidget {
     userProfileController.phoneController.text = phoneNumber;
     userProfileController.emailController.text = email;
     userProfileController.dobController.text = dateOfBirth;
+    userProfileController.addressController.text = address;
 
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'Edit profile'),
+      appBar: MainAppBar(title: 'edit_profile'.tr),
       body: SingleChildScrollView(
         padding: bodyPadding,
         child: Column(
@@ -57,7 +60,6 @@ class UserProfileEditScreen extends StatelessWidget {
           children: [
             Center(
               child: Obx(() {
-                // Use the reactive `imagePath` from the controller
                 String? image = myProfileController.imagePath.value;
 
                 return CircleAvatar(
@@ -70,11 +72,9 @@ class UserProfileEditScreen extends StatelessWidget {
                             radius: 70,
                             backgroundColor: Colors.grey,
                             backgroundImage: image != null
-                                ? FileImage(File(image)) // Show selected image
+                                ? FileImage(File(image))
                                 : NetworkImage(
-                              profileImage.isNotEmpty
-                                  ? profileImage
-                                  : placeholderImage,
+                              profileImage.isNotEmpty ? profileImage : placeholderImage,
                             ) as ImageProvider,
                           ),
                         ),
@@ -83,7 +83,7 @@ class UserProfileEditScreen extends StatelessWidget {
                         bottom: 5,
                         right: 5,
                         child: GestureDetector(
-                          onTap: myProfileController.pickImage, // Trigger image picking
+                          onTap: myProfileController.pickImage,
                           child: Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
@@ -101,12 +101,12 @@ class UserProfileEditScreen extends StatelessWidget {
             ),
 
             Text(
-              'Full name',
+              'full_name'.tr,
               style: customLabelStyle,
             ),
             heightBox5,
             RoundTextField(
-              hint: 'Enter your full name',
+              hint: 'enter_your_full_name'.tr,
               controller: userProfileController.nameController,
               prefixIcon: Icon(
                 Icons.person,
@@ -116,12 +116,12 @@ class UserProfileEditScreen extends StatelessWidget {
 
             heightBox10,
             Text(
-              'Number',
+              'number'.tr,
               style: customLabelStyle,
             ),
             heightBox5,
             RoundTextField(
-              hint: 'Enter your phone number',
+              hint: 'enter_your_phone_number'.tr,
               controller: userProfileController.phoneController,
               prefixIcon: Icon(
                 Icons.phone,
@@ -131,7 +131,7 @@ class UserProfileEditScreen extends StatelessWidget {
 
             heightBox10,
             Text(
-              'Gender',
+              'gender'.tr,
               style: customLabelStyle,
             ),
             heightBox5,
@@ -139,37 +139,53 @@ class UserProfileEditScreen extends StatelessWidget {
               selectedValue: myProfileController.gender.value.isNotEmpty
                   ? myProfileController.gender.value
                   : null,
-              items: ['male', "female", 'other'],
+              items: ['male'.tr, "female".tr, 'other'.tr],
               onChanged: (value) {
                 myProfileController.gender.value = value ?? '';
               },
-              hintText: "Gender",
+              hintText: "gender".tr,
             )),
 
             heightBox10,
             Text(
-              'Date of birth',
+              'date_of_birth'.tr,
               style: customLabelStyle,
             ),
             heightBox5,
             RoundTextField(
               onTap: () {
-                userProfileController.pickDate(context); // Trigger date picker
+                userProfileController.pickDate(context);
               },
               controller: userProfileController.dobController,
-              hint: 'Select your date of birth',
+              hint: 'select_your_date_of_birth'.tr,
               prefixIcon: Icon(Icons.calendar_month_outlined),
               readOnly: true,
             ),
 
             heightBox10,
             Text(
-              'Email',
+              'address'.tr,
               style: customLabelStyle,
             ),
             heightBox5,
             RoundTextField(
-              hint: 'Enter your email',
+              hint: 'enter_your_address'.tr,
+              controller: userProfileController.addressController,
+              readOnly: true,
+              prefixIcon: Icon(
+                Icons.location_on,
+                color: Colors.grey,
+              ),
+            ),
+
+            heightBox10,
+            Text(
+              'email'.tr,
+              style: customLabelStyle,
+            ),
+            heightBox5,
+            RoundTextField(
+              hint: 'enter_your_email'.tr,
               controller: userProfileController.emailController,
               readOnly: true,
               prefixIcon: Icon(
@@ -179,24 +195,22 @@ class UserProfileEditScreen extends StatelessWidget {
             ),
 
             heightBox20,
-            Obx(
-                  () => CustomButton(
-                title: "Update",
-                isLoading: myProfileController.isLoading.value,
-                onTap: () {
-                  print('id $id');
-                  myProfileController.updateProfile(
-                    fullName: userProfileController.nameController.text,
-                    dateOfBirth: userProfileController.dobController.text,
-                    gender: myProfileController.gender.value,
-                    phoneNumber: userProfileController.phoneController.text,
-                    email: userProfileController.emailController.text,
-                    id: id,
-                    context: context
-                  );
-                },
-              ),
-            ),
+            Obx(() => CustomButton(
+              title: "update".tr,
+              isLoading: myProfileController.isLoading.value,
+              onTap: () {
+                print('id $id');
+                myProfileController.updateProfile(
+                  fullName: userProfileController.nameController.text,
+                  dateOfBirth: userProfileController.dobController.text,
+                  gender: myProfileController.gender.value,
+                  phoneNumber: userProfileController.phoneController.text,
+                  email: userProfileController.emailController.text,
+                  id: id,
+                  context: context,
+                );
+              },
+            )),
             heightBox20,
           ],
         ),

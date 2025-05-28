@@ -98,7 +98,7 @@ class AddedAllItemHeader extends StatelessWidget {
                       ),
                       heightBox5,
                       CustomButton(
-                        title: 'Add a Menu',
+                        title: 'add_a_menu'.tr,
                         buttonColor: AppColors.secondaryColor,
                         padding_vertical: 8,
                         onTap: () {

@@ -200,7 +200,7 @@ class BookingCardWidget extends StatelessWidget {
                                 ),
                               ),
                               CustomText(
-                                title: 'Get QR Code',
+                                title: 'get_qr_code'.tr,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.black100,
                                 fontSize: 16,

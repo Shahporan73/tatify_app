@@ -54,7 +54,7 @@ class HomeMenuWidget extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                flex: 14,
+                flex: 13,
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
@@ -93,9 +93,11 @@ class HomeMenuWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              widthBox10,
+              SizedBox(
+                width: 3,
+              ),
               Expanded(
-                flex: 10,
+                flex: 11,
                 child: Container(
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
@@ -120,7 +122,9 @@ class HomeMenuWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              widthBox10,
+              SizedBox(
+                width: 3,
+              ),
               Expanded(
                 flex: 10,
                 child: Container(

@@ -118,9 +118,9 @@ class BaseClient {
             Get.snackbar('Error', 'Failed to Token Updated: $e');
           }*/
 
-        // Get.offAll(
-        //       () => SignInScreen(),
-        // );
+        Get.offAll(
+              () => SignInScreen(),
+        );
 
         print("Unauthorized");
         // LocalStorage.removeData(key: accessToken);

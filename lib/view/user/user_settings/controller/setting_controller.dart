@@ -7,7 +7,7 @@ import '../../../../data/local_database/local_data_base.dart';
 import '../../../../data/utils/const_value.dart';
 import '../../../authenticate/view/sign_in_screen.dart';
 
-class SettingController extends GetxController{
+class SettingController extends GetxController {
   var isLoading = false.obs;
   TextEditingController oldPasswordC = TextEditingController();
   TextEditingController newPasswordC = TextEditingController();
@@ -27,21 +27,21 @@ class SettingController extends GetxController{
 
     // Old password validation
     if (oldPasswordC.text.isEmpty) {
-      oldPasswordError.value = 'Please enter your old password';
+      oldPasswordError.value = 'please_enter_old_password'.tr;
     }
 
     // New password validation
     if (newPasswordC.text.isEmpty) {
-      newPasswordError.value = 'Please enter your new password';
+      newPasswordError.value = 'please_enter_new_password'.tr;
     } else if (newPasswordC.text.length < 6) {
-      newPasswordError.value = 'Password must be at least 6 characters';
+      newPasswordError.value = 'password_min_6_chars'.tr;
     }
 
     // Confirm password validation
     if (confirmPasswordC.text.isEmpty) {
-      confirmPasswordError.value = 'Please confirm your new password';
+      confirmPasswordError.value = 'please_confirm_new_password'.tr;
     } else if (confirmPasswordC.text != newPasswordC.text) {
-      confirmPasswordError.value = 'Passwords do not match';
+      confirmPasswordError.value = 'passwords_do_not_match'.tr;
     }
   }
 
@@ -64,13 +64,14 @@ class SettingController extends GetxController{
         ),
       );
 
-      if(responseBody != null && responseBody['success'] == true){
-        Get.snackbar('Success', 'Password successfully updated');
-        Navigator.of(context).pop();
+      if (responseBody != null && responseBody['success'] == true) {
+        Get.snackbar('success'.tr, 'password_updated_successfully'.tr);
+        LocalStorage.removeData(key: accessToken);
+        Get.offAll(() => SignInScreen());
       }
-    }catch(e){
+    } catch (e) {
       print('Change password error $e');
-    }finally{
+    } finally {
       isLoading.value = false;
     }
   }
@@ -89,19 +90,18 @@ class SettingController extends GetxController{
         ),
       );
 
-      if(responseBody != null && responseBody['success'] == true){
-        Get.snackbar('Success', 'Account successfully deleted');
+      if (responseBody != null && responseBody['success'] == true) {
+        Get.snackbar('success'.tr, 'account_deleted_successfully'.tr);
         Navigator.of(context).pop();
         LocalStorage.removeAllData();
-        Get.offAll(()=> SignInScreen());
+        Get.offAll(() => SignInScreen());
       }
-    }catch(e){
+    } catch (e) {
       print('Delete account error $e');
-    }finally{
+    } finally {
       isLoading.value = false;
     }
   }
-
 
   @override
   void onClose() {
@@ -111,6 +111,4 @@ class SettingController extends GetxController{
     confirmPasswordC.dispose();
     super.onClose();
   }
-
-
 }

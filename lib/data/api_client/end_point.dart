@@ -2,8 +2,11 @@
 class EndPoint {
   static const String MAP_KEY = 'AIzaSyAYU95zhhNeRjmDdr2AckdfQxz2zm9HHNQ';
 
+  // local baseURl
+  // static const String BASE_URL = 'http://192.168.10.180:5200/api/v1';
 
-  static const String BASE_URL = 'http://192.168.10.180:5200/api/v1';
+  // live baseURl
+  static const String BASE_URL = 'https://taste-point.com/api/v1';
 
   // auth endpoint
   static const String createUserURL = '$BASE_URL/user/create-customer';
@@ -103,6 +106,7 @@ class EndPoint {
   static String getTotalCommissionURL({required String year}) => '$BASE_URL/overview/vendor-commission?year=$year';
 
 //   payment
-  static const String paymentURL = '$BASE_URL/subscription/pay/68319b404105371904e806d6';
+  static const String getSubscriptionURL = '$BASE_URL/subscription';
+  static String paymentURL({required String subscriptionId}) => '$BASE_URL/subscription/pay/$subscriptionId';
 
 }

@@ -7,6 +7,7 @@ import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
 import 'package:tatify_app/res/common_widget/RoundTextField.dart';
 import 'package:tatify_app/res/common_widget/custom_button.dart';
+import 'package:tatify_app/res/common_widget/custom_radio_button.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/common_widget/main_app_bar.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
@@ -65,7 +66,7 @@ class EditItemScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(
-        title: 'Edit a menu for your customers',
+        title: 'edit_a_menu_for_your_customers'.tr,
         backgroundColor: AppColors.bgColor,
       ),
       body: SingleChildScrollView(
@@ -74,18 +75,17 @@ class EditItemScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Menu Name',
+              'menu_name'.tr,
               style: customLabelStyle,
             ),
             heightBox5,
             RoundTextField(
               controller: manuNameC,
-              hint: 'Enter menu name',
+              hint: 'enter_menu_name'.tr,
             ),
             heightBox10,
-
             Text(
-              'Menu description',
+              'menu_description'.tr,
               style: customLabelStyle,
             ),
             RoundTextField(
@@ -93,7 +93,7 @@ class EditItemScreen extends StatelessWidget {
               maxLine: 5,
               height: height / 8,
               vertical_padding: 5,
-              hint: 'Enter menu  description',
+              hint: 'enter_menu_description'.tr,
             ),
             heightBox10,
             Row(
@@ -106,7 +106,7 @@ class EditItemScreen extends StatelessWidget {
                 Expanded(
                   child: Center(
                       child: CustomText(
-                    title: 'Pricing',
+                    title: 'pricing'.tr,
                     fontWeight: FontWeight.w400,
                     color: AppColors.whiteDarker,
                   )),
@@ -124,7 +124,7 @@ class EditItemScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomText(
-                        title: 'Standard price',
+                        title: 'standard_price'.tr,
                         fontWeight: FontWeight.w400,
                         color: AppColors.whiteDarker,
                       ),
@@ -136,6 +136,7 @@ class EditItemScreen extends StatelessWidget {
                       RoundTextField(
                         controller: standardPriceC,
                         hint: '',
+                        keyboardType: TextInputType.number,
                         borderRadius: 25,
                         filled: true,
                         fillColor: Color(0xffD9D9D9),
@@ -151,7 +152,7 @@ class EditItemScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomText(
-                        title: 'Discount price',
+                        title: 'discount_price'.tr,
                         fontWeight: FontWeight.w400,
                         color: AppColors.whiteDarker,
                       ),
@@ -163,6 +164,7 @@ class EditItemScreen extends StatelessWidget {
                       RoundTextField(
                         controller: discountPriceC,
                         hint: '',
+                        keyboardType: TextInputType.number,
                         borderRadius: 25,
                         filled: true,
                         fillColor: Color(0xffD9D9D9),
@@ -176,7 +178,7 @@ class EditItemScreen extends StatelessWidget {
             heightBox20,
             Center(
               child: CustomText(
-                title: 'Offer Days',
+                title: 'offer_days'.tr,
                 fontWeight: FontWeight.w500,
                 color: AppColors.whiteDarker,
               ),
@@ -217,23 +219,47 @@ class EditItemScreen extends StatelessWidget {
                 }).toList(),
               ),
             ),
-            heightBox20,
+            heightBox10,
+
+
             Obx(
-              ()=> CustomButton(
-                  title: 'Update',
-                  isLoading: controller.isLoading.value,
-                  onTap: () {
-                    controller.updateItem(
-                        context: context,
-                        menuId: menuId,
-                        menuName: manuNameC.text,
-                        menuDescription: menuDesC.text,
-                        standardPrice: standardPriceC.text,
-                        discountPrice: discountPriceC.text,
-                    );
-                  },
+              ()=> Row(
+                children: [
+                  CustomText(
+                    title: 'Item Status',
+                    fontWeight: FontWeight.w500,
+                  ),
+                  CustomRadioButton(
+                    options: ['on-going', 'closed'],
+                    selectedValue: controller.itemStatus.value,
+                    onChanged: (value) {
+                      controller.updateItemStatus(value);
+                      print(controller.itemStatus.value);
+                    },
+                  )
+                ],
               ),
             ),
+
+
+            heightBox20,
+            Obx(
+              () => CustomButton(
+                title: 'update',
+                isLoading: controller.isLoading.value,
+                onTap: () {
+                  controller.updateItem(
+                    context: context,
+                    menuId: menuId,
+                    menuName: manuNameC.text,
+                    menuDescription: menuDesC.text,
+                    standardPrice: standardPriceC.text,
+                    discountPrice: discountPriceC.text,
+                  );
+                },
+              ),
+            ),
+            heightBox20,
           ],
         ),
       ),

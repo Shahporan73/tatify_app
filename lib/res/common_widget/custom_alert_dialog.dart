@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tatify_app/data/utils/custom_loader.dart';
 import '../app_colors/App_Colors.dart';
 import '../custom_style/custom_size.dart';
 import 'custom_button.dart';
+import 'dialog/show_full_screen_image_dialog.dart';
 
 class CustomAlertDialog {
 
@@ -15,14 +17,24 @@ class CustomAlertDialog {
     required String NegativebuttonText,
     required String PositivvebuttonText,
     required VoidCallback onPositiveButtonPressed,
-    required VoidCallback onNegativeButtonPressed
-}) {
+    required VoidCallback onNegativeButtonPressed,
+    RxBool? isLoading, // Optional RxBool
+    bool loadingFallback = false, // fallback for non-reactive usage
+  }) {
     return showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          content: Column(
+        Widget content() {
+          final bool loading = isLoading?.value ?? loadingFallback;
+
+          if (loading) {
+            return SizedBox(
+              height: 100,
+              child: Center(child: CustomLoader(size: 32)),
+            );
+          }
+
+          return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -33,6 +45,7 @@ class CustomAlertDialog {
                   fontSize: 20,
                 ),
               ),
+              const SizedBox(height: 8),
               Text(
                 message,
                 textAlign: TextAlign.center,
@@ -41,34 +54,48 @@ class CustomAlertDialog {
                   fontSize: 14,
                 ),
               ),
-              SizedBox(height: 14), // Replacing heightBox14 with SizedBox
+              const SizedBox(height: 14),
               Row(
                 children: [
                   Expanded(
                     child: CustomButton(
-                        title: PositivvebuttonText,
-                        padding_vertical: 10,
-                        fontSize: 14,
-                        onTap: onPositiveButtonPressed
+                      title: PositivvebuttonText,
+                      padding_vertical: 10,
+                      fontSize: 14,
+                      onTap: onPositiveButtonPressed,
                     ),
                   ),
-                  widthBox10,
+                  const SizedBox(width: 10),
                   Expanded(
                     child: CustomButton(
-                        title: NegativebuttonText,
-                        padding_vertical: 10,
-                        buttonColor: Colors.transparent,
-                        titleColor: AppColors.darkPink,
-                        border: Border.all(color: AppColors.darkPink),
-                        fontSize: 14,
-                        onTap: onNegativeButtonPressed
+                      title: NegativebuttonText,
+                      padding_vertical: 10,
+                      buttonColor: Colors.transparent,
+                      titleColor: AppColors.darkPink,
+                      border: Border.all(color: AppColors.darkPink),
+                      fontSize: 14,
+                      onTap: onNegativeButtonPressed,
                     ),
                   ),
                 ],
-              )
+              ),
             ],
-          ),
-        );
+          );
+        }
+
+        if (isLoading != null) {
+          // Reactive mode: wrap content in Obx to listen to RxBool changes
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            content: Obx(content),
+          );
+        } else {
+          // Non-reactive mode: just show once with bool fallback
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            content: content(),
+          );
+        }
       },
     );
   }
@@ -184,4 +211,34 @@ class CustomAlertDialog {
       },
     );
   }
+
+  void showLoaderDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 10),
+              Text("Please wait..."),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showFullScreenImageDialog({required BuildContext context, required String imageUrl}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ShowFullScreenImageDialog(imageUrl: imageUrl);
+      },
+    );
+  }
+
 }

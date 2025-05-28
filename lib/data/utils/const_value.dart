@@ -11,3 +11,7 @@ const saveRememberMe = 'saveRememberMe';
 
 const vendorId = 'vendorId';
 const userType = 'userType';
+
+const language = 'Language';
+
+const restaurantId = 'restaurantId';

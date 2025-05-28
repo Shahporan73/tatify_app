@@ -219,7 +219,7 @@ class RequestRedeemWidget extends StatelessWidget {
                           size: 16,
                         ),
                         widthBox10,
-                        CustomText(title: 'Scan to redeem',
+                        CustomText(title: 'scan_to_redeem'.tr,
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                             color: AppColors.black100

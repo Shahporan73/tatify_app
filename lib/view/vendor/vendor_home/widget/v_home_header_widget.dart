@@ -41,13 +41,13 @@ class VHomeHeaderWidget extends StatelessWidget {
             height: Get.height / 12,
           ),
           CustomText(
-              title: 'Hi, $userName',
+              title: '${'hi'.tr} $userName',
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.w500
           ),
           CustomText(
-              title: 'Welcome to Taste Point ',
+              title: 'welcome_to_taste_hub'.tr,
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w500),

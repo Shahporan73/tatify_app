@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tatify_app/data/local_database/local_data_base.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/RoundTextField.dart';
 import 'package:tatify_app/res/common_widget/custom_button.dart';
@@ -15,6 +16,7 @@ import 'package:tatify_app/view/authenticate/controller/sign_in_controller.dart'
 import 'package:tatify_app/view/authenticate/view/sign_up_screen.dart';
 import 'package:tatify_app/view/user/user_home/view/home_dashboard.dart';
 
+import '../../../data/utils/const_value.dart';
 import '../../../res/app_images/App_images.dart';
 import 'email_verification_screen.dart';
 import 'forgot_sheet_screen/forgot_password_sheet.dart';
@@ -28,6 +30,7 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+    print('restaurant id ${LocalStorage.getData(key: restaurantId)}');
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       body: Container(
@@ -41,8 +44,7 @@ class SignInScreen extends StatelessWidget {
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-          )
-        ),
+            )),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: bodyPadding,
@@ -52,7 +54,7 @@ class SignInScreen extends StatelessWidget {
                 children: [
                   Center(
                     child: CustomText(
-                      title: 'Log In',
+                      title: 'log_in'.tr,
                       fontSize: 30,
                       fontWeight: FontWeight.w600,
                       color: AppColors.secondaryColor,
@@ -67,13 +69,13 @@ class SignInScreen extends StatelessWidget {
 
                   heightBox10,
                   Text(
-                    'Email',
+                    'email'.tr,
                     style: customLabelStyle,
                   ),
                   heightBox5,
                   RoundTextField(
                     controller: controller.emailC,
-                    hint: 'Enter your email',
+                    hint: 'enter_your_email'.tr,
                     prefixIcon: Icon(
                       Icons.email,
                       color: Colors.grey,
@@ -82,20 +84,22 @@ class SignInScreen extends StatelessWidget {
 
                   heightBox10,
                   Text(
-                    'Password',
+                    'password'.tr,
                     style: customLabelStyle,
                   ),
                   heightBox5,
                   RoundTextField(
                     controller: controller.passC,
-                    hint: '************',
+                    hint: 'password_hint'.tr,
                     prefixIcon: Icon(
                       Icons.lock,
                       color: Colors.grey,
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        controller.isPasswordVisible.value ? Icons.remove_red_eye : Icons.visibility_off,
+                        controller.isPasswordVisible.value
+                            ? Icons.remove_red_eye
+                            : Icons.visibility_off,
                       ),
                       onPressed: () {
                         controller.togglePasswordVisibility();
@@ -113,14 +117,15 @@ class SignInScreen extends StatelessWidget {
                           activeColor: AppColors.primaryColor,
                           value: controller.isSelected.value,
                           onChanged: (bool? value) {
-                            controller.isSelected.value = !controller.isSelected.value;
+                            controller.isSelected.value =
+                            !controller.isSelected.value;
                             controller.isRemembered();
                           },
                         ),
                       ),
                       widthBox8,
                       Text(
-                        'Remember me',
+                        'remember_me'.tr,
                         style: TextStyle(color: Colors.black),
                       ),
                       Spacer(),
@@ -131,13 +136,14 @@ class SignInScreen extends StatelessWidget {
                             isScrollControlled: true,
                             isDismissible: false,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20)),
                             ),
                             builder: (_) => ForgotPasswordSheet(),
                           );
                         },
                         child: Text(
-                          'Forgot Password',
+                          'forgot_password'.tr,
                           style: TextStyle(
                             color: AppColors.primaryColor,
                             fontWeight: FontWeight.w500,
@@ -147,20 +153,24 @@ class SignInScreen extends StatelessWidget {
                     ],
                   ),
 
-                  // sign up
+                  // sign up button
                   heightBox10,
                   Obx(
-                    ()=> CustomButton(
-                      title: 'Log In',
+                        () => CustomButton(
+                      title: 'log_in'.tr,
                       isLoading: controller.isLoading.value,
                       onTap: () {
-                        // controller.checkUser();
-
                         String? validationError = controller.validateLogin();
 
-                        if(validationError != null){
-                          Get.snackbar("Error", validationError, snackPosition: SnackPosition.TOP, backgroundColor: Colors.red, colorText: Colors.white);
-                        }else{
+                        if (validationError != null) {
+                          Get.snackbar(
+                            'error'.tr,
+                            validationError,
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                        } else {
                           controller.loginMethod();
                           controller.checkUser();
                         }
@@ -168,61 +178,36 @@ class SignInScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // sign in with google
-                  heightBox10,
-                  CustomButton(
-                    title: 'Sign Up',
-                    border: Border.all(color: Color(0xffEDEDED)),
-                    buttonColor: Colors.transparent,
-                    widget: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          AppImages.googleLogo,
-                          scale: 4,
-                        ),
-                        widthBox10,
-                        CustomText(
-                            title: 'Continue with google',
-                            color: AppColors.blackColor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500
-                        ),
-                      ],
-                    ),
-                    onTap: () {},
-                  ),
-
-                  //already have an account
+                  //already have an account text with sign up link
                   heightBox10,
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RichText(
-                          text: TextSpan(children: [
-                            TextSpan(
-                              text: 'Don\'t have an account? ',
-                              style: GoogleFonts.poppins(
-                                  color: AppColors.blackColor,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600),
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: 'dont_have_account'.tr,
+                            style: GoogleFonts.poppins(
+                              color: AppColors.blackColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
                             ),
-                            TextSpan(
-                              text: 'Sign Up',
-                              style: GoogleFonts.poppins(
-                                  color: AppColors.secondaryColor,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Get.to(
-                                          ()=> SignUpScreen()
-                                  );
-                                },
+                          ),
+                          TextSpan(
+                            text: 'sign_up'.tr,
+                            style: GoogleFonts.poppins(
+                              color: AppColors.secondaryColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
-                          ])),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Get.to(() => SignUpScreen());
+                              },
+                          ),
+                        ]),
+                      ),
                     ],
                   ),
 

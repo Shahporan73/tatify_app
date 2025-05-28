@@ -45,12 +45,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'Notification'),
+      appBar: MainAppBar(title: 'notification'.tr),
       body: Obx(() {
         if (controller.isLoading.value && controller.notificationList.isEmpty) {
           return CustomLoader();
         } else if (controller.notificationList.isEmpty) {
-          return Center(child: Text('No Notification'));
+          return Center(child: Text('no_notification'.tr));
         } else {
           return RefreshIndicator(
             color: AppColors.primaryColor,

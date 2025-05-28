@@ -51,7 +51,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         title: CustomText(
-          title: "Payment",
+          title: "payment".tr,
           fontSize: 15,
           color: Colors.white,
         ),

@@ -17,15 +17,14 @@ class RedeemSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(
-        Duration(seconds: 3),() {
-
-          if(isUser == true) {
-            Get.offAll(HomeDashboard());
-          }else {
-            Get.offAll(VendorHomeDashboard());
-          }
-
-        },
+      Duration(seconds: 3),
+          () {
+        if (isUser == true) {
+          Get.offAll(HomeDashboard());
+        } else {
+          Get.offAll(VendorHomeDashboard());
+        }
+      },
     );
     return Scaffold(
       backgroundColor: AppColors.bgColor,
@@ -33,20 +32,24 @@ class RedeemSuccessScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-
           LottieLoaderWidget(
             repeat: false,
-              lottieAssetPath: AppImages.successAnim,
+            lottieAssetPath: AppImages.successAnim,
           ),
-          
-          CustomText(title: 'Deal Redeemed!', fontSize: 22, fontWeight: FontWeight.w600,),
+          CustomText(
+            title: 'deal_redeemed'.tr,
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+          ),
           heightBox10,
-          Padding(padding: EdgeInsets.symmetric(horizontal: 30),
-          child: CustomText(title: 'Your Redeemed Has Been Successfully Completed.',
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            textAlign: TextAlign.center,
-          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: CustomText(
+              title: 'redeem_success_message'.tr,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),

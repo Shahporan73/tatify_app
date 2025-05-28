@@ -1,0 +1,2 @@
+C:/Users/riadk/StudioProjects/tatify_app/android/app/.cxx/RelWithDebInfo/4z5c4ar2/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/riadk/StudioProjects/tatify_app/android/app/.cxx/RelWithDebInfo/4z5c4ar2/arm64-v8a/CMakeFiles/rebuild_cache.dir

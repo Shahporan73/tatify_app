@@ -44,7 +44,7 @@ class _ForgotPasswordSheetState extends State<ForgotPasswordSheet> {
                 children: [
                   heightBox10,
                   CustomText(
-                    title: 'Forgot password',
+                    title: 'forgot_password'.tr,
                     style: GoogleFonts.rubik(
                       fontSize: 24,
                       fontWeight: FontWeight.w500,
@@ -53,8 +53,7 @@ class _ForgotPasswordSheetState extends State<ForgotPasswordSheet> {
                   ),
                   heightBox20,
                   CustomText(
-                    title:
-                        'Enter your email for the verification process, we will send 4 digits code to your email.',
+                    title: 'enter_email_for_verification_process'.tr,
                     style: GoogleFonts.rubik(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -64,19 +63,20 @@ class _ForgotPasswordSheetState extends State<ForgotPasswordSheet> {
                   heightBox20,
                   RoundTextField(
                     controller: controller.emailController,
-                    hint: 'Enter your email',
+                    hint: 'enter_your_email'.tr,
                     prefixIcon: Icon(Icons.email_outlined),
                   ),
                   heightBox20,
                   Obx(
-                    () => CustomButton(
-                      title: 'Send',
+                        () => CustomButton(
+                      title: 'send'.tr,
                       isLoading: controller.isLoading.value,
                       onTap: () {
                         if (controller.emailController.text.isEmpty) {
-                          Get.rawSnackbar(message: 'Please enter email');
-                        } else if (controller.emailController.text.contains('@') ==false) {
-                          Get.rawSnackbar(message: 'Please enter valid email');
+                          Get.rawSnackbar(message: 'please_enter_email'.tr);
+                        } else if (controller.emailController.text.contains('@') ==
+                            false) {
+                          Get.rawSnackbar(message: 'please_enter_valid_email'.tr);
                         } else {
                           controller.forgotPassword(context: context);
                         }

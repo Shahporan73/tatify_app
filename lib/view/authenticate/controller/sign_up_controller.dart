@@ -46,7 +46,7 @@ class SignUpController extends GetxController {
       Map<String, dynamic> body = {
         'name': fullName,
         'phoneNumber': phoneNumber,
-        // 'address': address,
+        'address': address,
         'email': email,
         'location': {
           'coordinates': [longitude, latitude],

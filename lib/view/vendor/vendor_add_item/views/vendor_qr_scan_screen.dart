@@ -80,7 +80,7 @@ class _VendorQrScanScreenState extends State<VendorQrScanScreen>
     final double scanBoxSize = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('QR Scanner')),
+      appBar: AppBar(title: Text('qr_scanner'.tr)),
       body: Padding(
         padding: bodyPadding,
         child: Stack(

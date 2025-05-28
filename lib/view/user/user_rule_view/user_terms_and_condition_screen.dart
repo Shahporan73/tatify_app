@@ -22,7 +22,7 @@ class UserTermsAndConditionScreen extends StatelessWidget {
     final RuleController controller = Get.put(RuleController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'Terms and condition'),
+      appBar: MainAppBar(title: 'terms_and_condition'.tr),
       body: Obx(
             ()=> SingleChildScrollView(
           padding: bodyPadding,

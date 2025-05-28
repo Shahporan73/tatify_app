@@ -48,7 +48,7 @@ class VendorHistoryScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: MainAppBar(
-        title: 'History',
+        title: 'history'.tr,
         backgroundColor: AppColors.bgColor,
       ),
       body: RefreshIndicator(
@@ -66,7 +66,7 @@ class VendorHistoryScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       Spacer(),
-                      CustomText(title: 'Filter', fontSize: 16, fontWeight: FontWeight.w600,),
+                      CustomText(title: 'filter'.tr, fontSize: 16, fontWeight: FontWeight.w600,),
                       IconButton(
                         onPressed: () {
                           _selectDate(context, controller);
@@ -82,7 +82,7 @@ class VendorHistoryScreen extends StatelessWidget {
                 ),
                 Expanded(
                     child: controller.isLoading.value ? CustomLoader() :
-                    controller.getBookRedeemList.isEmpty ? EmptyRestaurantView(title: 'No History Found',) :
+                    controller.getBookRedeemList.isEmpty ? EmptyRestaurantView(title: 'no_history_found'.tr,) :
                     ListView.builder(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,

@@ -8,6 +8,7 @@ import 'package:tatify_app/res/app_const/app_const.dart';
 import 'package:tatify_app/res/common_widget/custom_alert_dialog.dart';
 import 'package:tatify_app/res/common_widget/custom_app_bar.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
+import 'package:tatify_app/res/common_widget/dialog/show_full_screen_image_dialog.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/view/authenticate/view/sign_in_screen.dart';
 import 'package:tatify_app/view/user/user_profile/controller/my_profile_controller.dart';
@@ -31,8 +32,6 @@ class UserProfileScreen extends StatelessWidget {
       backgroundColor: AppColors.bgColor,
       body: Stack(
         children: [
-
-
           // Header image
           Positioned(
             top: 0,
@@ -42,31 +41,43 @@ class UserProfileScreen extends StatelessWidget {
               height: height / 2,
               padding: EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
               decoration: BoxDecoration(
-                color: AppColors.secondaryColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(25),
-                  bottomRight: Radius.circular(25)
-                )
-              ),
+                  color: AppColors.secondaryColor,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25))),
               child: Obx(
-                ()=> Column(
+                    () => Column(
                   children: [
-                    CustomAppBar(appBarName: 'Profile', titleColor: Colors.white, widget: SizedBox(),),
+                    CustomAppBar(
+                      appBarName: 'profile'.tr,
+                      titleColor: Colors.white,
+                      widget: SizedBox(),
+                    ),
                     heightBox20,
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundColor: AppColors.primaryColor,
-                      backgroundImage: NetworkImage(
-                        myProfileController.profileImage.value.isNotEmpty ? myProfileController.profileImage.value :
-                        placeholderImage,
+                    InkWell(
+                      onTap: () {
+                        CustomAlertDialog().showFullScreenImageDialog(context: context, imageUrl: myProfileController.profileImage.value.isEmpty
+                            ? placeholderImage :
+                        myProfileController.profileImage.value);
+                      },
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundColor: AppColors.primaryColor,
+                        backgroundImage: NetworkImage(
+                          myProfileController.profileImage.value.isNotEmpty
+                              ? myProfileController.profileImage.value
+                              : placeholderImage,
+                        ),
                       ),
                     ),
                     heightBox10,
                     CustomText(
-                      title: myProfileController.fullName.value.isNotEmpty ?
-                      myProfileController.fullName.value : 'User Name',
+                      title: myProfileController.fullName.value.isNotEmpty
+                          ? myProfileController.fullName.value
+                          : 'user_name'.tr,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,fontSize: 18,
+                      color: Colors.white,
+                      fontSize: 18,
                     )
                   ],
                 ),
@@ -83,77 +94,69 @@ class UserProfileScreen extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                    offset: Offset(0, 1)
-                  )
-                ]
-              ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset: Offset(0, 1))
+                  ]),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     ProfileItemWidget(
                         icon: Icons.person,
-                        title: 'Personal Information',
-                        onTap: (){
+                        title: 'personal_information'.tr,
+                        onTap: () {
                           Get.to(() => UserPersonalInformationScreen());
-                        }
-                    ),
+                        }),
                     ProfileItemWidget(
                         icon: Icons.settings,
-                        title: 'Settings',
-                        onTap: (){
+                        title: 'settings'.tr,
+                        onTap: () {
                           Get.to(() => UserSettingScreen());
-                        }
-                    ),
-
+                        }),
                     ProfileItemWidget(
                         icon: Icons.description,
-                        title: 'Terms of Services',
-                        onTap: (){
+                        title: 'terms_of_services'.tr,
+                        onTap: () {
                           Get.to(() => UserTermsAndConditionScreen());
-                        }
-                    ),
+                        }),
                     ProfileItemWidget(
                         icon: Icons.privacy_tip,
-                        title: 'Privacy Policy',
-                        onTap: (){
+                        title: 'privacy_policy'.tr,
+                        onTap: () {
                           Get.to(() => UserPrivacyPolicyScreen());
-                        }
-                    ),
+                        }),
                     ProfileItemWidget(
                         icon: Icons.info_outline,
-                        title: 'About Us',
-                        onTap: (){
+                        title: 'about_us'.tr,
+                        onTap: () {
                           Get.to(() => UserSupportScreen());
-                        }
-                    ),
+                        }),
                     ProfileItemWidget(
-                        icon: Icons.logout,
-                        title: 'Logout',
-                        iconColor: Colors.red,
-                        titleColor: Colors.red,
-                        onTap: (){
-                          CustomAlertDialog().customAlert(
-                              context: context,
-                              title: 'Want to logout?',
-                              message: 'Are your sure you want to logout?',
-                              NegativebuttonText: "Cancel",
-                              PositivvebuttonText: "Logout",
-                              onPositiveButtonPressed: () {
-                                LocalStorage.removeData(key: accessToken);
-                                Get.offAll(() => SignInScreen());
-                              },
-                              onNegativeButtonPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                          );
-                        },
+                      icon: Icons.logout,
+                      title: 'logout'.tr,
+                      iconColor: Colors.red,
+                      titleColor: Colors.red,
+                      onTap: () {
+                        CustomAlertDialog().customAlert(
+                          context: context,
+                          title: 'want_to_logout'.tr,
+                          message: 'are_you_sure_want_to_logout'.tr,
+                          NegativebuttonText: "cancel".tr,
+                          PositivvebuttonText: "logout".tr,
+                          onPositiveButtonPressed: () {
+                            LocalStorage.removeData(key: accessToken);
+                            Get.offAll(() => SignInScreen());
+                          },
+                          onNegativeButtonPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      },
                       isDivider: true,
                     ),
                   ],

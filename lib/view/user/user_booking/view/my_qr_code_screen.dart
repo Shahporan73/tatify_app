@@ -11,7 +11,7 @@ class MyQrCodeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: MainAppBar(title: 'QR Code'),
+      appBar: MainAppBar(title: 'qr_code'.tr),
       body: Center(
         child: QrImageView(
           data: foodId,

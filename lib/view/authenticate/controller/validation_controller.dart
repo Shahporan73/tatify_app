@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ValidationController extends GetxController{
-
-
+class ValidationController extends GetxController {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
@@ -12,102 +10,89 @@ class ValidationController extends GetxController{
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-
   final otpController = TextEditingController();
 
   final oldPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
 
-
   final bankNameController = TextEditingController();
   final holderNameController = TextEditingController();
   final ibanNumberController = TextEditingController();
 
-
-
-
   String? validateCreateUserAccount() {
-    // Check if all fields are filled
     if (nameController.text.isEmpty) {
-      return "Name is required";
+      return "name_is_required".tr;
     }
 
     if (phoneController.text.isEmpty) {
-      return "Phone number is required";
+      return "phone_number_is_required".tr;
     }
-    // else if (phoneController.text.length < 10) {
-    //   return "Enter a valid phone number";
-    // }
+
     if (addressController.text.isEmpty) {
-      return "Address is required";
+      return "address_is_required".tr;
     }
 
     if (emailController.text.isEmpty) {
-      return "Email is required";
+      return "email_is_required".tr;
     } else if (!GetUtils.isEmail(emailController.text)) {
-      return "Enter a valid email address";
+      return "enter_valid_email_address".tr;
     }
 
     if (passwordController.text.isEmpty) {
-      return "Password is required";
+      return "password_is_required".tr;
     } else if (passwordController.text.length < 6) {
-      return "Password should be at least 6 characters long";
+      return "password_minimum_6_chars".tr;
     }
 
     if (confirmPasswordController.text.isEmpty) {
-      return "Confirm password is required";
+      return "confirm_password_is_required".tr;
     } else if (passwordController.text != confirmPasswordController.text) {
-      return "Passwords do not match";
+      return "passwords_do_not_match".tr;
     }
-    // All validations passed
+
     return null;
   }
 
   String? validateCreateVendorAccount() {
-    // Check if all fields are filled
     if (nameController.text.isEmpty) {
-      return "Name is required";
+      return "name_is_required".tr;
     }
 
     if (bankNameController.text.isEmpty) {
-      return "Bank name is required";
+      return "bank_name_is_required".tr;
     }
     if (holderNameController.text.isEmpty) {
-      return "Holder name is required";
+      return "holder_name_is_required".tr;
     }
     if (ibanNumberController.text.isEmpty) {
-      return "IBAN number is required";
+      return "iban_number_is_required".tr;
     }
-    if(ibanNumberController.text.trim().length < 15 || ibanNumberController.text.trim().length > 34){
-      return "IBAN length must be between 15 and 34 characters";
+    if (ibanNumberController.text.trim().length < 15 || ibanNumberController.text.trim().length > 34) {
+      return "iban_length_between_15_34".tr;
     }
 
     if (phoneController.text.isEmpty) {
-      return "Phone number is required";
+      return "phone_number_is_required".tr;
     }
-    // else if (phoneController.text.length < 10) {
-    //   return "Enter a valid phone number";
-    // }
 
     if (emailController.text.isEmpty) {
-      return "Email is required";
+      return "email_is_required".tr;
     } else if (!GetUtils.isEmail(emailController.text)) {
-      return "Enter a valid email address";
+      return "enter_valid_email_address".tr;
     }
 
     if (passwordController.text.isEmpty) {
-      return "Password is required";
+      return "password_is_required".tr;
     } else if (passwordController.text.length < 6) {
-      return "Password should be at least 6 characters long";
+      return "password_minimum_6_chars".tr;
     }
 
     if (confirmPasswordController.text.isEmpty) {
-      return "Confirm password is required";
+      return "confirm_password_is_required".tr;
     } else if (passwordController.text != confirmPasswordController.text) {
-      return "Passwords do not match";
+      return "passwords_do_not_match".tr;
     }
-    // All validations passed
+
     return null;
   }
-
 }

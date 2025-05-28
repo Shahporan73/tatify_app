@@ -10,18 +10,12 @@ import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/app_const/app_const.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
 import 'package:tatify_app/res/common_widget/RoundTextField.dart';
-import 'package:tatify_app/res/common_widget/country_code_picker.dart';
 import 'package:tatify_app/res/common_widget/custom_button.dart';
-import 'package:tatify_app/res/common_widget/custom_checkbox.dart';
 import 'package:tatify_app/res/common_widget/custom_drop_down_widget.dart';
-import 'package:tatify_app/res/common_widget/custom_radio_button.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/common_widget/main_app_bar.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/res/custom_style/custom_style.dart';
-import 'package:tatify_app/view/authenticate/controller/sign_up_controller.dart';
-import 'package:tatify_app/view/authenticate/view/email_verification_screen.dart';
-import 'package:tatify_app/view/authenticate/view/sign_in_screen.dart';
 import 'package:tatify_app/view/user/user_profile/controller/profile_controller.dart';
 
 import '../../../user/user_profile/controller/my_profile_controller.dart';
@@ -35,34 +29,35 @@ class VendorProfileEditScreen extends StatelessWidget {
   final String dateOfBirth;
   final String email;
   final String id;
-  VendorProfileEditScreen(
-      {super.key,
-      required this.profileImage,
-      required this.fullName,
-      required this.phoneNumber,
-      required this.gander,
-      required this.dateOfBirth,
-      required this.email,
-      required this.id});
-
+  VendorProfileEditScreen({
+    super.key,
+    required this.profileImage,
+    required this.fullName,
+    required this.phoneNumber,
+    required this.gander,
+    required this.dateOfBirth,
+    required this.email,
+    required this.id,
+  });
 
   final UserProfileController userProfileController = Get.put(UserProfileController());
   final VendorProfileController myProfileController = Get.put(VendorProfileController());
-
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
 
+    // Initialize fields with passed data on each build (consider better initialization in real app)
     userProfileController.nameController.text = fullName;
     userProfileController.phoneController.text = phoneNumber;
     userProfileController.emailController.text = email;
     userProfileController.dobController.text = dateOfBirth;
+    myProfileController.gender.value = gander;
 
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'Edit profile'),
+      appBar: MainAppBar(title: 'edit_profile'.tr),
       body: SingleChildScrollView(
         padding: bodyPadding,
         child: Column(
@@ -70,9 +65,7 @@ class VendorProfileEditScreen extends StatelessWidget {
           children: [
             Center(
               child: Obx(() {
-                // Use the reactive `imagePath` from the controller
                 String? image = myProfileController.imagePath.value;
-
                 return CircleAvatar(
                   radius: 70,
                   child: Stack(
@@ -82,12 +75,10 @@ class VendorProfileEditScreen extends StatelessWidget {
                           child: CircleAvatar(
                             radius: 70,
                             backgroundColor: Colors.grey,
-                            backgroundImage: image != null
-                                ? FileImage(File(image)) // Show selected image
+                            backgroundImage: image != null && image.isNotEmpty
+                                ? FileImage(File(image))
                                 : NetworkImage(
-                              profileImage.isNotEmpty
-                                  ? profileImage
-                                  : placeholderImage,
+                              profileImage.isNotEmpty ? profileImage : placeholderImage,
                             ) as ImageProvider,
                           ),
                         ),
@@ -96,7 +87,7 @@ class VendorProfileEditScreen extends StatelessWidget {
                         bottom: 5,
                         right: 5,
                         child: GestureDetector(
-                          onTap: myProfileController.pickImage, // Trigger image picking
+                          onTap: myProfileController.pickImage,
                           child: Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
@@ -113,103 +104,75 @@ class VendorProfileEditScreen extends StatelessWidget {
               }),
             ),
 
-            Text(
-              'Full name',
-              style: customLabelStyle,
-            ),
+            heightBox20,
+            CustomText(title: 'full_name'.tr, style: customLabelStyle),
             heightBox5,
             RoundTextField(
-              hint: 'Enter your full name',
+              hint: 'enter_full_name'.tr,
               controller: userProfileController.nameController,
-              prefixIcon: Icon(
-                Icons.person,
-                color: Colors.grey,
-              ),
+              prefixIcon: Icon(Icons.person, color: Colors.grey),
             ),
 
             heightBox10,
-            Text(
-              'Number',
-              style: customLabelStyle,
-            ),
+            CustomText(title: 'phone_number'.tr, style: customLabelStyle),
             heightBox5,
             RoundTextField(
-              hint: 'Enter your phone number',
+              hint: 'enter_phone_number'.tr,
               controller: userProfileController.phoneController,
-              prefixIcon: Icon(
-                Icons.phone,
-                color: Colors.grey,
-              ),
+              prefixIcon: Icon(Icons.phone, color: Colors.grey),
             ),
 
             heightBox10,
-            Text(
-              'Gender',
-              style: customLabelStyle,
-            ),
+            CustomText(title: 'gender'.tr, style: customLabelStyle),
             heightBox5,
             Obx(() => CustomDropDownWidget(
               selectedValue: myProfileController.gender.value.isNotEmpty
                   ? myProfileController.gender.value
                   : null,
-              items: ['male', "female", 'other'],
+              items: ['male'.tr, 'female'.tr, 'other'.tr],
               onChanged: (value) {
                 myProfileController.gender.value = value ?? '';
               },
-              hintText: "gander",
+              hintText: "select_gender".tr,
             )),
 
             heightBox10,
-            Text(
-              'Date of birth',
-              style: customLabelStyle,
-            ),
+            CustomText(title: 'date_of_birth'.tr, style: customLabelStyle),
             heightBox5,
             RoundTextField(
-              onTap: () {
-                userProfileController.pickDate(context); // Trigger date picker
-              },
+              onTap: () => userProfileController.pickDate(context),
               controller: userProfileController.dobController,
-              hint: 'Select your date of birth',
+              hint: 'select_date_of_birth'.tr,
               prefixIcon: Icon(Icons.calendar_month_outlined),
               readOnly: true,
             ),
 
             heightBox10,
-            Text(
-              'Email',
-              style: customLabelStyle,
-            ),
+            CustomText(title: 'email'.tr, style: customLabelStyle),
             heightBox5,
             RoundTextField(
-              hint: 'Enter your email',
+              hint: 'enter_email'.tr,
               controller: userProfileController.emailController,
               readOnly: true,
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.grey,
-              ),
+              prefixIcon: Icon(Icons.email, color: Colors.grey),
             ),
 
             heightBox20,
-            Obx(
-                  () => CustomButton(
-                title: "Update",
-                isLoading: myProfileController.isLoading.value,
-                onTap: () {
-                  print('id $id');
-                  myProfileController.updateProfile(
-                      fullName: userProfileController.nameController.text,
-                      dateOfBirth: userProfileController.dobController.text,
-                      gender: myProfileController.gender.value,
-                      phoneNumber: userProfileController.phoneController.text,
-                      email: userProfileController.emailController.text,
-                      id: id,
-                      context: context
-                  );
-                },
-              ),
-            ),
+            Obx(() => CustomButton(
+              title: "update".tr,
+              isLoading: myProfileController.isLoading.value,
+              onTap: () {
+                myProfileController.updateProfile(
+                  fullName: userProfileController.nameController.text,
+                  dateOfBirth: userProfileController.dobController.text,
+                  gender: myProfileController.gender.value,
+                  phoneNumber: userProfileController.phoneController.text,
+                  email: userProfileController.emailController.text,
+                  id: id,
+                  context: context,
+                );
+              },
+            )),
             heightBox20,
           ],
         ),

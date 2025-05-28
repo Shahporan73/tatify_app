@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:tatify_app/view/authenticate/view/sign_in_screen.dart';
+import 'package:tatify_app/view/vendor/payment/model/get_subscription_model.dart';
 import 'package:tatify_app/view/vendor/payment/views/payment_success_screen.dart';
 import 'package:tatify_app/view/vendor/vendor_home/views/vendor_home_dashboard.dart';
 
@@ -14,45 +15,35 @@ import '../views/payment_webview_screen.dart';
 
 class PaymentController extends GetxController {
   var isLoading = false.obs;
-
-  /*var isSelectLoading = false.obs;
-  var subscriptionModel = SubscriptionModel().obs;
+  var isPayNowLoading = false.obs;
+  var subscriptionModel = GetSubscriptionModel().obs;
   var subscriptionList = <SubscriptionList>[].obs;
 
-  var currentPage = 1.obs;
-  var totalPages = 1.obs;
-  var isMoreLoading = false.obs;*/
-
-/*  @override
+  @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     getSubscription();
   }
 
-  Future<void> getSubscription({bool isLoadMore = false}) async {
-    if (isLoadMore) {
-      isMoreLoading(true);
-    } else {
-      isLoading(true);
-      subscriptionList.clear();
-      currentPage.value = 1; // Reset to first page
-    }
-
+  Future<void> getSubscription() async {
+    isLoading(true);
     try {
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': await LocalStorage.getData(key: accessToken),
+      };
+
       dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(api: "${ApiUrl.subscriptionURl}?page=${currentPage.value}"),
+        await BaseClient.getRequest(
+            api: EndPoint.getSubscriptionURL,
+            headers: headers
+        ),
       );
 
-      if (responseBody['success'] == true) {
-        var model = SubscriptionModel.fromJson(responseBody);
-        subscriptionModel.value = model;
-        if (isLoadMore) {
-          subscriptionList.addAll(model.data?.data ?? []);
-        } else {
-          subscriptionList.value = model.data?.data ?? [];
-        }
-        totalPages.value = model.data?.meta?.totalPage ?? 1;
+      if (responseBody != null && responseBody['success'] == true) {
+        subscriptionModel.value = GetSubscriptionModel.fromJson(responseBody);
+        subscriptionList.value = subscriptionModel.value.data ?? [];
       } else {
         throw 'Failed to load data: ${responseBody['message']}';
       }
@@ -60,32 +51,19 @@ class PaymentController extends GetxController {
       print(e);
     } finally {
       isLoading(false);
-      isMoreLoading(false);
     }
   }
 
-  void loadMore() {
-    if (currentPage.value < totalPages.value && !isMoreLoading.value) {
-      currentPage.value++;
-      getSubscription(isLoadMore: true);
-    }
-  }*/
 
-  Future<void> onCheckOutPayment() async {
-    isLoading(true);
+  Future<void> onCheckOutPayment({required String subscriptionId}) async {
+    isPayNowLoading(true);
     try {
-
-      final Uri url = Uri.parse(EndPoint.paymentURL);
+      final Uri url = Uri.parse(EndPoint.paymentURL(subscriptionId: subscriptionId));
 
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Authorization': LocalStorage.getData(key: accessToken),
       };
-
-      // Map<String, dynamic> body = {
-      //   "amount": 327,
-      //   "currency": "eur"
-      // };
 
       final http.Response response = await http.post(
         url,
@@ -101,17 +79,17 @@ class PaymentController extends GetxController {
         } else {
           print('Payment failed: ${jsonResponse['message']}');
         }
+      } if(response.statusCode == 504){
+        Get.rawSnackbar(message: 'Please check your internet connection');
       } else {
         print('Server error: ${response.statusCode}');
       }
     } catch (e) {
       print("payment error: $e");
     } finally {
-      isLoading(false);
+      isPayNowLoading(false);
     }
   }
-
-
 
   paymentResults({required String finishUrl}) async {
     isLoading(true);
@@ -121,21 +99,24 @@ class PaymentController extends GetxController {
       };
 
       final response = await http.get(Uri.parse(finishUrl), headers: headers);
+      dynamic responseBody = jsonDecode(response.body);
 
       print("Response : ${response.statusCode}");
-      if (response.statusCode == 200) {
-        dynamic responseBody = jsonDecode(response.body);
+
+
+      if (responseBody["success"] == true) {
 
         print("Response Body: $responseBody");
         if (responseBody != null && responseBody["success"] == true) {
           print("Payment Success");
 
           // Ensure navigation happens after the UI rebuilds
-          Future.delayed(Duration(milliseconds: 500), () {
+          Future.delayed(
+              Duration(milliseconds: 100), () {
             Get.offAll(() => PaymentSuccessScreen(
-                  title: 'Your Payment is Success',
+                  title: 'your_payment_is_success'.tr,
                   subTitle:
-                      'Thank you for connecting with us and for placing your trust in us',
+                      'thank_you_for_connecting_with_us_and_for_placing_your_trust_in_us'.tr,
                   onTap: () {
                     Get.offAll(() => VendorHomeDashboard());
                   },
@@ -144,13 +125,13 @@ class PaymentController extends GetxController {
         } else {
           print("Payment Failed");
           Get.rawSnackbar(
-            message: "Payment Failed",
+            message: "payment_failed".tr,
           );
-          if( LocalStorage.removeData(key: accessToken) != null) {
+          if (LocalStorage.removeData(key: accessToken) != null) {
             LocalStorage.removeData(key: accessToken);
           }
           // Ensure that even on failure, navigation works correctly
-          Future.delayed(Duration(milliseconds: 500), () {
+          Future.delayed(Duration(milliseconds: 100), () {
             Get.offAll(() => SignInScreen());
           });
         }
@@ -163,5 +144,6 @@ class PaymentController extends GetxController {
       isLoading(false);
     }
   }
+
 
 }

@@ -23,53 +23,53 @@ class ChangePasswordScreen extends StatelessWidget {
     final SettingController controller = Get.put(SettingController());
     return Scaffold(
       backgroundColor: AppColors.bgColor,
-      appBar: MainAppBar(title: 'Change password'),
-      body:  SingleChildScrollView(
+      appBar: MainAppBar(title: 'change_password'.tr),
+      body: SingleChildScrollView(
         padding: bodyPadding,
         child: Obx(
-          ()=> Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+              () => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 height: height / 15,
               ),
               CustomPasswordField(
-                  hintText: 'Enter old password',
-                  controller: controller.oldPasswordC,
-                  showObscure: true,
+                hintText: 'enter_old_password'.tr,
+                controller: controller.oldPasswordC,
+                showObscure: true,
                 borderColor: Colors.black,
                 errorText: controller.oldPasswordError.value,
               ),
               heightBox10,
               CustomPasswordField(
-                  hintText: 'Enter new password',
-                  controller: controller.newPasswordC,
-                  showObscure: true,
+                hintText: 'enter_new_password'.tr,
+                controller: controller.newPasswordC,
+                showObscure: true,
                 borderColor: Colors.black,
                 errorText: controller.newPasswordError.value,
               ),
               heightBox10,
               CustomPasswordField(
-                  hintText: 'Enter confirm password',
-                  controller: controller.confirmPasswordC,
-                  errorText: controller.confirmPasswordError.value,
-                  showObscure: true,
+                hintText: 'enter_confirm_password'.tr,
+                controller: controller.confirmPasswordC,
+                errorText: controller.confirmPasswordError.value,
+                showObscure: true,
                 borderColor: Colors.black,
               ),
               heightBox10,
               // Confirm button
               CustomButton(
-                title: "Update",
+                title: "update".tr,
                 borderRadius: 8,
+                isLoading: controller.isLoading.value,
                 onTap: () {
                   controller.validateFields();
 
-                  // If no errors, perform the password change logic
                   if (controller.oldPasswordError.value == null &&
                       controller.newPasswordError.value == null &&
                       controller.confirmPasswordError.value == null) {
-                   controller.changePassword(context);
+                    controller.changePassword(context);
                   }
                 },
               ),

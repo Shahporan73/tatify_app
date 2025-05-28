@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
@@ -78,7 +79,7 @@ class _VendorHomeDashboardState extends State<VendorHomeDashboard> {
                         ? Image.asset(AppImages.homeActive, scale: 4)
                         : Image.asset(AppImages.homeInactive, scale: 4),
                   ),
-                  text: 'Home',
+                  text: 'home'.tr,
                   textStyle: navBarStyle,
                   /*GoogleFonts.poppins(
                     fontSize: 10,
@@ -88,7 +89,7 @@ class _VendorHomeDashboardState extends State<VendorHomeDashboard> {
                 ),
                 GButton(
                   icon: Icons.home,
-                  text: 'Add Item',
+                  text: 'add_item'.tr,
                   leading: SizedBox(
                     width: 24,  // Set appropriate width
                     height: 24,  // Set appropriate height
@@ -99,7 +100,7 @@ class _VendorHomeDashboardState extends State<VendorHomeDashboard> {
                 ),
                 GButton(
                   icon: Icons.home,
-                  text: 'Redeem',
+                  text: 'redeem'.tr,
                   leading: SizedBox(
                     width: 24,  // Set appropriate width
                     height: 24,  // Set appropriate height
@@ -111,7 +112,7 @@ class _VendorHomeDashboardState extends State<VendorHomeDashboard> {
                 ),
                 GButton(
                   icon: Icons.home,
-                  text: 'Profile',
+                  text: 'profile'.tr,
                   leading: SizedBox(
                     width: 24,  // Set appropriate width
                     height: 24,  // Set appropriate height

@@ -35,68 +35,61 @@ class ResetPasswordSheet extends StatelessWidget {
             ),
           ),
           child: SingleChildScrollView(
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  heightBox10,
-                  CustomText(
-                    title: 'Reset Password',
-                    style: GoogleFonts.rubik(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.blackColor,
-                    ),
-                  ),
-                  heightBox20,
-                  CustomText(
-                    title: 'Set the new password for your account so you can login and access all the features.',
-                    style: GoogleFonts.rubik(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.blackColor,
-                    ),
-                  ),
-                  heightBox20,
-                  RoundTextField(
-                    hint: 'New Password',
-                    prefixIcon: Icon(Icons.lock_outline),
-                    controller: controller.newPasswordController,
-                    obscureText: controller.isPasswordVisible.value,
-                    suffixIcon: IconButton(
-                      icon: Icon(controller.isPasswordVisible.value ? Icons.visibility_off : Icons.visibility),
-                      color: AppColors.blackColor,
-                      onPressed: controller.togglePasswordVisibility,
-                    ),
-                  ),
-                  heightBox20,
-                  RoundTextField(
-                    hint: 'Confirm Password',
-                    prefixIcon: Icon(Icons.lock_outline),
-                    controller: controller.confirmPasswordController,
-                    obscureText: controller.isConfirmPasswordVisible.value,
-                    suffixIcon: IconButton(
-                      icon: Icon(controller.isConfirmPasswordVisible.value ? Icons.visibility_off : Icons.visibility),
-                      color: AppColors.blackColor,
-                      onPressed: controller.toggleConfirmPasswordVisibility,
-                    ),
-                  ),
-                  heightBox20,
-                  Obx(
-                    ()=> CustomButton(
-                      title: 'Verify OTP',
-                      isLoading: controller.isLoading.value,
-                      onTap: (){
-                        controller.resetPassword(context: context);
-                      },
-                    ),
-                  ),
-                ]
-            ),
+            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              heightBox10,
+              CustomText(
+                title: 'reset_password'.tr,
+                style: GoogleFonts.rubik(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.blackColor,
+                ),
+              ),
+              heightBox20,
+              CustomText(
+                title: 'set_new_password_for_account'.tr,
+                style: GoogleFonts.rubik(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.blackColor,
+                ),
+              ),
+              heightBox20,
+              RoundTextField(
+                hint: 'new_password'.tr,
+                prefixIcon: Icon(Icons.lock_outline),
+                controller: controller.newPasswordController,
+                obscureText: controller.isPasswordVisible.value,
+                suffixIcon: IconButton(
+                  icon: Icon(controller.isPasswordVisible.value ? Icons.visibility_off : Icons.visibility),
+                  color: AppColors.blackColor,
+                  onPressed: controller.togglePasswordVisibility,
+                ),
+              ),
+              heightBox20,
+              RoundTextField(
+                hint: 'confirm_password'.tr,
+                prefixIcon: Icon(Icons.lock_outline),
+                controller: controller.confirmPasswordController,
+                obscureText: controller.isConfirmPasswordVisible.value,
+                suffixIcon: IconButton(
+                  icon: Icon(controller.isConfirmPasswordVisible.value ? Icons.visibility_off : Icons.visibility),
+                  color: AppColors.blackColor,
+                  onPressed: controller.toggleConfirmPasswordVisibility,
+                ),
+              ),
+              heightBox20,
+              Obx(() => CustomButton(
+                title: 'verify_otp'.tr,
+                isLoading: controller.isLoading.value,
+                onTap: () {
+                  controller.resetPassword(context: context);
+                },
+              )),
+            ]),
           ),
-        ),);
+        ));
       },
     );
   }
 }
-

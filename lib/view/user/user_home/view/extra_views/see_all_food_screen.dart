@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tatify_app/view/vendor/vendor_add_item/model/food_item_model.dart';
 
 import '../../../../../res/common_widget/main_app_bar.dart';
@@ -12,7 +13,7 @@ class SeeAllFoodScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: MainAppBar(title: 'Foods'),
+      appBar: MainAppBar(title: 'foods'.tr),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ListView.builder(
@@ -22,11 +23,11 @@ class SeeAllFoodScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             var food = foodList[index];
             return UserDetailsItemWidget(
-              foodName: food.itemName ?? 'Not Available',
+              foodName: food.itemName ?? 'not_available'.tr,
               standardPrice: food.price?.price.toString() ?? '0',
               discountPrice: food.price?.discountPrice.toString() ?? '0',
               offerDays: food.price?.offerDay ?? '',
-              description: food.description ?? 'Not Available',
+              description: food.description ?? 'not_available'.tr,
               foodId: food.id ?? '',
             );
           },
