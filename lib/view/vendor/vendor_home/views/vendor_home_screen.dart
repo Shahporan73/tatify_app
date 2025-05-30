@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tatify_app/data/utils/custom_loader.dart';
@@ -110,7 +112,7 @@ class VendorHomeScreen extends StatelessWidget {
                         : ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: foodItemController.onGoingList.length,
+                          itemCount: min(foodItemController.onGoingList.length, 5),
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             var food = foodItemController.onGoingList[index];

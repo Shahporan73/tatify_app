@@ -83,8 +83,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Center(
                   child: Image.asset(
                     AppImages.splashLogo,
-                    width: Get.width / 3,
-                    height: Get.height / 8,
+                    width: width / 1.8,
+                    height: height / 12,
                   ),
                 ),
 

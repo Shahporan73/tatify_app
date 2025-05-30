@@ -104,38 +104,32 @@ class PaymentController extends GetxController {
       print("Response : ${response.statusCode}");
 
 
-      if (responseBody["success"] == true) {
-
-        print("Response Body: $responseBody");
-        if (responseBody != null && responseBody["success"] == true) {
-          print("Payment Success");
-
-          // Ensure navigation happens after the UI rebuilds
-          Future.delayed(
-              Duration(milliseconds: 100), () {
-            Get.offAll(() => PaymentSuccessScreen(
-                  title: 'your_payment_is_success'.tr,
-                  subTitle:
-                      'thank_you_for_connecting_with_us_and_for_placing_your_trust_in_us'.tr,
-                  onTap: () {
-                    Get.offAll(() => VendorHomeDashboard());
-                  },
-                ));
-          });
-        } else {
-          print("Payment Failed");
-          Get.rawSnackbar(
-            message: "payment_failed".tr,
-          );
-          if (LocalStorage.removeData(key: accessToken) != null) {
-            LocalStorage.removeData(key: accessToken);
-          }
-          // Ensure that even on failure, navigation works correctly
-          Future.delayed(Duration(milliseconds: 100), () {
-            Get.offAll(() => SignInScreen());
-          });
-        }
+      if (responseBody != null) {
+        print("Payment Success");
+        // Ensure navigation happens after the UI rebuilds
+        Future.delayed(
+            Duration(milliseconds: 0), () {
+          Get.offAll(() => PaymentSuccessScreen(
+            title: 'your_payment_is_success'.tr,
+            subTitle:
+            'thank_you_for_connecting_with_us_and_for_placing_your_trust_in_us'.tr,
+            onTap: () {
+              Get.offAll(() => VendorHomeDashboard());
+            },
+          ));
+        });
       } else {
+        print("Payment Failed");
+        Get.rawSnackbar(
+          message: "payment_failed".tr,
+        );
+        if (LocalStorage.removeData(key: accessToken) != null) {
+          LocalStorage.removeData(key: accessToken);
+        }
+        // Ensure that even on failure, navigation works correctly
+        Future.delayed(Duration(milliseconds: 0), () {
+          Get.offAll(() => SignInScreen());
+        });
         throw 'Request failed with status: ${response.statusCode}';
       }
     } catch (e) {

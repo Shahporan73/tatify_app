@@ -2,15 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../../data/api_client/bace_client.dart';
 import '../../../../data/api_client/end_point.dart';
 import '../../../../data/local_database/local_data_base.dart';
 import '../../../../data/utils/const_value.dart';
+import 'package:path/path.dart' as path;
 
 class VendorProfileController extends GetxController {
   var isLoading = false.obs;
@@ -81,7 +84,7 @@ class VendorProfileController extends GetxController {
     required String dateOfBirth,
     required String gender,
     required String phoneNumber,
-    required String email,
+    required String address,
     required String id,
     required BuildContext context
   }) async {
@@ -103,6 +106,7 @@ class VendorProfileController extends GetxController {
         "name": fullName,
         "phoneNumber": phoneNumber,
         "gender": gender,
+        'address': address,
         if(dateOfBirth.isNotEmpty && dateOfBirth != "") "dob": dateOfBirth,
         // "dob": dateOfBirth,
       };
@@ -153,7 +157,9 @@ class VendorProfileController extends GetxController {
           Get.snackbar('Error', 'Failed to update profile: ${jsonResponse['message']}',
               backgroundColor: Colors.red, snackPosition: SnackPosition.TOP);
         }
-      } else {
+      }if (response.statusCode == 413) {
+        Get.rawSnackbar(message: 'Image size is too large');
+      }else {
         var responseBody = await response.stream.bytesToString();
         print('Error updating profile: $responseBody');
       }
@@ -166,12 +172,36 @@ class VendorProfileController extends GetxController {
 
 
 
-// Method to pick the image from the gallery
   Future<void> pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 100,
+    );
+
     if (pickedFile != null) {
-      imagePath.value = pickedFile.path;
+      final File originalFile = File(pickedFile.path);
+      final int fileSize = await originalFile.length();
+
+      // If image is > 1MB, compress it
+      if (fileSize > 1 * 1024 * 1024) {
+        final dir = await getTemporaryDirectory();
+        final targetPath = path.join(dir.path, 'compressed_${path.basename(pickedFile.path)}');
+
+        final compressedFile = await FlutterImageCompress.compressAndGetFile(
+          pickedFile.path,
+          targetPath,
+          quality: 70, // Reduce quality to shrink size
+        );
+
+        if (compressedFile != null) {
+          imagePath.value = compressedFile.path;
+        } else {
+          Get.snackbar('Error', 'Image compression failed',
+              backgroundColor: Colors.red, snackPosition: SnackPosition.TOP);
+        }
+      } else {
+        imagePath.value = pickedFile.path;
+      }
     }
   }
-
 }

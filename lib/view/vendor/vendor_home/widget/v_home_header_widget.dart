@@ -35,10 +35,15 @@ class VHomeHeaderWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
-            AppImages.splashLogo,
-            width: Get.width / 8,
-            height: Get.height / 12,
+          Center(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Image.asset(
+                AppImages.splashLogo,
+                width: width / 1,
+                height: height / 12,
+              ),
+            ),
           ),
           CustomText(
               title: '${'hi'.tr} $userName',

@@ -63,7 +63,8 @@ class SignInScreen extends StatelessWidget {
                   Center(
                     child: Image.asset(
                       AppImages.splashLogo,
-                      scale: 6,
+                      width: width / 1.8,
+                      height: height / 12,
                     ),
                   ),
 

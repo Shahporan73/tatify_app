@@ -38,11 +38,13 @@ class WelcomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(
-              AppImages.splashLogo,
-              height: height / 4,
-              width: width / 4,
-              fit: BoxFit.contain,
+            Center(
+              child: Image.asset(
+                AppImages.splashLogo,
+                height: height / 6,
+                width: width / 1,
+                fit: BoxFit.contain,
+              ),
             ),
             CustomText(
               title: 'lets_get_started'.tr,

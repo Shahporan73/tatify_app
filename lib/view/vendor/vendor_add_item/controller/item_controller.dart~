@@ -301,6 +301,22 @@ class ItemController extends GetxController {
     selectedTab.value = newData;
   }
 
+  /*void selectDay(String day) {
+      if (day == "7 days") {
+        selectedDays.value = ["7 days"];
+      } else {
+        if (selectedDays.contains("7 days")) {
+          selectedDays.clear();
+        }
+
+        if (selectedDays.contains(day)) {
+          selectedDays.remove(day);
+        } else {
+          selectedDays.value = [day];
+        }
+      }
+  }*/
+
   void selectDay(String day) {
     if (day == "7days") {
       selectedDays.value = ["7days"];

@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -135,36 +137,40 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Obx(() => controller.pickedImage.value != null
-                ? GestureDetector(
-              onTap: controller.pickImage,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.file(
-                  controller.pickedImage.value!,
-                  height: height / 4,
-                  width: Get.width,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            )
-                : CustomDottedWidget(
-              containerHeight: height / 4,
-              centerWidget: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud_upload_outlined, color: AppColors.primaryColor),
-                  widthBox5,
-                  CustomText(
-                    title: 'upload_restaurant_photo'.tr,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.secondaryColor,
+            Obx(() {
+              final imagePath = controller.imagePath.value;
+              return imagePath != null
+                  ? GestureDetector(
+                onTap: controller.pickImage,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.file(
+                    File(imagePath),
+                    height: height / 4,
+                    width: Get.width,
+                    fit: BoxFit.cover,
                   ),
-                ],
-              ),
-              onTap: controller.pickImage,
-            )),
+                ),
+              )
+                  : CustomDottedWidget(
+                containerHeight: height / 4,
+                centerWidget: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.cloud_upload_outlined, color: AppColors.primaryColor),
+                    widthBox5,
+                    CustomText(
+                      title: 'upload_restaurant_photo'.tr,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.secondaryColor,
+                    ),
+                  ],
+                ),
+                onTap: controller.pickImage,
+              );
+            }),
+
             heightBox10,
             Text('kitchen_style'.tr, style: customLabelStyle),
             heightBox10,

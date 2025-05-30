@@ -139,7 +139,7 @@ class UserProfileEditScreen extends StatelessWidget {
               selectedValue: myProfileController.gender.value.isNotEmpty
                   ? myProfileController.gender.value
                   : null,
-              items: ['male'.tr, "female".tr, 'other'.tr],
+              items: ['male', "female", 'other'],
               onChanged: (value) {
                 myProfileController.gender.value = value ?? '';
               },
@@ -171,7 +171,7 @@ class UserProfileEditScreen extends StatelessWidget {
             RoundTextField(
               hint: 'enter_your_address'.tr,
               controller: userProfileController.addressController,
-              readOnly: true,
+              readOnly: false,
               prefixIcon: Icon(
                 Icons.location_on,
                 color: Colors.grey,
@@ -200,12 +200,21 @@ class UserProfileEditScreen extends StatelessWidget {
               isLoading: myProfileController.isLoading.value,
               onTap: () {
                 print('id $id');
+                if (userProfileController.nameController.text.isEmpty ||
+                    userProfileController.phoneController.text.isEmpty ||
+                    myProfileController.gender.value.isEmpty ||
+                    userProfileController.dobController.text.isEmpty ||
+                    userProfileController.addressController.text.isEmpty) {
+                  Get.rawSnackbar(message: "please_fill_all_the_fields".tr);
+                  return;
+                }
+
                 myProfileController.updateProfile(
                   fullName: userProfileController.nameController.text,
                   dateOfBirth: userProfileController.dobController.text,
                   gender: myProfileController.gender.value,
                   phoneNumber: userProfileController.phoneController.text,
-                  email: userProfileController.emailController.text,
+                  address: userProfileController.addressController.text,
                   id: id,
                   context: context,
                 );

@@ -27,6 +27,7 @@ class VendorProfileEditScreen extends StatelessWidget {
   final String phoneNumber;
   final String gander;
   final String dateOfBirth;
+  final String address;
   final String email;
   final String id;
   VendorProfileEditScreen({
@@ -38,6 +39,7 @@ class VendorProfileEditScreen extends StatelessWidget {
     required this.dateOfBirth,
     required this.email,
     required this.id,
+    required this.address,
   });
 
   final UserProfileController userProfileController = Get.put(UserProfileController());
@@ -53,6 +55,7 @@ class VendorProfileEditScreen extends StatelessWidget {
     userProfileController.phoneController.text = phoneNumber;
     userProfileController.emailController.text = email;
     userProfileController.dobController.text = dateOfBirth;
+    userProfileController.addressController.text = address;
     myProfileController.gender.value = gander;
 
     return Scaffold(
@@ -129,7 +132,7 @@ class VendorProfileEditScreen extends StatelessWidget {
               selectedValue: myProfileController.gender.value.isNotEmpty
                   ? myProfileController.gender.value
                   : null,
-              items: ['male'.tr, 'female'.tr, 'other'.tr],
+              items: ['male', 'female', 'other'],
               onChanged: (value) {
                 myProfileController.gender.value = value ?? '';
               },
@@ -148,6 +151,22 @@ class VendorProfileEditScreen extends StatelessWidget {
             ),
 
             heightBox10,
+            Text(
+              'address'.tr,
+              style: customLabelStyle,
+            ),
+            heightBox5,
+            RoundTextField(
+              hint: 'enter_your_address'.tr,
+              controller: userProfileController.addressController,
+              readOnly: false,
+              prefixIcon: Icon(
+                Icons.location_on,
+                color: Colors.grey,
+              ),
+            ),
+
+            heightBox10,
             CustomText(title: 'email'.tr, style: customLabelStyle),
             heightBox5,
             RoundTextField(
@@ -162,12 +181,21 @@ class VendorProfileEditScreen extends StatelessWidget {
               title: "update".tr,
               isLoading: myProfileController.isLoading.value,
               onTap: () {
+                if (userProfileController.nameController.text.isEmpty ||
+                    userProfileController.phoneController.text.isEmpty ||
+                    myProfileController.gender.value.isEmpty ||
+                    userProfileController.dobController.text.isEmpty||
+                    userProfileController.addressController.text.isEmpty) {
+                  Get.rawSnackbar(message: "please_fill_all_the_fields".tr);
+                  return;
+                }
+
                 myProfileController.updateProfile(
                   fullName: userProfileController.nameController.text,
                   dateOfBirth: userProfileController.dobController.text,
                   gender: myProfileController.gender.value,
                   phoneNumber: userProfileController.phoneController.text,
-                  email: userProfileController.emailController.text,
+                  address: userProfileController.addressController.text,
                   id: id,
                   context: context,
                 );
