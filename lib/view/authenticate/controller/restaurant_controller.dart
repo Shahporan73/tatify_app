@@ -2,18 +2,24 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../data/api_client/end_point.dart';
 import '../../../data/local_database/local_data_base.dart';
 import '../../../data/utils/const_value.dart';
 import '../view/sign_in_screen.dart';
+import 'package:path/path.dart' as path;
 
 class RestaurantController extends GetxController {
   var isLoading = false.obs;
-  var pickedImage = Rx<File?>(null);
+
+
+  var imagePath = Rxn<String>();
+  final ImagePicker _picker = ImagePicker();
 
   final TextEditingController restaurantNameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
@@ -57,7 +63,7 @@ class RestaurantController extends GetxController {
 
   Future<void> createRestaurant({required double latitude, required double longitude}) async {
     isLoading.value = true;
-    var imageFile = pickedImage.value;
+    var imageFile = imagePath.value;
     try {
       Map<String, String> headers = {
         'Content-Type': 'multipart/form-data',
@@ -108,7 +114,7 @@ class RestaurantController extends GetxController {
         request.files.add(
           await http.MultipartFile.fromPath(
             'featureImage',
-            imageFile.path,
+            imageFile,
             contentType: MediaType('image', 'jpeg'),
           ),
         );
@@ -149,16 +155,45 @@ class RestaurantController extends GetxController {
     }
   }
 
-  Future<void> pickImage() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 50);
-    if (picked != null) {
-      pickedImage.value = File(picked.path);
-    }
-  }
 
   String formatTo24Hour(TimeOfDay time) {
     final hour = time.hour;
     final minute = time.minute;
     return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
+
+  // Method to pick the image from the gallery
+  Future<void> pickImage() async {
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 100,
+    );
+
+    if (pickedFile != null) {
+      final File originalFile = File(pickedFile.path);
+      final int fileSize = await originalFile.length();
+
+      // If image is > 1MB, compress it
+      if (fileSize > 1 * 1024 * 1024) {
+        final dir = await getTemporaryDirectory();
+        final targetPath = path.join(dir.path, 'compressed_${path.basename(pickedFile.path)}');
+
+        final compressedFile = await FlutterImageCompress.compressAndGetFile(
+          pickedFile.path,
+          targetPath,
+          quality: 70, // Reduce quality to shrink size
+        );
+
+        if (compressedFile != null) {
+          imagePath.value = compressedFile.path;
+        } else {
+          Get.snackbar('Error', 'Image compression failed',
+              backgroundColor: Colors.red, snackPosition: SnackPosition.TOP);
+        }
+      } else {
+        imagePath.value = pickedFile.path;
+      }
+    }
+  }
+
 }

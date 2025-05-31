@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tatify_app/data/utils/custom_loader.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/RoundTextField.dart';
@@ -17,6 +19,7 @@ import '../../../../res/common_widget/custom_alert_dialog.dart';
 import '../widget/opening_hour_widget.dart';
 import '../widget/restaurant_image_widget.dart';
 import '../widget/show_search_dialog.dart';
+import '../widget/update_location_dialog.dart';
 
 class ShowRestaurantInformationScreen extends StatefulWidget {
   const ShowRestaurantInformationScreen({super.key});
@@ -57,23 +60,26 @@ class _ShowRestaurantInformationScreenState
   // double? latitude;
   // double? longitude;
 
-  Future<void> _getLocationData() async {
-    try {
-      var location = await LocationServiceWithAddress.getCurrentLocationWithAddress();
-      print('Latitude: ${location['latitude']}');
-      print('Longitude: ${location['longitude']}');
-      print('Address: ${location['address']}');
+  // Future<void> _getLocationData() async {
+  //   try {
+  //     var location = await LocationServiceWithAddress.getCurrentLocationWithAddress();
+  //     print('Latitude: ${location['latitude']}');
+  //     print('Longitude: ${location['longitude']}');
+  //     print('Address: ${location['address']}');
+  //
+  //     setState(() {
+  //       controller.latitude.value = location['latitude'];
+  //       controller.longitude.value = location['longitude'];
+  //     });
+  //     controller.addressController.text = location['address'];
+  //   } catch (e) {
+  //     print('Error: $e');
+  //   }
+  // }
 
-      setState(() {
-        controller.latitude.value = location['latitude'];
-        controller.longitude.value = location['longitude'];
-      });
-      controller.addressController.text = location['address'];
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
 
+
+  final TextEditingController kitchenStyleController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -126,7 +132,7 @@ class _ShowRestaurantInformationScreenState
                       }).toList(),
                     ),
                     TextField(
-                      controller: TextEditingController(),
+                      controller: kitchenStyleController,
                       decoration: InputDecoration(
                         hintText: 'enter_style_and_press_enter'.tr,
                         border: InputBorder.none,
@@ -138,6 +144,7 @@ class _ShowRestaurantInformationScreenState
                       ),
                       onSubmitted: (tag) {
                         controller.addTag(tag);
+                        kitchenStyleController.clear();
                       },
                     ),
                   ],
@@ -150,33 +157,45 @@ class _ShowRestaurantInformationScreenState
                 hint: 'enter_your_restaurant_name'.tr,
                 controller: controller.restaurantNameController,
               ),
+
+
               heightBox10,
               Text('restaurant_address'.tr, style: customLabelStyle),
               heightBox10,
               RoundTextField(
                 hint: 'enter_restaurant_address'.tr,
                 controller: controller.addressController,
-                prefixIcon: Icon(Icons.location_on_outlined),
-                readOnly: true,
-                onTap: () {
-                  CustomAlertDialog().customAlert(
-                      context: context,
-                      title: 'warning'.tr,
-                      message: 'are_you_sure_you_want_to_update_your_address'.tr,
-                      NegativebuttonText: "no".tr,
-                      PositivvebuttonText: "yes".tr,
-                      onNegativeButtonPressed: () {
-                        print('No');
-                        Navigator.pop(context);
-                      },
-                      onPositiveButtonPressed: () {
-                        _getLocationData();
-                        Navigator.pop(context);
-                      }
-                  );
-                  // showSearchDialog(context);
-                },
+                readOnly: false,
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.my_location, color: AppColors.primaryColor),
+                  onPressed: () async {
+                    final result = await Get.dialog<Map<String, dynamic>>(
+                      UpdateLocationDialog(
+                        initialLatitude: controller.latitude.value,
+                        initialLongitude: controller.longitude.value,
+                      ),
+                    );
+
+                    if (result != null) {
+                      final LatLng updatedLatLng = result['latLng'];
+                      final String updatedAddress = result['address'];
+
+                      controller.addressController.text = updatedAddress;
+
+                      controller.latitude.value = updatedLatLng.latitude;
+                      controller.longitude.value = updatedLatLng.longitude;
+
+                      print('Updated Address: $updatedAddress');
+                      print('Latitude: ${updatedLatLng.latitude}, Longitude: ${updatedLatLng.longitude}');
+                    }
+                  },
+                  splashRadius: 20,
+                ),
               ),
+
+
+
+
               heightBox10,
               Text('city'.tr, style: customLabelStyle),
               heightBox10,

@@ -76,9 +76,13 @@ class NetIncomeChartWidget extends StatelessWidget {
                 child: Row(
                   children: [
                     Spacer(),
-                    CustomText(title: 'Filter', fontSize: 14, fontWeight: FontWeight.w500),
-                    widthBox10,
-                    Icon(Icons.filter_alt_outlined, color: Colors.black, size: 24),
+                    CustomText(
+                      title: 'Filter',
+                      fontSize: 13,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    Icon(Icons.filter_alt_outlined, color: AppColors.blackColor),
                     const SizedBox(width: 16),
                   ],
                 ),

@@ -28,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
           gradient: LinearGradient(
             colors: [
               const Color(0xffFFFAFB),
-              const Color(0xFFFFD7C599),
+              AppColors.secondaryColor.withOpacity(0.3),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -38,11 +38,13 @@ class WelcomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(
-              AppImages.splashLogo,
-              height: height / 4,
-              width: width / 4,
-              fit: BoxFit.contain,
+            Center(
+              child: Image.asset(
+                AppImages.splashLogo,
+                height: height / 6,
+                width: width / 1,
+                fit: BoxFit.contain,
+              ),
             ),
             CustomText(
               title: 'lets_get_started'.tr,

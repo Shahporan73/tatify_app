@@ -164,12 +164,16 @@ class SignInController extends GetxController {
               snackPosition: SnackPosition.TOP
           );
 
-        } else {
+        }  if (responseBody['success'] == false) {
           Get.rawSnackbar(
-              message: responseBody['message'],
+              message: 'User not found',
               snackPosition: SnackPosition.TOP);
-          print('responseBody ${responseBody['message']}');
         }
+
+      }else {
+        Get.rawSnackbar(
+            message: responseBody['message'],
+            snackPosition: SnackPosition.TOP);
       }
     } catch (e) {
       print('sign in error $e');

@@ -76,6 +76,8 @@ dependencies:
   month_year_picker: ^0.4.0+1
   syncfusion_flutter_datepicker: ^29.2.5
   google_sign_in: ^6.3.0
+  flutter_image_compress: ^2.1.0
+  path_provider: ^2.0.0
 
 
 dev_dependencies:

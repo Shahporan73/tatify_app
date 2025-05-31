@@ -48,7 +48,7 @@ class ProfileItemWidget extends StatelessWidget {
                   child: Icon(icon, size: 20, color: iconColor?? Colors.black,),
                 ),
                 widthBox10,
-                CustomText(title: title, fontWeight: FontWeight.w400, fontSize: 15, color:titleColor?? Colors.black,),
+                Expanded(child: CustomText(title: title, fontWeight: FontWeight.w400, fontSize: 15, color:titleColor?? Colors.black,)),
               ],
             ),
             isDivider == false? Divider(height: 1,):SizedBox(),

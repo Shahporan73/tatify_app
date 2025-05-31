@@ -198,9 +198,8 @@ class Review {
 
   factory Review.fromJson(Map<String, dynamic> json){
     return Review(
-      star: json["star"],
+      star: json["star"] == null ? null : (json["star"] as num).toDouble(),
       total: json["total"],
     );
   }
-
 }

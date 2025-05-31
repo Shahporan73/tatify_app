@@ -81,7 +81,7 @@ class SecondGrapWidget extends StatelessWidget {
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
-                          Icon(Icons.filter_alt_outlined, color: AppColors.black100),
+                          Icon(Icons.filter_alt_outlined, color: AppColors.blackColor),
                         ],
                       ),
                     ),
@@ -160,17 +160,29 @@ class SecondGrapWidget extends StatelessWidget {
 
     return await showDialog<int>(
       context: context,
-      builder: (context) => SimpleDialog(
+      builder: (context) => AlertDialog(
         title: const Text('Select Year'),
-        children: years.map((year) {
-          return SimpleDialogOption(
-            onPressed: () => Navigator.pop(context, year),
-            child: Text(year.toString()),
-          );
-        }).toList(),
+        content: SingleChildScrollView(
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: years.map((year) {
+              return ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  backgroundColor: Colors.grey[200],
+                  foregroundColor: Colors.black,
+                ),
+                onPressed: () => Navigator.pop(context, year),
+                child: Text(year.toString()),
+              );
+            }).toList(),
+          ),
+        ),
       ),
     );
   }
+
 
   Future<void> _filterByYear(BuildContext context) async {
     final pickedYear = await showSimpleYearPicker(context);

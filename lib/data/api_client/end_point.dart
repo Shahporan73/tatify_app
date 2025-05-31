@@ -109,4 +109,7 @@ class EndPoint {
   static const String getSubscriptionURL = '$BASE_URL/subscription';
   static String paymentURL({required String subscriptionId}) => '$BASE_URL/subscription/pay/$subscriptionId';
 
+//   banner for onboarding
+  static const String getBannerURL = '$BASE_URL/banner';
+
 }

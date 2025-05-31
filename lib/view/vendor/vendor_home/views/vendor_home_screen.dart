@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tatify_app/data/utils/custom_loader.dart';
@@ -7,7 +9,6 @@ import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/custom_row_widget.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
-import 'package:tatify_app/view/vendor/vendor_home/controller/net_income_controller.dart';
 import 'package:tatify_app/view/vendor/vendor_home/views/search_on_going_item_screen.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/first_grap_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_home/widget/home_menu_widget.dart';
@@ -15,6 +16,7 @@ import 'package:tatify_app/view/vendor/vendor_home/widget/second_grap_widget.dar
 import 'package:tatify_app/view/vendor/vendor_home/widget/v_home_header_widget.dart';
 import 'package:tatify_app/view/vendor/vendor_profile/controller/my_restaurant_controller.dart';
 import '../../vendor_add_item/controller/item_controller.dart';
+import '../../vendor_add_item/widget/item_widget_shimmer.dart';
 import '../../vendor_profile/controller/vendor_profile_controller.dart';
 
 class VendorHomeScreen extends StatelessWidget {
@@ -75,12 +77,12 @@ class VendorHomeScreen extends StatelessWidget {
                     child: NetIncomeChartWidget(),
                   ),
 
-                  heightBox10,
+/*                  heightBox10,
+                // total commission section
                   SizedBox(
                     height: height / 2.5,
                     child: SecondGrapWidget(),
-                  ),
-
+                  ),*/
                   // OnGoing list
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
@@ -102,15 +104,17 @@ class VendorHomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+
+
                   Obx(
                         () => foodItemController.isLoading.value
-                        ? Center(child: CustomLoader())
+                        ? Center(child: ItemWidgetShimmer(count: 2))
                         : foodItemController.onGoingList.isEmpty
                         ? Center(child: CustomText(title: 'no_item_found'.tr, fontSize: 16))
                         : ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: foodItemController.onGoingList.length,
+                          itemCount: min(foodItemController.onGoingList.length, 5),
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             var food = foodItemController.onGoingList[index];

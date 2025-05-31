@@ -10,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:tatify_app/data/local_database/local_data_base.dart';
 import 'package:tatify_app/data/utils/const_value.dart';
+import 'package:tatify_app/view/authenticate/view/restaurant_information_screen.dart';
 import 'package:tatify_app/view/vendor/payment/views/pay_now_screen.dart';
 import 'package:tatify_app/view/splash/view/splash_screen.dart';
 import 'package:tatify_app/view/user/user_home/view/home_dashboard.dart';
@@ -106,6 +107,8 @@ class MyApp extends StatelessWidget {
       home: LocalStorage.getData(key: accessToken) != null? (
       LocalStorage.getData(key: userType) == 'vendor' ? VendorHomeDashboard() : HomeDashboard()
       ) : SplashScreen(),
+
+      // home: RestaurantInformationScreen(),
 
       // home: PayNowScreen(),
     );

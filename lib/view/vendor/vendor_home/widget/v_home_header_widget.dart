@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
 import 'package:tatify_app/res/common_widget/custom_text.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
@@ -29,16 +30,24 @@ class VHomeHeaderWidget extends StatelessWidget {
             bottomRight: Radius.circular(20),
           ),
           gradient: LinearGradient(colors: [
-            Color(0xffFF4F00B2).withOpacity(0.7),
-            Color(0xffF04B6C),
+            Color(0xffF004e28).withOpacity(0.7),
+            AppColors.secondaryColor,
+
+            // Color(0xffFF4F00B2).withOpacity(0.7),
+            // Color(0xffF04B6C),
           ])),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
-            AppImages.splashLogo,
-            width: Get.width / 8,
-            height: Get.height / 12,
+          Center(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Image.asset(
+                AppImages.splashLogo,
+                width: width / 1,
+                height: height / 12,
+              ),
+            ),
           ),
           CustomText(
               title: '${'hi'.tr} $userName',

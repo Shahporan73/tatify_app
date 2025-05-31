@@ -190,7 +190,6 @@ class ItemController extends GetxController {
 
       if (response.statusCode == 200) {
         await getFoods();
-        selectedDay.value = "";
         menuNameController.clear();
         descriptionController.clear();
         standardPriceController.clear();
@@ -245,7 +244,7 @@ class ItemController extends GetxController {
 
       if (responseBody != null && responseBody['success'] == true) {
         getFoods();
-        selectedDay.value = "";
+        itemStatus.value = 'on-going';
         Get.rawSnackbar(message: 'Food updated successfully');
         Navigator.of(context).pop();
       } else {
@@ -300,22 +299,6 @@ class ItemController extends GetxController {
   void switchTab(String newData) {
     selectedTab.value = newData;
   }
-
-  /*void selectDay(String day) {
-      if (day == "7 days") {
-        selectedDays.value = ["7 days"];
-      } else {
-        if (selectedDays.contains("7 days")) {
-          selectedDays.clear();
-        }
-
-        if (selectedDays.contains(day)) {
-          selectedDays.remove(day);
-        } else {
-          selectedDays.value = [day];
-        }
-      }
-  }*/
 
   void selectDay(String day) {
     if (day == "7days") {

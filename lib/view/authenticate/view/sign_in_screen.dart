@@ -40,7 +40,7 @@ class SignInScreen extends StatelessWidget {
             gradient: LinearGradient(
               colors: [
                 const Color(0xffFFFAFB),
-                const Color(0xFFFFD7C599),
+                AppColors.secondaryColor.withOpacity(0.3),
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -63,7 +63,8 @@ class SignInScreen extends StatelessWidget {
                   Center(
                     child: Image.asset(
                       AppImages.splashLogo,
-                      scale: 6,
+                      width: width / 1.8,
+                      height: height / 12,
                     ),
                   ),
 

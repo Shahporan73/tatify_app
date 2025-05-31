@@ -121,6 +121,13 @@ class VendorPersonalInformationScreen extends StatelessWidget {
                         onTap: () {},
                       ),
                       ProfileItemWidget(
+                          icon: Icons.location_on_outlined,
+                          title: controller.address.value.isNotEmpty
+                              ? controller.address.value
+                              : 'not_found'.tr,
+                          onTap: () {}),
+
+                      ProfileItemWidget(
                         icon: Icons.email_outlined,
                         title: controller.email.value.isNotEmpty
                             ? controller.email.value
@@ -148,6 +155,7 @@ class VendorPersonalInformationScreen extends StatelessWidget {
                       phoneNumber: controller.phoneNumber.value,
                       gander: controller.gender.value,
                       dateOfBirth: controller.dateOfBirth.value,
+                      address: controller.address.value,
                       email: controller.email.value,
                       id: controller.id.value,
                     ),

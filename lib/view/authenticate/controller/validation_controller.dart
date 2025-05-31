@@ -28,9 +28,9 @@ class ValidationController extends GetxController {
       return "phone_number_is_required".tr;
     }
 
-    if (addressController.text.isEmpty) {
-      return "address_is_required".tr;
-    }
+    // if (addressController.text.isEmpty) {
+    //   return "address_is_required".tr;
+    // }
 
     if (emailController.text.isEmpty) {
       return "email_is_required".tr;
