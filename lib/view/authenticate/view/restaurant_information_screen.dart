@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tatify_app/data/service/location_service.dart';
 import 'package:tatify_app/res/app_colors/App_Colors.dart';
 import 'package:tatify_app/res/common_widget/RoundTextField.dart';
@@ -15,8 +16,8 @@ import 'package:tatify_app/res/common_widget/main_app_bar.dart';
 import 'package:tatify_app/res/custom_style/custom_size.dart';
 import 'package:tatify_app/res/custom_style/custom_style.dart';
 import 'package:tatify_app/view/authenticate/controller/restaurant_controller.dart';
-import '../../../data/service/get_current_postion.dart';
 import '../../vendor/vendor_profile/widget/opening_hour_widget.dart';
+import '../widget/map_view_dialog.dart';
 
 class RestaurantInformationScreen extends StatefulWidget {
   const RestaurantInformationScreen({super.key});
@@ -100,29 +101,6 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
   double? latitude;
   double? longitude;
 
-  @override
-  void initState() {
-    super.initState();
-    _getLocationData();
-  }
-
-  Future<void> _getLocationData() async {
-    try {
-      var location = await LocationServiceWithAddress.getCurrentLocationWithAddress();
-      print('Latitude: ${location['latitude']}');
-      print('Longitude: ${location['longitude']}');
-      print('Address: ${location['address']}');
-
-      setState(() {
-        latitude = location['latitude'];
-        longitude = location['longitude'];
-      });
-
-      controller.addressController.text = location['address'];
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,15 +201,38 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
               hint: 'enter_your_restaurant_name'.tr,
               controller: controller.restaurantNameController,
             ),
+
+
             heightBox10,
             Text('restaurant_address'.tr, style: customLabelStyle),
             heightBox10,
             RoundTextField(
               hint: 'enter_your_restaurant_address'.tr,
               controller: controller.addressController,
-              prefixIcon: Icon(Icons.location_on_outlined),
               readOnly: false,
+              // for open map
+              suffixIcon: IconButton(
+                icon: Icon(Icons.my_location, color: AppColors.primaryColor),
+                onPressed: () async {
+                  final result = await Get.dialog<Map<String, dynamic>>(MapViewDialog());
+                  if (result != null) {
+                    final LatLng pickedLatLng = result['latLng'];
+                    final String pickedAddress = result['address'];
+                    controller.addressController.text = pickedAddress;
+                    print('Picked Address: $pickedAddress');
+                    print('Latitude: ${pickedLatLng.latitude}, Longitude: ${pickedLatLng.longitude}');
+                    setState(() {
+                      latitude = pickedLatLng.latitude;
+                      longitude = pickedLatLng.longitude;
+                    });
+                  }
+                },
+                splashRadius: 20,
+              ),
             ),
+
+
+
             heightBox10,
             Text('city'.tr, style: customLabelStyle),
             heightBox10,
@@ -270,8 +271,13 @@ class _RestaurantInformationScreenState extends State<RestaurantInformationScree
                 title: 'continue'.tr,
                 isLoading: controller.isLoading.value,
                 onTap: () {
+
                   if (_validateInputs()) {
-                    controller.createRestaurant(longitude: longitude ?? 0.0, latitude: latitude ?? 0.0);
+                   if (latitude != null && longitude != null) {
+                     controller.createRestaurant(longitude: longitude!, latitude: latitude!);
+                   }else{
+                     Get.rawSnackbar(message: 'Select restaurant location'.tr);
+                   }
                   }
                 },
               ),

@@ -28,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
           gradient: LinearGradient(
             colors: [
               const Color(0xffFFFAFB),
-              const Color(0xFFFFD7C599),
+              AppColors.secondaryColor.withOpacity(0.3),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

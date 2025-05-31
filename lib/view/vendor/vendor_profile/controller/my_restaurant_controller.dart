@@ -105,7 +105,9 @@ class MyRestaurantController extends GetxController {
          await LocalStorage.saveData(key: restaurantId, data: myRestaurantsModel.value.data?.id ?? '');
         }
 
+
         // Initialize tags and opening hours from API response (if available)
+        tags.clear();
         if (myRestaurantsModel.value.data?.kitchenStyle != null) {
           tags.addAll(myRestaurantsModel.value.data?.kitchenStyle ?? []);
         }
@@ -214,8 +216,9 @@ class MyRestaurantController extends GetxController {
 
   // Add a new tag if it does not already exist
   void addTag(String tag) {
-    if (tag.isNotEmpty && !tags.contains(tag)) {
-      tags.add(tag);
+    String normalizedTag = tag.trim().toLowerCase();
+    if (normalizedTag.isNotEmpty && !tags.map((e) => e.toLowerCase()).contains(normalizedTag)) {
+      tags.add(tag.trim());  // Keep original casing in UI
     }
   }
 

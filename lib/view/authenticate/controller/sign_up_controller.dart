@@ -35,7 +35,7 @@ class SignUpController extends GetxController {
   Future<void> createUserAccount(
       {required String fullName,
       required String phoneNumber,
-      required String address,
+      // required String address,
       required String email,
       required double latitude,
       required double longitude,
@@ -46,7 +46,7 @@ class SignUpController extends GetxController {
       Map<String, dynamic> body = {
         'name': fullName,
         'phoneNumber': phoneNumber,
-        'address': address,
+        // 'address': address,
         'email': email,
         'location': {
           'coordinates': [longitude, latitude],

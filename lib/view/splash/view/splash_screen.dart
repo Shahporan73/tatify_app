@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tatify_app/res/app_images/App_images.dart';
 
+import '../../../res/app_colors/App_Colors.dart';
 import 'onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -34,11 +35,11 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         width: width,
         height: height,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color(0xffFFFAFB),
-              Color(0xFFFFD7C599),
+              const Color(0xffFFFAFB),
+              AppColors.secondaryColor.withOpacity(0.3),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

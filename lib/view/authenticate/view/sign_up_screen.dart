@@ -194,29 +194,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
 
                 // address
-                Visibility(
-                  visible: controller.selectedRole.value == "User",
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      heightBox10,
-                      Text(
-                        'address'.tr,
-                        style: customLabelStyle,
-                      ),
-                      heightBox5,
-                      RoundTextField(
-                        controller: validationController.addressController,
-                        hint: 'enter_your_address'.tr,
-                        readOnly: false,
-                        prefixIcon: Icon(
-                          Icons.location_on,
-                          color: Colors.grey,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                // Visibility(
+                //   visible: controller.selectedRole.value == "User",
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       heightBox10,
+                //       Text(
+                //         'address'.tr,
+                //         style: customLabelStyle,
+                //       ),
+                //       heightBox5,
+                //       RoundTextField(
+                //         controller: validationController.addressController,
+                //         hint: 'enter_your_address'.tr,
+                //         readOnly: false,
+                //         prefixIcon: Icon(
+                //           Icons.location_on,
+                //           color: Colors.grey,
+                //         ),
+                //       )
+                //     ],
+                //   ),
+                // ),
 
                 // Email
                 Visibility(
@@ -411,7 +411,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             fullName: validationController.nameController.text,
                             phoneNumber:
                             validationController.phoneController.text,
-                            address: validationController.addressController.text,
+                            // address: validationController.addressController.text,
                             email: validationController.emailController.text,
                             password: validationController.passwordController.text,
                             latitude: latitude ?? 0.0,

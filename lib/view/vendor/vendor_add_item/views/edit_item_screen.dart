@@ -248,14 +248,28 @@ class EditItemScreen extends StatelessWidget {
                 title: 'update',
                 isLoading: controller.isLoading.value,
                 onTap: () {
-                  controller.updateItem(
-                    context: context,
-                    menuId: menuId,
-                    menuName: manuNameC.text,
-                    menuDescription: menuDesC.text,
-                    standardPrice: standardPriceC.text,
-                    discountPrice: discountPriceC.text,
-                  );
+                  if (manuNameC.text.isEmpty) {
+                   Get.rawSnackbar(message: 'Please enter menu name');
+                  } else if (menuDesC.text.isEmpty) {
+                    Get.rawSnackbar(message: 'Please enter menu description');
+                  } else if (standardPriceC.text.isEmpty) {
+                    Get.rawSnackbar(message: 'Please enter standard price');
+                  } else if (discountPriceC.text.isEmpty) {
+                    Get.rawSnackbar(message: 'Please enter discount price');
+                  }else if(controller.selectedDays.isEmpty){
+                    Get.rawSnackbar(message: 'Please select offer days');
+                  }else if(controller.itemStatus.value.isEmpty){
+                    Get.rawSnackbar(message: 'Please select item status');
+                  }else {
+                    controller.updateItem(
+                      context: context,
+                      menuId: menuId,
+                      menuName: manuNameC.text,
+                      menuDescription: menuDesC.text,
+                      standardPrice: standardPriceC.text,
+                      discountPrice: discountPriceC.text,
+                    );
+                  }
                 },
               ),
             ),

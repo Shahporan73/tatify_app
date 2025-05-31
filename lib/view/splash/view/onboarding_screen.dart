@@ -45,7 +45,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xffF5EAE9),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Obx(() {
           final banners = splashController.bannerList;
@@ -62,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: [
                 const SizedBox(height: 20),
                 CustomText(
-                  title: 'Taste Point',
+                  title: 'taste_hub'.tr,
                   style: GoogleFonts.poppins(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
@@ -71,7 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 const SizedBox(height: 4),
                 CustomText(
-                  title: 'Restaurant App',
+                  title: 'restaurant_app'.tr,
                   style: GoogleFonts.lato(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -160,7 +160,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                           const SizedBox(height: 32),
                           CustomButton(
-                            title: 'Get Started',
+                            title: 'get_started'.tr,
                             borderRadius: 25,
                             onTap: () {
                               Get.to(() => WelcomeScreen());
